@@ -1,17 +1,18 @@
 {% extends "marketplace/base.html" %}
-{% block title %}{{ product.name }} - Eco-Friendly Products Marketplace{% endblock %}
+{% block title %}Products - Eco-Friendly Products Marketplace{% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-md-6">
-        <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
-    </div>
-    <div class="col-md-6">
-        <h1>{{ product.name }}</h1>
-        <p>{{ product.description }}</p>
-        <p><strong>Price:</strong> ${{ product.price }}</p>
-        <p><strong>Category:</strong> {{ product.category }}</p>
-        <p><strong>Eco-Certifications:</strong> {{ product.eco_certifications }}</p>
-        <p><strong>Environmental Impact:</strong> {{ product.environmental_impact }}</p>
-    </div>
+    {% for product in products %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                    <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Product</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}
