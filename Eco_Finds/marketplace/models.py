@@ -62,3 +62,5 @@ class Order(models.Model):
 
 
 
+#Uname - sundhark
+#pswd - Will2win@1148
