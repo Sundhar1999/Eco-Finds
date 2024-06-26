@@ -4,23 +4,19 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Eco-Friendly Products Marketplace</title>
+    <title>Register - Eco-Friendly Products Marketplace</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
 <div class="container mt-5">
-    <h2>Profile</h2>
-    <h3>Order History</h3>
-    <ul>
-        {% for order in user_orders %}
-        <li>Order ID: {{ order.id }}, Total Price: ${{ order.total_price }}, Date: {{ order.ordered_at }}</li>
-        {% endfor %}
-    </ul>
-    <h3>Browsing History</h3>
-    <p>Number of Visits: {{ history.visits }}</p>
-    <p>Last Visit: {{ history.last_visit }}</p>
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
