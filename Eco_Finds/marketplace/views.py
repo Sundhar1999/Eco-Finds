@@ -77,8 +77,6 @@ def profile(request):
     return render(request, 'marketplace/profile.html', {'user_orders': user_orders, 'history': history})
 
 
-
-# New products view
 def products(request):
     products = Product.objects.all()
     return render(request, 'marketplace/Products.html', {'products': products})
@@ -93,11 +91,11 @@ def add_to_cart(request, product_id):
         cart_item.save()
     return redirect('cart')
 
+
 @login_required
 def cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
     return render(request, 'marketplace/cart.html', {'cart_items': cart_items})
-
 
 
 @login_required
@@ -109,12 +107,36 @@ def checkout(request):
             user=request.user,
             total_price=total_price,
             shipping_address=request.POST['shipping_address'],
+            shipping_city=request.POST['shipping_city'],
+            shipping_pin=request.POST['shipping_pin'],
+            billing_city=request.POST['billing_city'],
+            billing_pin=request.POST['billing_pin'],
             billing_address=request.POST['billing_address']
         )
         order.items.set(cart_items)
         cart_items.delete()
-        return redirect('order_success')
+        return redirect('awaiting_payment')
     return render(request, 'marketplace/checkout.html')
 
+
+@login_required
+def awaiting_payment(request):
+    return render(request, 'marketplace/card_details.html')
+
+@login_required
+def card_details(request):
+    payment_type = request.POST.get('payment')
+    return render(request, 'marketplace/card_details.html', {'payment_type': payment_type})
+
+
+@login_required
+def submit_payment(request):
+    if request.method == 'POST':
+        # Process the payment details here
+        return redirect('order_success')
+    return render(request, 'marketplace/card_details.html')
+
+
+@login_required
 def order_success(request):
     return render(request, 'marketplace/order_success.html')
