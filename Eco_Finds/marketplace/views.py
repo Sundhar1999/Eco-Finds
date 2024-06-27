@@ -61,13 +61,13 @@ def register(request):
             return redirect('login')
     else:
         form = UserRegisterForm()
-    return render(request, 'marketplace/Register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})  # Pointing to standalone register.html
 
 
-def logout_view(request):
-    logout(request)
-    messages.info(request, 'You have successfully logged out.')
-    return redirect('home')
+# def logout_view(request):
+#     logout(request)
+#     messages.info(request, 'You have successfully logged out.')
+#     return redirect('home')
 
 
 @login_required
