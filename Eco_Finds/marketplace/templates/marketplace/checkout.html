@@ -1,0 +1,108 @@
+{% extends "marketplace/base.html" %}
+{% block title %}Checkout - Eco-Friendly Products Marketplace{% endblock %}
+{% block content %}
+<div class="container">
+  <h2>Checkout</h2>
+  <form method="post" action="{% url 'card_details' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <h4>Shipping Address</h4>
+      <label for="shipping_address">Unit No:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="shipping_address"
+        name="shipping_address"
+        required
+      />
+      <label for="shipping_street">Street:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="shipping_street"
+        name="shipping_street"
+        required
+      />
+      <label for="shipping_city">City:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="shipping_city"
+        name="billing_city"
+        required
+      />
+      <label for="shipping_pin">Pin Code:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="shipping_pin"
+        name="shipping_address"
+        placeholder="Eg: A1B 2C3"
+        required
+      />
+      <div id="phoneInput">
+        <label for="phone">Phone Number:</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="Enter your phone number"
+          required
+        />
+      </div>
+    </div>
+    <input type="checkbox" id="checkbox1" name="checkbox1" />
+    <label for="checkbox1"> Billing address same as shipping address </label>
+
+    <div class="form-group">
+      <h4>Billing Address</h4>
+      <label for="billing_address">Unit No:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="billing_address"
+        name="billing_address"
+      />
+      <label for="billing_street">Street:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="billing_street"
+        name="billing_street"
+      />
+      <label for="billing_city">City:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="billing_city"
+        name="billing_city"
+      />
+      <label for="billing_pin">Zip Code:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="billing_pin"
+        name="billing_address"
+        placeholder="Eg: A1B 2C3"
+      />
+      <div id="contactInput">
+        <label for="phone">Phone Number:</label>
+        <input
+          type="tel"
+          id="call"
+          name="phone"
+          placeholder="Enter your phone number"
+        />
+      </div>
+    </div>
+
+    <h2>Payment Options</h2>
+    <input type="radio" id="credit" name="payment" value="credit" required />
+    <label for="credit">Credit Card</label><br />
+    <input type="radio" id="debit" name="payment" value="debit" />
+    <label for="debit">Debit Card</label><br />
+
+    <button type="submit" class="btn btn-success">NEXT</button>
+  </form>
+</div>
+{% endblock %}
