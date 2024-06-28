@@ -97,6 +97,10 @@ def cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
     return render(request, 'marketplace/cart.html', {'cart_items': cart_items})
 
+@login_required
+def rewards(request):
+    return render(request, 'marketplace/rewards.html')
+
 
 @login_required
 def checkout(request):
