@@ -2,12 +2,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Review, CartItem
 from django.contrib.auth import logout
 from .forms import ReviewForm
-from .forms import UserRegisterForm
-from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Order, UserHistory
+from .forms import UserRegistrationForm
+from .models import UserRegistration
+from django.contrib.auth.hashers import make_password
 
 
 def home(request):
@@ -53,15 +55,15 @@ def product_detail(request, product_id):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             return redirect('login')
     else:
-        form = UserRegisterForm()
-    return render(request, 'registration/register.html', {'form': form})  # Pointing to standalone register.html
+        form = UserRegistrationForm()
+    return render(request, 'registration/register.html', {'form': form})
 
 
 # def logout_view(request):
