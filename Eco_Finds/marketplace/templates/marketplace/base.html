@@ -11,7 +11,14 @@
 </head>
 <body>
 <header>
-    <div class="banner">Get free delivery on orders over $75</div>
+    <div class="header-content">
+        <div id="logo">
+            <img src="{% static 'images/logo3.jpg' %}" alt="Logo" width="60" height="72">
+        </div>
+        <div id="center-text">
+            Eco Finds
+        </div>
+    </div>
 
     <div class="wrapper">
         <div class="searchBar">
@@ -21,12 +28,6 @@
     </div>
 
     <nav>
-        <div id="logo">
-            <div id="logo svg">
-                <img src="{% static 'images/logo3.jpg' %}" alt="Logo" width="60" height="72">
-            </div>
-             Eco-Friendly <br> Marketplace
-        </div>
         <ul class="navigation-menu">
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'products' %}">Products</a></li>
@@ -66,6 +67,7 @@
         </div>
     </div>
 </section>
+
 <section id="products">
     <div class="container">
         <div class="products-header">
@@ -95,13 +97,14 @@
         </div>
         <div class="product product-4">
             <figure>
-                <img src="https://res.cloudinary.com/de8cuyd0n/image/upload/v1520412550/E-commerce%20landing%20page/products-showcase/product-4-img_3x.jpg" alt="product-image">
+                <img src="{% static 'images/product4.jpg' %}" alt="product-image">
                 <figcaption>men fashion</figcaption>
                 <figcaption>$ 89.00</figcaption>
             </figure>
         </div>
     </div>
 </section>
+
 <section id="collections">
     <div class="container">
         <div class="c-1">
@@ -120,6 +123,7 @@
         </div>
     </div>
 </section>
+
 <section id="blog">
     <div class="container">
         <div class="blog-header">
@@ -152,13 +156,44 @@
         </div>
     </div>
 </section>
-<section id="contact">
+
+<!-- New Carbon Footprint Statistics Section -->
+<section id="carbon-footprint">
     <div class="container">
-        <h4>Contact us:</h4>
-        <p>418 Askin Avenue</p>
-        <p>+1 (226) 999 8888</p>
-        <p>info.ecofinds@gmail.com</p>
-        <p class="email">email us <span><img src="https://res.cloudinary.com/de8cuyd0n/image/upload/v1520412541/E-commerce%20landing%20page/icons/get_in_touch_1x.png" alt="email-image"></span></p>
+        <div class="stats-header">
+            <h2>Carbon Footprint Statistics</h2>
+            <p>Understanding the impact of eco-friendly products.</p>
+        </div>
+        <div class="stats-content">
+            <div class="stat-item" data-stat="80">
+                <div class="circle">
+                    <div class="circle-content">1st</div>
+                </div>
+                <div class="percentage">80%</div>
+                <div class="description">Reduction in carbon footprint in the first year of using eco-friendly products.</div>
+            </div>
+            <div class="stat-item" data-stat="70">
+                <div class="circle">
+                    <div class="circle-content">2nd</div>
+                </div>
+                <div class="percentage">70%</div>
+                <div class="description">Reduction in carbon footprint in the second year of using eco-friendly products.</div>
+            </div>
+            <div class="stat-item" data-stat="50">
+                <div class="circle">
+                    <div class="circle-content">5th</div>
+                </div>
+                <div class="percentage">50%</div>
+                <div class="description">Reduction in carbon footprint in the fifth year of using eco-friendly products.</div>
+            </div>
+            <div class="stat-item" data-stat="30">
+                <div class="circle">
+                    <div class="circle-content">10th</div>
+                </div>
+                <div class="percentage">30%</div>
+                <div class="description">Reduction in carbon footprint in the tenth year of using eco-friendly products.</div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -226,5 +261,44 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stats = document.querySelectorAll(".stat-item");
+        stats.forEach(stat => {
+            const percentage = stat.querySelector(".percentage");
+            const target = +stat.getAttribute("data-stat");
+            let count = 0;
+            const updateCount = () => {
+                percentage.innerText = `${count}%`;
+                if (count < target) {
+                    count++;
+                    setTimeout(updateCount, 20);
+                } else {
+                    percentage.innerText = `${target}%`;
+                }
+            };
+            updateCount();
+        });
+
+        const searchButton = document.getElementById('searchQuerySubmit');
+        searchButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchQueryInput').value.toLowerCase();
+            if (query) {
+                const elements = document.querySelectorAll('section, footer, nav, header, main');
+                let found = false;
+                elements.forEach(element => {
+                    if (element.innerText.toLowerCase().includes(query)) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        found = true;
+                    }
+                });
+                if (!found) {
+                    alert('No matching sections found');
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
