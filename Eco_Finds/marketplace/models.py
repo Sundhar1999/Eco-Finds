@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
@@ -61,6 +62,19 @@ class Order(models.Model):
         return f'Order #{self.id} by {self.user.username}'
 
 
+class UserRegistration(models.Model):
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)
+
+    def check_password(self, raw_password):
+        from django.contrib.auth.hashers import check_password
+        return check_password(raw_password, self.password)
+
+
 
 #Uname - sundhark
 #pswd - Will2win@1148
+
+#uname - sundhar
+#pswd - sundhar@123
