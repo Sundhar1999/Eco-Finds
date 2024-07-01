@@ -1,0 +1,15 @@
+{% extends "marketplace/base.html" %}
+
+{% block title %}Profile - Eco-Friendly Products Marketplace{% endblock %}
+{% block content %}
+<h2>Profile</h2>
+<h3>Order History</h3>
+<ul>
+    {% for order in user_orders %}
+    <li>Order ID: {{ order.id }}, Total Price: ${{ order.total_price }}, Date: {{ order.ordered_at }}</li>
+    {% endfor %}
+</ul>
+<h3>Browsing History</h3>
+<p>Number of Visits: {{ history.visits }}</p>
+<p>Last Visit: {{ history.last_visit }}</p>
+{% endblock %}

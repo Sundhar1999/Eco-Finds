@@ -1,0 +1,8 @@
+{% extends "marketplace/base.html" %}
+
+{% block title %}Order Success - Eco-Friendly Products Marketplace{% endblock %}
+{% block content %}
+<h2>Thank you for your order!</h2>
+<p>Your order has been placed successfully. You will receive a confirmation email shortly.</p>
+<a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+{% endblock %}
