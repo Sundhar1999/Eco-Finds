@@ -62,14 +62,15 @@ def register(request):
             messages.success(request, f'Account created for {username}!')
             return redirect('login')
     else:
-        form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'form': form})
+        form = UserRegisterForm()
+    return render(request, 'marketplace/Register.html', {'form': form})
 
 
-# def logout_view(request):
-#     logout(request)
-#     messages.info(request, 'You have successfully logged out.')
-#     return redirect('home')
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, 'You have successfully logged out.')
+    return redirect('home')
 
 
 @login_required
@@ -98,10 +99,6 @@ def add_to_cart(request, product_id):
 def cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
     return render(request, 'marketplace/cart.html', {'cart_items': cart_items})
-
-@login_required
-def rewards(request):
-    return render(request, 'marketplace/rewards.html')
 
 
 @login_required
@@ -146,3 +143,4 @@ def submit_payment(request):
 @login_required
 def order_success(request):
     return render(request, 'marketplace/order_success.html')
+
