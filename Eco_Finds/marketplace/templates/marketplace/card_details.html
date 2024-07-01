@@ -1,0 +1,27 @@
+{% extends "marketplace/base.html" %}
+
+{% block title %}Card Details - Eco-Friendly Products Marketplace{% endblock %}
+{% block content %}
+<h2>Enter Your Card Details</h2>
+<form method="post" action="{% url 'submit_payment' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="cardType">Card Type:</label>
+        <input type="text" class="form-control" id="cardType" name="cardType" readonly value="{{ payment_type|capfirst }} Card"><br><br>
+
+        <label for="cardNumber">Card Number:</label>
+        <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="xxxx xxxx xxxx xxxx" required><br><br>
+
+        <label for="expiryDate">Expiry Date:</label>
+        <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY" required><br><br>
+
+         <label for="cardname">Card Holder Name:</label>
+        <input type="text" class="form-control" id="cardname" name="cardname" required><br><br>
+
+        <label for="cvv">CVV:</label>
+        <input type="text" class="form-control" id="cvv" name="cvv" required><br><br>
+    </div>
+    <button type="submit" class="btn btn-success"> SUBMIT </button>
+</form>
+{% endblock %}
+
