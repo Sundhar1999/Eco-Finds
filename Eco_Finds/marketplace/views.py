@@ -6,8 +6,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import Order, UserHistory
-from .forms import UserRegistrationForm
+from .models import Order, UserHistory, CardDetails, Checkout
+from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm
 from .models import UserRegistration
 from django.contrib.auth.hashers import make_password
 
@@ -62,8 +62,8 @@ def register(request):
             messages.success(request, f'Account created for {username}!')
             return redirect('login')
     else:
-        form = UserRegisterForm()
-    return render(request, 'marketplace/Register.html', {'form': form})
+        form = UserRegistrationForm()
+    return render(request, 'registration/Register.html', {'form': form})
 
 
 
@@ -104,33 +104,57 @@ def cart(request):
 @login_required
 def checkout(request):
     if request.method == 'POST':
-        cart_items = CartItem.objects.filter(user=request.user)
-        total_price = sum(item.product.price * item.quantity for item in cart_items)
-        order = Order.objects.create(
-            user=request.user,
-            total_price=total_price,
-            shipping_address=request.POST['shipping_address'],
-            shipping_city=request.POST['shipping_city'],
-            shipping_pin=request.POST['shipping_pin'],
-            billing_city=request.POST['billing_city'],
-            billing_pin=request.POST['billing_pin'],
-            billing_address=request.POST['billing_address']
-        )
-        order.items.set(cart_items)
-        cart_items.delete()
-        return redirect('awaiting_payment')
-    return render(request, 'marketplace/checkout.html')
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            checkout = form.save(commit=False)
+            checkout.user = request.user
+            checkout.save()
+            selected_card_type = form.cleaned_data['payment_method']
+            return redirect('card_details', card_type=selected_card_type)
+    else:
+        form = CheckoutForm()
+    return render(request, 'marketplace/checkout.html', {'form': form})
 
+# @login_required
+# def checkout(request):
+#     if request.method == 'POST':
+#         form = CheckoutForm(request.POST)
+#         if form.is_valid():
+#             selected_card_type = form.cleaned_data['payment_method']
+#             return redirect('card_details', card_type=selected_card_type)
+#     else:
+#         form = CheckoutForm()
+#     return render(request, 'marketplace/checkout.html', {'form': form})
+
+@login_required
+def card_details_view(request, card_type):
+    if request.method == 'POST':
+        form = CardDetailsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('order_success')
+    else:
+        form = CardDetailsForm(initial={'card_type': card_type})
+    return render(request, 'marketplace/card_details.html', {'form': form})
+
+@login_required
+def order_success(request):
+    return render(request, 'marketplace/order_success.html')
 
 @login_required
 def awaiting_payment(request):
     return render(request, 'marketplace/card_details.html')
 
-@login_required
-def card_details(request):
-    payment_type = request.POST.get('payment')
-    return render(request, 'marketplace/card_details.html', {'payment_type': payment_type})
-
+# @login_required
+# def card_details(request):
+#     if request.method == 'POST':
+#         form = CardDetailsForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('order_success')
+#     else:
+#         form = CardDetailsForm()
+#     return render(request, 'marketplace/card_details.html', {'form': form})
 
 @login_required
 def submit_payment(request):

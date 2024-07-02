@@ -689,3 +689,68 @@ nav {
     line-height: 1.4; /* Better line spacing */
 }
 
+/* Center the checkout container */
+.checkout-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the form fields */
+.checkout-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout-container form .form-group {
+    margin-bottom: 15px;
+}
+
+.checkout-container form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.checkout-container form input,
+.checkout-container form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Style the radio buttons */
+.checkout-container form .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkout-container form .form-check label {
+    margin-left: 5px;
+}
+
+.checkout-container form .form-check-input {
+    margin-right: 10px;
+}
+
+/* Style the submit button */
+.checkout-container form .btn {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.checkout-container form .btn:hover {
+    background-color: #218838;
+}
+

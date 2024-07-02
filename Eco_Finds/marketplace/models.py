@@ -64,31 +64,30 @@ class Order(models.Model):
 
 class Checkout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    shipping_unit_no = models.CharField(max_length=100)
-    shipping_street = models.CharField(max_length=200)
+    shipping_unit_no = models.CharField(max_length=255)
+    shipping_street = models.CharField(max_length=100)
     shipping_city = models.CharField(max_length=100)
     shipping_pin = models.CharField(max_length=10)
+    billing_unit_no = models.CharField(max_length=255, default='')
+    billing_street = models.CharField(max_length=100, default='')
+    billing_city = models.CharField(max_length=100, default='')
+    billing_pin = models.CharField(max_length=10, default='')
     phone = models.CharField(max_length=15)
-    billing_unit_no = models.CharField(max_length=100, blank=True, null=True)
-    billing_street = models.CharField(max_length=200, blank=True, null=True)
-    billing_city = models.CharField(max_length=100, blank=True, null=True)
-    billing_pin = models.CharField(max_length=10, blank=True, null=True)
-    payment_method = models.CharField(max_length=50)
-
+    payment_method = models.CharField(max_length=30)
+    #created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Checkout for {self.user.username}'
+        return f"Checkout {self.id} by {self.user.username}"
 
 class CardDetails(models.Model):
-    checkout = models.ForeignKey(Checkout, on_delete=models.CASCADE)
-    card_type = models.CharField(max_length=50)
-    card_number = models.CharField(max_length=20)
+    card_type = models.CharField(max_length=20)
+    card_number = models.CharField(max_length=16)
     expiry_date = models.CharField(max_length=5)
-    cardholder_name = models.CharField(max_length=100)
-    cvv = models.CharField(max_length=4)
+    card_holder_name = models.CharField(max_length=100)  # Ensure this field is included
+    cvv = models.CharField(max_length=3)
 
     def __str__(self):
-        return f'Card Details for {self.checkout.user.username}'
+        return f'Card Details for {self.card_holder_name}'
 
 class UserRegistration(models.Model):
     username = models.CharField(max_length=150, unique=True)
