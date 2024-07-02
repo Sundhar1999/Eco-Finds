@@ -18,6 +18,13 @@
         <div id="center-text">
             Eco Finds
         </div>
+        <div class="user-info">
+            {% if user.is_authenticated %}
+                <span class="welcome-text">Welcome, {{ user.username }}</span>
+            {% endif %}
+            <span class="material-symbols-outlined"><i class="fas fa-bell fa-2x"></i></span>
+            <span class="material-symbols-outlined"><i class="fas fa-heart fa-2x"></i></span>
+        </div>
     </div>
 
     <div class="wrapper">
@@ -40,12 +47,9 @@
                 <li><a href="{% url 'register' %}">Register</a></li>
             {% endif %}
         </ul>
-        <div id="utility">
-            <span class="material-symbols-outlined"><i class="fas fa-bell fa-2x"></i></span>
-            <span class="material-symbols-outlined"><i class="fas fa-heart fa-2x"></i></span>
-        </div>
     </nav>
 </header>
+
 
 <main>
     {% block content %}
