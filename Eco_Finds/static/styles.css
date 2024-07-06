@@ -3,13 +3,13 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f8f5; /* Greenish white background */
+    background-color: lavenderblush /* Greenish white background */
 }
 
 /* Header styling */
 header {
-    position: fixed;
-    top: 0;
+    /*position: block;*/
+    /*top: 0; */
     z-index: 1000;
     width: 100%;
     background: olivedrab; /* Greenish white background */
@@ -87,19 +87,37 @@ nav {
     z-index: 1000;
 }
 
-#logo {
+.header-content {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    grid-gap: 8px;
-    line-height: 100%;
-
+    justify-content: center;
+    position: relative;
 }
 
-#logo svg {
-    fill: #2c5f2d; /* Dark green color */
-    color: olivedrab;
+#logo {
+    position: absolute;
+    left: 50px;
+    padding-top: 9%;
 }
+
+#logo img {
+    width: 90px;
+    height: 92px;
+    margin-right: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#center-text {
+    font-weight: lighter;
+    color: black;
+    text-transform: uppercase;
+    font-size: 2.0rem;
+    letter-spacing: 1.2px;
+    padding-top: 3%;
+}
+
+
 
 .navigation-menu {
     display: flex;
@@ -275,7 +293,8 @@ nav {
 
 .footer .text-center {
     background-color: olivedrab;; /* Dark green background */
-    color: white;
+    color: black;
+    font-weight: bold;
     padding: 10px 0;
 }
 
@@ -315,6 +334,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    margin-top: -30px;
 }
 
 #summer-collection .sc-content {
@@ -344,17 +364,16 @@ nav {
 
 #summer-collection .sc-media {
     flex: 1 1 50%; /* Allow flexibility */
-    max-width: 50%; /* Limit maximum width to 50% */
+    max-width: 30%; /* Limit maximum width to 50% */
     box-sizing: border-box;
 }
 
 #summer-collection .sc-media-bg {
-    background-color: #f5f5f5;
-    padding: 1rem;
+    padding: 0rem;
 }
 
 #summer-collection .sc-media-bg img {
-    width: 100%;
+    width: 90%;
     height: auto;
 }
 
@@ -391,7 +410,8 @@ nav {
 
 .product img {
     width: 100%;
-    height: auto;
+    height: 300px; /* Adjust this value to increase image height */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
 }
 
 #collections .container {
@@ -445,7 +465,7 @@ nav {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 2rem 0; /* Increased padding for blogs */
+    padding: 9rem 0; /* Increased padding for blogs */
 }
 
 #blog .blog-header {
@@ -592,3 +612,80 @@ nav {
 #contact .email span img {
     vertical-align: middle;
 }
+
+
+
+#carbon-footprint {
+    background-color: whitesmoke; /* Slightly darker background for better contrast */
+    padding: 0px;
+    text-align: center;
+    margin-top: -80px;
+}
+
+.stats-header h2 {
+    font-size: 2.5rem; /* Increased font size */
+    margin-bottom: 5px;
+    color: #2c5f2d; /* Darker green color */
+    text-transform: uppercase;
+    letter-spacing: 1.5px; /* Add some spacing between letters */
+}
+
+.stats-header p {
+    font-size: 1.2rem; /* Increased font size */
+    margin-bottom: 30px;
+    color: #4f4f4f; /* Neutral color for the subtitle */
+}
+
+.stats-content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px; /* Increased gap between items */
+}
+
+.stat-item {
+    flex: 1;
+    max-width: 20%;
+    margin: 20px;
+    text-align: center;
+    background: white; /* White background for each item */
+    padding: 20px; /* Add padding inside each item */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.3s ease; /* Smooth transform on hover */
+}
+
+.stat-item:hover {
+    transform: translateY(-10px); /* Lift up on hover */
+}
+
+.stat-item .circle {
+    width: 120px; /* Increased size */
+    height: 120px; /* Increased size */
+    border-radius: 50%;
+    background-color: #a5d6a7; /* Softer green background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px auto;
+    position: relative;
+}
+
+.stat-item .circle .circle-content {
+    font-size: 1.4rem; /* Increased font size */
+    color: white; /* White text color */
+}
+
+.stat-item .percentage {
+    font-size: 2rem; /* Increased font size */
+    font-weight: bold;
+    color: #2c5f2d; /* Darker green color */
+    margin-bottom: 10px;
+}
+
+.stat-item .description {
+    font-size: 1rem; /* Slightly larger font size */
+    color: #4f4f4f; /* Neutral text color */
+    line-height: 1.4; /* Better line spacing */
+}
+
