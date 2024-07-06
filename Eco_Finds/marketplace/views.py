@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Review, CartItem
+from .models import Product, Review, CartItem, Reward
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Order, UserHistory, CardDetails, Checkout
-from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm
+from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm, RewardForm
 from .models import UserRegistration
 from django.contrib.auth.hashers import make_password
 
@@ -115,16 +115,6 @@ def checkout(request):
         form = CheckoutForm()
     return render(request, 'marketplace/checkout.html', {'form': form})
 
-# @login_required
-# def checkout(request):
-#     if request.method == 'POST':
-#         form = CheckoutForm(request.POST)
-#         if form.is_valid():
-#             selected_card_type = form.cleaned_data['payment_method']
-#             return redirect('card_details', card_type=selected_card_type)
-#     else:
-#         form = CheckoutForm()
-#     return render(request, 'marketplace/checkout.html', {'form': form})
 
 @login_required
 def card_details_view(request, card_type):
@@ -145,16 +135,6 @@ def order_success(request):
 def awaiting_payment(request):
     return render(request, 'marketplace/card_details.html')
 
-# @login_required
-# def card_details(request):
-#     if request.method == 'POST':
-#         form = CardDetailsForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('order_success')
-#     else:
-#         form = CardDetailsForm()
-#     return render(request, 'marketplace/card_details.html', {'form': form})
 
 @login_required
 def submit_payment(request):
@@ -168,3 +148,33 @@ def submit_payment(request):
 def order_success(request):
     return render(request, 'marketplace/order_success.html')
 
+@login_required
+def rewards(request):
+    # Calculate the total amount spent by the user
+    user_orders = Order.objects.filter(user=request.user)
+    total_spent = sum(order.total_price for order in user_orders)
+
+    # Calculate the total reward points (0.5 points per dollar spent)
+    total_points = total_spent * 0.5
+
+    points_value = total_points * 2
+
+    # Get the user's rewards
+    rewards = Reward.objects.all()
+
+    return render(request, 'marketplace/rewards.html', {
+        'rewards': rewards,
+        'total_points': total_points,
+        'points_value': points_value,
+    })
+
+# @login_required
+# def add_reward(request):
+#     if request.method == 'POST':
+#         form = RewardForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('rewards')
+#     else:
+#         form = RewardForm()
+#     return render(request, 'marketplace/add_reward.html', {'form': form})

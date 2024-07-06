@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Product
 from .models import Review, Checkout, CardDetails
-from .models import Order, CartItem
+from .models import Order, CartItem, Reward
 from .models import UserRegistration
 from django.contrib.auth.hashers import make_password
 
@@ -78,7 +78,7 @@ class CheckoutForm(forms.ModelForm):
         model = Checkout
         fields = [
             'shipping_unit_no', 'shipping_street', 'shipping_city', 'shipping_pin',
-            'phone', 'billing_unit_no', 'billing_street', 'billing_city', 'billing_pin', 'payment_method'
+            'phone', 'payment_method'
         ]
 
 #card details form
@@ -89,3 +89,10 @@ class CardDetailsForm(forms.ModelForm):
         widgets = {
             'card_type': forms.TextInput(attrs={'readonly': 'readonly'})
         }
+
+#rewards
+class RewardForm(forms.ModelForm):
+    class Meta:
+        model = Reward
+        fields = ['name', 'description', 'points_required']
+

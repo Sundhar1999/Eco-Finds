@@ -697,6 +697,7 @@ nav {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
 }
 
 /* Style the form fields */
@@ -754,3 +755,86 @@ nav {
     background-color: #218838;
 }
 
+.eco-finds-container {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    margin-top: 100px;
+}
+
+.eco-finds-heading {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 20px;
+
+}
+
+.points-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.points {
+    color: green;
+    font-weight: bold;
+}
+
+.rewards-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.rewards-box ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.rewards-box li {
+    padding: 5px 0;
+}
+
+.about-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.about-button:hover {
+    background-color: #45a049;
+}
+
+.about-details {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+
+.value-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.value {
+    color: #45a049;
+    font-weight: bold;
+}

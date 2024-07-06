@@ -68,10 +68,6 @@ class Checkout(models.Model):
     shipping_street = models.CharField(max_length=100)
     shipping_city = models.CharField(max_length=100)
     shipping_pin = models.CharField(max_length=10)
-    billing_unit_no = models.CharField(max_length=255, default='')
-    billing_street = models.CharField(max_length=100, default='')
-    billing_city = models.CharField(max_length=100, default='')
-    billing_pin = models.CharField(max_length=10, default='')
     phone = models.CharField(max_length=15)
     payment_method = models.CharField(max_length=30)
     #created_at = models.DateTimeField(auto_now_add=True)
@@ -97,6 +93,16 @@ class UserRegistration(models.Model):
     def check_password(self, raw_password):
         from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.password)
+
+
+class Reward(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    points_required = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
 
 
