@@ -18,6 +18,13 @@
         <div id="center-text">
             Eco Finds
         </div>
+        <div class="user-info">
+            {% if user.is_authenticated %}
+                <span class="welcome-text">Welcome, {{ user.username }}</span>
+            {% endif %}
+            <span class="material-symbols-outlined"><i class="fas fa-bell fa-2x"></i></span>
+            <span class="material-symbols-outlined"><i class="fas fa-heart fa-2x"></i></span>
+        </div>
     </div>
 
     <div class="wrapper">
@@ -32,8 +39,9 @@
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'products' %}">Products</a></li>
             <li><a href="{% url 'cart' %}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-            <li><a href="{% url 'rewards' %}"><i class = "fas fa-rewards"></i>Eco-Finds+</a></li>
             <li><a href="{% url 'aboutus' %}">About Us</a></li>
+            <li><a href="{% url 'rewards' %}"><i class="rewards"></i> Rewards</a></li>
+
             {% if user.is_authenticated %}
                 <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
@@ -42,12 +50,9 @@
                 <li><a href="{% url 'register' %}">Register</a></li>
             {% endif %}
         </ul>
-        <div id="utility">
-            <span class="material-symbols-outlined"><i class="fas fa-bell fa-2x"></i></span>
-            <span class="material-symbols-outlined"><i class="fas fa-heart fa-2x"></i></span>
-        </div>
     </nav>
 </header>
+
 
 <main>
     {% block content %}
