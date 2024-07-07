@@ -157,6 +157,8 @@ def submit_payment(request):
 def order_success(request):
     return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
+def aboutus(request):  # For aboutus
+    return render(request, 'aboutus.html')
 @login_required
 def rewards(request):
     # Calculate the total amount spent by the user

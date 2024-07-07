@@ -11,6 +11,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     path('profile/', views.profile, name='profile'),
     path('products/', views.products, name='products'),
+    path('rewards/', views.rewards, name='rewards'),
+    path('aboutus/', views.aboutus, name='aboutus'),
     path('cart/', views.cart, name='cart'),
     path('checkout/', views.checkout, name='checkout'),
     path('awaiting_payment/', views.awaiting_payment, name='awaiting_payment'),
@@ -18,6 +20,6 @@ urlpatterns = [
     path('card-details/<str:card_type>/', card_details_view, name='card_details'),
     path('submit_payment/', views.submit_payment, name='submit_payment'),
     path('order_success/', views.order_success, name='order_success'),
-    path('rewards/', views.rewards, name='rewards'),
+
 ]
 
