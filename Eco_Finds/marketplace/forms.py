@@ -85,7 +85,7 @@ class CheckoutForm(forms.ModelForm):
 class CardDetailsForm(forms.ModelForm):
     class Meta:
         model = CardDetails
-        fields = ['card_type', 'card_number', 'expiry_date', 'card_holder_name', 'cvv']
+        fields = ['card_type', 'card_number', 'expiry_date', 'cardholder_name', 'cvv']
         widgets = {
             'card_type': forms.TextInput(attrs={'readonly': 'readonly'})
         }

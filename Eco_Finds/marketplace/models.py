@@ -81,11 +81,11 @@ class CardDetails(models.Model):
     card_type = models.CharField(max_length=20)
     card_number = models.CharField(max_length=16)
     expiry_date = models.CharField(max_length=5)
-    card_holder_name = models.CharField(max_length=100)  
+    cardholder_name = models.CharField(max_length=100)
     cvv = models.CharField(max_length=3)
 
     def __str__(self):
-        return f'Card Details for {self.checkout.user.username}'
+        return f'Card Details for {self.cardholder_name}'
 
 class UserRegistration(models.Model):
     username = models.CharField(max_length=150, unique=True)
