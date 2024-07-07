@@ -9,13 +9,12 @@ from django.contrib.auth.decorators import login_required
 from .models import Order, UserHistory
 from .forms import UserRegistrationForm
 from .models import UserRegistration
-from django.contrib.auth.hashers import make_password
-
+from django.utils import timezone
 
 def home(request):
     products = Product.objects.all()
-    return render(request, 'marketplace/home.html', {'products': products})
-
+    username = request.session.get('username', None)
+    return render(request, 'marketplace/home.html', {'products': products, 'username': username})
 
 def login_view(request):
     if request.method == 'POST':
@@ -26,6 +25,9 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                request.session['username'] = username
+                request.session.set_expiry(180)  # Set session to expire in 3 minutes
+                request.session['last_touch'] = timezone.now().timestamp()
                 messages.info(request, f'You are now logged in as {username}.')
                 return redirect('home')
             else:
@@ -34,8 +36,7 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
-    return render(request, 'marketplace/Login.html', {'form': form})
-
+    return render(request, 'registration/Login.html', {'form': form})
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -50,8 +51,7 @@ def product_detail(request, product_id):
             return redirect('product_detail', product_id=product.id)
     else:
         review_form = ReviewForm()
-    return render(request, 'marketplace/Products.html', {'product': product, 'reviews': reviews, 'review_form': review_form})
-
+    return render(request, 'marketplace/Products.html', {'product': product, 'reviews': reviews, 'review_form': review_form, 'username': request.session.get('username')})
 
 def register(request):
     if request.method == 'POST':
@@ -63,26 +63,23 @@ def register(request):
             return redirect('login')
     else:
         form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'registration/Register.html', {'form': form})
 
-
-# def logout_view(request):
-#     logout(request)
-#     messages.info(request, 'You have successfully logged out.')
-#     return redirect('home')
-
+def logout_view(request):
+    logout(request)
+    messages.info(request, 'Your session has expired. Please log in again.')
+    return redirect('login')
 
 @login_required
 def profile(request):
     user_orders = Order.objects.filter(user=request.user)
     history, created = UserHistory.objects.get_or_create(user=request.user)
-    return render(request, 'marketplace/profile.html', {'user_orders': user_orders, 'history': history})
-
+    return render(request, 'marketplace/profile.html', {'user_orders': user_orders, 'history': history, 'username': request.session.get('username')})
 
 def products(request):
     products = Product.objects.all()
-    return render(request, 'marketplace/Products.html', {'products': products})
-
+    username = request.session.get('username', None)
+    return render(request, 'marketplace/Products.html', {'products': products, 'username': username})
 
 @login_required
 def add_to_cart(request, product_id):
@@ -93,16 +90,10 @@ def add_to_cart(request, product_id):
         cart_item.save()
     return redirect('cart')
 
-
 @login_required
 def cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
-    return render(request, 'marketplace/cart.html', {'cart_items': cart_items})
-
-@login_required
-def rewards(request):
-    return render(request, 'marketplace/rewards.html')
-
+    return render(request, 'marketplace/cart.html', {'cart_items': cart_items, 'username': request.session.get('username')})
 
 @login_required
 def checkout(request):
@@ -122,31 +113,29 @@ def checkout(request):
         order.items.set(cart_items)
         cart_items.delete()
         return redirect('awaiting_payment')
-    return render(request, 'marketplace/checkout.html')
-
+    return render(request, 'marketplace/checkout.html', {'username': request.session.get('username')})
 
 @login_required
 def awaiting_payment(request):
-    return render(request, 'marketplace/card_details.html')
+    return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
 @login_required
 def card_details(request):
     payment_type = request.POST.get('payment')
-    return render(request, 'marketplace/card_details.html', {'payment_type': payment_type})
-
+    return render(request, 'marketplace/card_details.html', {'payment_type': payment_type, 'username': request.session.get('username')})
 
 @login_required
 def submit_payment(request):
     if request.method == 'POST':
         # Process the payment details here
         return redirect('order_success')
-    return render(request, 'marketplace/card_details.html')
-
+    return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
 @login_required
 def order_success(request):
-    return render(request, 'marketplace/order_success.html')
+    return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 def aboutus(request):  # For aboutus
     return render(request, 'aboutus.html')
-gi
+
+
