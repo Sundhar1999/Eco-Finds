@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Review, CartItem, Reward
+from .models import Product, Review, CartItem, Reward, Cart
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -82,14 +82,47 @@ def products(request):
     return render(request, 'marketplace/Products.html', {'products': products, 'username': username})
 
 @login_required
+def view_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.all()
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+@login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
     if not created:
         cart_item.quantity += 1
         cart_item.save()
-    return redirect('cart')
+    return redirect('view_cart')
 
+@login_required
+def remove_from_cart(request, product_id):
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
+    cart_item.delete()
+    return redirect('view_cart')
+
+
+@login_required
+def toggle_favorite(request, product_id):
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
+    cart_item.is_favorite = not cart_item.is_favorite
+    cart_item.save()
+    return redirect('view_cart')
+
+@login_required
+def update_quantity(request, product_id, action):
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
+    if action == 'increase':
+        cart_item.quantity += 1
+    elif action == 'decrease' and cart_item.quantity > 1:
+        cart_item.quantity -= 1
+    cart_item.save()
+    return redirect('view_cart')
 @login_required
 def cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
