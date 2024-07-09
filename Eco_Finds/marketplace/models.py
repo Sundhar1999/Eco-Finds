@@ -1,7 +1,4 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 
@@ -20,7 +17,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
 class UserHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     visits = models.IntegerField(default=0)
@@ -28,8 +24,6 @@ class UserHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.visits} visits"
-
-
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
@@ -40,7 +34,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
-
 
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -67,44 +60,48 @@ class Order(models.Model):
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
 
-
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
 
 class Checkout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    shipping_unit_no = models.CharField(max_length=255)
-    shipping_street = models.CharField(max_length=100)
+    shipping_unit_no = models.CharField(max_length=100)
+    shipping_street = models.CharField(max_length=200)
     shipping_city = models.CharField(max_length=100)
     shipping_pin = models.CharField(max_length=10)
     phone = models.CharField(max_length=15)
-    payment_method = models.CharField(max_length=30)
-    #created_at = models.DateTimeField(auto_now_add=True)
+    billing_unit_no = models.CharField(max_length=100, blank=True, null=True)
+    billing_street = models.CharField(max_length=200, blank=True, null=True)
+    billing_city = models.CharField(max_length=100, blank=True, null=True)
+    billing_pin = models.CharField(max_length=10, blank=True, null=True)
+    payment_method = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Checkout {self.id} by {self.user.username}"
-
-
+        return f'Checkout for {self.user.username}'
 
 class CardDetails(models.Model):
-    card_type = models.CharField(max_length=20)
-    card_number = models.CharField(max_length=16)
+    checkout = models.ForeignKey(Checkout, on_delete=models.CASCADE, default=1)
+    card_type = models.CharField(max_length=50)
+    card_number = models.CharField(max_length=20)
     expiry_date = models.CharField(max_length=5)
     cardholder_name = models.CharField(max_length=100)
-    cvv = models.CharField(max_length=3)
+    cvv = models.CharField(max_length=4)
 
     def __str__(self):
-        return f'Card Details for {self.cardholder_name}'
+        return f'Card Details for {self.checkout.user.username}'
 
 class UserRegistration(models.Model):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     def check_password(self, raw_password):
         from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.password)
 
+    def __str__(self):
+        return self.username
 
 class Reward(models.Model):
     name = models.CharField(max_length=100)
@@ -115,11 +112,8 @@ class Reward(models.Model):
     def __str__(self):
         return self.name
 
+# Uname - sundhark
+# pswd - Will2win@1148
 
-
-
-#Uname - sundhark
-#pswd - Will2win@1148
-
-#uname - sundhar
-#pswd - sundhar@123
+# uname - sundhar
+# pswd - sundhar@123

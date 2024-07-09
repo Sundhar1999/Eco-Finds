@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Review, CartItem, Reward, Cart
+from .models import Product, Review, CartItem, Reward
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -55,7 +55,7 @@ def product_detail(request, product_id):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -191,7 +191,7 @@ def order_success(request):
     return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 def aboutus(request):  # For aboutus
-    return render(request, 'aboutus.html')
+    return render(request, 'marketplace/aboutus.html')
 @login_required
 def rewards(request):
     # Calculate the total amount spent by the user
