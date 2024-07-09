@@ -1,7 +1,4 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 
@@ -18,7 +15,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
 class UserHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     visits = models.IntegerField(default=0)
@@ -26,8 +22,6 @@ class UserHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.visits} visits"
-
-
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
@@ -39,7 +33,6 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
 
-
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -49,7 +42,6 @@ class CartItem(models.Model):
     def __str__(self):
         return f'{self.quantity} of {self.product.name}'
 
-
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(CartItem)
@@ -57,7 +49,6 @@ class Order(models.Model):
     ordered_at = models.DateTimeField(auto_now_add=True)
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
-
 
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
@@ -74,7 +65,6 @@ class Checkout(models.Model):
     billing_city = models.CharField(max_length=100, blank=True, null=True)
     billing_pin = models.CharField(max_length=10, blank=True, null=True)
     payment_method = models.CharField(max_length=50)
-
 
     def __str__(self):
         return f'Checkout for {self.user.username}'
@@ -103,9 +93,17 @@ class UserRegistration(models.Model):
     def __str__(self):
         return self.username
 
+class Reward(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    points_required = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-#Uname - sundhark
-#pswd - Will2win@1148
+    def __str__(self):
+        return self.name
 
-#uname - sundhar
-#pswd - sundhar@123
+# Uname - sundhark
+# pswd - Will2win@1148
+
+# uname - sundhar
+# pswd - sundhar@123

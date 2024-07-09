@@ -1,13 +1,28 @@
-<!--{% extends "marketplace/base.html" %}-->
-<!--{% block title %}Your Rewards - Eco-Friendly Products Marketplace{% endblock %}-->
-<!--{% block content %}-->
-<!--<div class="container">-->
-<!--    <div class="row justify-content-center">-->
-<!--        <div class="col-md-6">-->
-<!--            <div class="text-center mt-5">-->
-<!--                <h1>Your Rewards</h1>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--{% endblock %}-->
+{% extends "marketplace/base.html" %}
+
+{% block content %}
+  <div class="eco-finds-container">
+    <h2 class="eco-finds-heading">Eco-Finds+</h2>
+    <div class="points-box">
+      <p>Total Reward Points: <span class="points">{{ total_points }}</span></p>
+    </div>
+    <div class="value-box">
+      <p>Value of Reward Points: <span class="value">${{ points_value }}</span></p>
+    </div>
+    <button id="about-eco-finds-btn" class="about-button">About Eco-Finds+</button>
+    <div id="about-eco-finds-details" class="about-details" style="display: none;">
+      <p>Eco-Finds+ is a program designed to reward our loyal customers. For every dollar you spend, you earn 0.5 reward points which can be redeemed for discounts and special offers. We appreciate your commitment to eco-friendly products and strive to provide the best value for your purchases.</p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('about-eco-finds-btn').onclick = function() {
+      var details = document.getElementById('about-eco-finds-details');
+      if (details.style.display === 'none') {
+        details.style.display = 'block';
+      } else {
+        details.style.display = 'none';
+      }
+    }
+  </script>
+{% endblock %}
+
