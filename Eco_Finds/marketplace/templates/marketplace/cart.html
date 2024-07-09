@@ -7,21 +7,37 @@
     <thead>
         <tr>
             <th>Product</th>
+            <th>Description</th>
+            <th>Image</th>
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for item in cart_items %}
         <tr>
             <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
+            <td>{{ item.product.description }}</td>
+            <td><img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="50"></td>
+            <td>
+                <a href="{% url 'update_quantity' item.product.id 'decrease' %}" class="btn btn-secondary btn-sm">-</a>
+                {{ item.quantity }}
+                <a href="{% url 'update_quantity' item.product.id 'increase' %}" class="btn btn-secondary btn-sm">+</a>
+            </td>
             <td>${{ item.product.price }}</td>
             <td>${{ item.product.price|multiply:item.quantity }}</td>
+            <td>
+                <a href="{% url 'toggle_favorite' item.product.id %}" class="btn btn-warning btn-sm">
+                    {% if item.is_favorite %}Unfavorite{% else %}Favorite{% endif %}
+                </a>
+                <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<h3>Total Price: ${{ total_price }}</h3>
 <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
 {% endblock %}
