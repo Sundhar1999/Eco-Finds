@@ -70,7 +70,7 @@ class Checkout(models.Model):
         return f'Checkout for {self.user.username}'
 
 class CardDetails(models.Model):
-    checkout = models.ForeignKey(Checkout, on_delete=models.CASCADE)
+    checkout = models.ForeignKey(Checkout, on_delete=models.CASCADE, default=1)
     card_type = models.CharField(max_length=50)
     card_number = models.CharField(max_length=20)
     expiry_date = models.CharField(max_length=5)
