@@ -94,12 +94,14 @@ class UserRegistration(models.Model):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     def check_password(self, raw_password):
         from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.password)
 
-
+    def __str__(self):
+        return self.username
 
 
 #Uname - sundhark

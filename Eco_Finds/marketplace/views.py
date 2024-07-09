@@ -55,7 +55,7 @@ def product_detail(request, product_id):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
