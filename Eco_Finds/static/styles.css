@@ -96,16 +96,25 @@ nav {
 
 .user-info {
     display: flex;
+    align-items: center;
+    gap: 10px;
     color: whitesmoke;
     margin-top: 20px;
-    gap: 10px;
 }
 
 .welcome-text {
     font-size: 1rem;
     font-weight: bold;
-    color: black; /* Dark green color for text */
+    color: black;
 }
+
+.profile-picture img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 
 #logo {
     display: flex;

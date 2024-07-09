@@ -19,10 +19,11 @@ from .models import UserRegistration
 class UserRegistrationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    profile_picture = forms.ImageField(label='Profile Picture', required=False)
 
     class Meta:
         model = UserRegistration
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'profile_picture']
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
