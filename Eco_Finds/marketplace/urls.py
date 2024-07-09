@@ -20,11 +20,6 @@ urlpatterns = [
     path('card-details/<str:card_type>/', card_details_view, name='card_details'),
     path('submit_payment/', views.submit_payment, name='submit_payment'),
     path('order_success/', views.order_success, name='order_success'),
-    path('cart/', views.view_cart, name='view_cart'),
-    path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
-    path('cart/remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
-    path('cart/favorite/<int:product_id>/', views.toggle_favorite, name='toggle_favorite'),
-    path('cart/update_quantity/<int:product_id>/<str:action>/', views.update_quantity, name='update_quantity'),
 
 ]
 
