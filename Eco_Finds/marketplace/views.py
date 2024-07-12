@@ -251,16 +251,18 @@ def aboutus(request):
     return render(request, 'marketplace/aboutus.html')
 
 
+######REWARDS
+
 @login_required
 def rewards(request):
     user_orders = Order.objects.filter(user=request.user)
-    total_spent = sum(order.total_price for order in user_orders)
-    total_points = total_spent * 0.5
-    points_value = total_points * 2
+    total_order = sum(order.items for order in user_orders)
+    total_points = total_order * 0.25
+    points_value = total_points * 4
 
     rewards = Reward.objects.all()
 
-    return render(request, 'marketplace/base.html', {
+    return render(request, 'marketplace/rewards.html', {
         'rewards': rewards,
         'total_points': total_points,
         'points_value': points_value,
@@ -279,17 +281,6 @@ def wishlist(request):
     return render(request, 'marketplace/partials/wishlist_items.html', {'wishlist_items': wishlist_items})
 
 
-# @login_required
-# def add_reward(request):
-#     if request.method == 'POST':
-#         form = RewardForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('rewards')
-#     else:
-#         form = RewardForm()
-#     return render(request, 'marketplace/add_reward.html', {'form': form})
-# return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 @login_required
 def view_cart(request):
@@ -356,3 +347,14 @@ def add_to_cart_from_wishlist(request, product_id):
     # Add product to cart logic here
     user_registration.wishlist.remove(product)
     return redirect('cart')
+
+
+
+
+
+
+
+
+
+#username: vignesh
+#password: vignesh123
