@@ -1,0 +1,15 @@
+{% extends "marketplace/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Security Questions</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>{{ security_questions.question1 }}</p>
+        <input type="text" name="security_answer1" required>
+        <p>{{ security_questions.question2 }}</p>
+        <input type="text" name="security_answer2" required>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}
