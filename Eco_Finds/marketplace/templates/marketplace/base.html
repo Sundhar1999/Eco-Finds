@@ -86,11 +86,8 @@
             >
           </li>
           <li>
-            <a href="{% url 'rewards' %}" id="rewards-link"
-              ><i class="rewards"></i> Eco-Finds+</a
-            >
+            <a href="{% url 'rewards' %}"><i class="rewards"></i> Eco-Finds+</a>
           </li>
-
           <li><a href="{% url 'aboutus' %}">About Us</a></li>
 
           {% if user.is_authenticated %}
@@ -383,79 +380,28 @@
         &copy; 2024 Eco-Friendly Products Marketplace. All rights reserved.
       </div>
     </footer>
-    <!-- Modal for Eco-Finds+ Rewards -->
-    <div
-      class="modal fade"
-      id="ecoFindsModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="ecoFindsModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="ecoFindsModalLabel">Eco-Finds+</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="eco-finds-container">
-              <h2 class="eco-finds-heading">Eco-Finds+</h2>
-              <div class="points-box">
-                <p>
-                  Total Reward Points:
-                  <span class="points">{{ total_points }}</span>
-                </p>
-              </div>
-              <div class="value-box">
-                <p>
-                  Value of Reward Points:
-                  <span class="value">${{ points_value }}</span>
-                </p>
-              </div>
-              <button id="about-eco-finds-btn" class="about-button">
-                About Eco-Finds+
-              </button>
-              <div
-                id="about-eco-finds-details"
-                class="about-details"
-                style="display: none"
-              >
-                <p>
-                  Eco-Finds+ is a program designed to reward our loyal
-                  customers. For every dollar you spend, you earn 0.5 reward
-                  points which can be redeemed for discounts and special offers.
-                  We appreciate your commitment to eco-friendly products and
-                  strive to provide the best value for your purchases.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("about-eco-finds-btn").onclick = function () {
-          var details = document.getElementById("about-eco-finds-details");
-          if (details.style.display === "none") {
-            details.style.display = "block";
-          } else {
-            details.style.display = "none";
-          }
-        };
+        const stats = document.querySelectorAll(".stat-item");
+        stats.forEach((stat) => {
+          const percentage = stat.querySelector(".percentage");
+          const target = +stat.getAttribute("data-stat");
+          let count = 0;
+          const updateCount = () => {
+            percentage.innerText = `${count}%`;
+            if (count < target) {
+              count++;
+              setTimeout(updateCount, 20);
+            } else {
+              percentage.innerText = `${target}%`;
+            }
+          };
+          updateCount();
+        });
 
         document
           .querySelector("#rewards-link")
