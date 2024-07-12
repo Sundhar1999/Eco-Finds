@@ -59,6 +59,8 @@ class Order(models.Model):
     ordered_at = models.DateTimeField(auto_now_add=True)
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
+    product_name = models.CharField(max_length=255)
+
 
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
@@ -117,3 +119,32 @@ class Reward(models.Model):
 
 # uname - sundhar
 # pswd - sundhar@123
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    visit_count = models.IntegerField(default=0)
+    last_visit = models.DateTimeField(null=True, blank=True)
+
+
+
+def profile_view(request):
+    user = request.user
+    profile, created = UserProfile.objects.get_or_create(user=user)
+
+    # Check session for visit tracking
+    session_key = f'profile_visited_{user.id}'
+    if not request.session.get(session_key, False):
+        profile.visit_count += 1
+        profile.last_visit = now()
+        profile.save()
+        request.session[session_key] = True
+
+    orders = Order.objects.filter(user=user)
+
+    context = {
+        'user': user,
+        'profile': profile,
+        'orders': orders
+    }
+    return render(request, 'profile.html', context)
