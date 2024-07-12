@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import card_details_view
+from .views import forget_password, set_new_password
+from .views import wishlist, add_to_wishlist, remove_from_wishlist, add_to_cart_from_wishlist
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -25,6 +27,14 @@ urlpatterns = [
     path('cart/remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/favorite/<int:product_id>/', views.toggle_favorite, name='toggle_favorite'),
     path('cart/update_quantity/<int:product_id>/<str:action>/', views.update_quantity, name='update_quantity'),
+
+    path('forget_password/', forget_password, name='forget_password'),
+    path('security_questions/', views.security_questions, name='security_questions'),
+    path('set_new_password/', set_new_password, name='set_new_password'),
+
+    path('wishlist/', wishlist, name='wishlist'),
+    path('wishlist/add_to_cart/<int:product_id>/', add_to_cart_from_wishlist, name='add_to_cart_from_wishlist'),
+    path('wishlist/remove/<int:product_id>/', remove_from_wishlist, name='remove_from_wishlist'),
 
 ]
 

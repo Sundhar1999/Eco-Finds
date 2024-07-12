@@ -16,28 +16,63 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import UserRegistration
 
-class UserRegistrationForm(forms.ModelForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+class UserRegistrationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
     profile_picture = forms.ImageField(label='Profile Picture', required=False)
+    security_question1 = forms.CharField(label='Security Question 1')
+    security_answer1 = forms.CharField(label='Answer 1')
+    security_question2 = forms.CharField(label='Security Question 2')
+    security_answer2 = forms.CharField(label='Answer 2')
 
     class Meta:
-        model = UserRegistration
-        fields = ['username', 'email', 'profile_picture']
-
-    def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
-        return password2
+        model = User
+        fields = ['username', 'email', 'password1', 'password2', 'profile_picture', 'security_question1', 'security_answer1', 'security_question2', 'security_answer2']
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.password = make_password(self.cleaned_data["password1"])
+        user.email = self.cleaned_data['email']
         if commit:
             user.save()
+            user_registration, created = UserRegistration.objects.get_or_create(
+                user=user,
+                defaults={
+                    'profile_picture': self.cleaned_data['profile_picture'],
+                    'security_question1': self.cleaned_data['security_question1'],
+                    'security_answer1': self.cleaned_data['security_answer1'],
+                    'security_question2': self.cleaned_data['security_question2'],
+                    'security_answer2': self.cleaned_data['security_answer2']
+                }
+            )
+            if not created:
+                # If user registration already exists, update it with the new data
+                user_registration.profile_picture = self.cleaned_data['profile_picture']
+                user_registration.security_question1 = self.cleaned_data['security_question1']
+                user_registration.security_answer1 = self.cleaned_data['security_answer1']
+                user_registration.security_question2 = self.cleaned_data['security_question2']
+                user_registration.security_answer2 = self.cleaned_data['security_answer2']
+                user_registration.save()
         return user
+
+
+
+class ForgetPasswordForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    # security_answer1 = forms.CharField(max_length=255)
+    # security_answer2 = forms.CharField(max_length=255)
+
+class SetNewPasswordForm(forms.Form):
+    username = forms.CharField(widget=forms.HiddenInput())
+    new_password = forms.CharField(label='New Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    confirm_password = forms.CharField(label='Confirm New Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        if new_password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")
+        return cleaned_data
 
 
 

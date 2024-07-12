@@ -1,0 +1,25 @@
+{% extends "marketplace/base.html" %}
+
+{% block title %}Your Wishlist - Eco-Friendly Products Marketplace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Wishlist</h2>
+    <div class="row">
+        {% for item in wishlist_items %}
+            <div class="col-md-4">
+                <div class="card-wishlist mb-4">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top">
+                    <div class="card-body-wishlist">
+                        <h5 class="card-title">{{ item.product.name }}</h5>
+                        <p class="card-text">{{ item.product.description }}</p>
+                        <p class="card-text">${{ item.product.price }}</p>
+                        <a href="{% url 'add_to_cart_from_wishlist' item.product.id %}" class="btn btn-success">Add to Cart</a>
+                        <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn btn-danger">Remove</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
