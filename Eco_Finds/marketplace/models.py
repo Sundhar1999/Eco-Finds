@@ -93,17 +93,17 @@ class CardDetails(models.Model):
         return f'Card Details for {self.checkout.user.username}'
 
 class UserRegistration(models.Model):
-    username = models.CharField(max_length=150, unique=True)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-
-    def check_password(self, raw_password):
-        from django.contrib.auth.hashers import check_password
-        return check_password(raw_password, self.password)
+    security_question1 = models.CharField(max_length=255)
+    security_answer1 = models.CharField(max_length=255)
+    security_question2 = models.CharField(max_length=255)
+    security_answer2 = models.CharField(max_length=255)
+    wishlist = models.ManyToManyField('Product', blank=True, related_name='wishlisted_by')
 
     def __str__(self):
-        return self.username
+        return self.user.username
+
 
 class Reward(models.Model):
     name = models.CharField(max_length=100)
