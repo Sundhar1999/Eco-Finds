@@ -7,6 +7,8 @@ from .models import Review, Checkout, CardDetails
 from .models import Order, CartItem, Reward
 from .models import UserRegistration
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import AuthenticationForm
+
 
 
 #USER REGISTRATION FORM
@@ -27,6 +29,33 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2', 'profile_picture', 'security_question1', 'security_answer1', 'security_question2', 'security_answer2']
+        labels = {
+            'password1': 'Password',
+            'password2': 'Confirm Password',
+        }
+        widgets = {
+            'password1': forms.PasswordInput(attrs={'placeholder': 'Password'}),
+            'password2': forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}),
+        }
+        help_texts = {
+            'username': None,
+        }
+       
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Email already exists.")
+        return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            self.add_error('password2', "Passwords do not match.")
+
+        return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -44,7 +73,7 @@ class UserRegistrationForm(UserCreationForm):
                 }
             )
             if not created:
-                # If user registration already exists, update it with the new data
+                
                 user_registration.profile_picture = self.cleaned_data['profile_picture']
                 user_registration.security_question1 = self.cleaned_data['security_question1']
                 user_registration.security_answer1 = self.cleaned_data['security_answer1']
@@ -57,8 +86,7 @@ class UserRegistrationForm(UserCreationForm):
 
 class ForgetPasswordForm(forms.Form):
     username = forms.CharField(max_length=150)
-    # security_answer1 = forms.CharField(max_length=255)
-    # security_answer2 = forms.CharField(max_length=255)
+    
 
 class SetNewPasswordForm(forms.Form):
     username = forms.CharField(widget=forms.HiddenInput())

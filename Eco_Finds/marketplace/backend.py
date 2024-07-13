@@ -1,4 +1,3 @@
-
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.models import User
 from .models import UserRegistration
@@ -11,10 +10,9 @@ class UserRegistrationBackend(BaseBackend):
                 return user
         except User.DoesNotExist:
             try:
-                user_registration = UserRegistration.objects.get(username=username)
-                if user_registration.check_password(password):
-                    user = User.objects.create_user(username=username, password=password)
-                    user.save()
+                user_registration = UserRegistration.objects.get(user__username=username)
+                if user_registration.user.check_password(password):
+                    user = user_registration.user
                     return user
             except UserRegistration.DoesNotExist:
                 return None
