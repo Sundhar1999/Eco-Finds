@@ -13,6 +13,7 @@ from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
 from django.utils import timezone
 
+
 def home(request):
     products = Product.objects.all()
     username = request.session.get('username', None)
@@ -27,9 +28,6 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                request.session['username'] = username
-                request.session.set_expiry(180)  # Set session to expire in 3 minutes
-                request.session['last_touch'] = timezone.now().timestamp()
                 messages.info(request, f'You are now logged in as {username}.')
                 return redirect('home')
             else:
@@ -38,7 +36,9 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
-    return render(request, 'registration/Login.html', {'form': form})
+    return render(request, 'registration/login.html', {'form': form})
+
+
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -68,6 +68,7 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
+
 
 def logout_view(request):
     logout(request)
@@ -347,11 +348,6 @@ def add_to_cart_from_wishlist(request, product_id):
     # Add product to cart logic here
     user_registration.wishlist.remove(product)
     return redirect('cart')
-
-
-
-
-
 
 
 
