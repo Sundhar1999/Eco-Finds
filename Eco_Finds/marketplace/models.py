@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
+from django.utils import timezone
+
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
@@ -43,12 +45,11 @@ class CartItem(models.Model):
     is_favorite = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.quantity} of {self.product.name}'
-
+        return self.product.price * self.quantity
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    created_at = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return f'Cart ({self.user.username})'
 
@@ -59,7 +60,7 @@ class Order(models.Model):
     ordered_at = models.DateTimeField(auto_now_add=True)
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
-    product_name = models.CharField(max_length=255)
+    product_name = models.CharField(max_length=255, default='default_product_name')
 
 
     def __str__(self):

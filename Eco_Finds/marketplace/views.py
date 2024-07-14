@@ -359,3 +359,21 @@ def add_to_cart_from_wishlist(request, product_id):
     # Add product to cart logic here
     user_registration.wishlist.remove(product)
     return redirect('cart')
+
+#View to fetch cart items and pass them to the template >>>
+def cart_view(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        items = CartItem.objects.filter(cart=cart)
+        total_price = sum(item.get_total_price() for item in items)
+    except Cart.DoesNotExist:
+        cart = None
+        items = []
+        total_price = 0
+
+    context = {
+        'cart': cart,
+        'items': items,
+        'total_price': total_price
+    }
+    return render(request, 'cart.html', context)
