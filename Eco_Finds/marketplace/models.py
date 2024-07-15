@@ -62,6 +62,9 @@ class Order(models.Model):
     shipping_address = models.CharField(max_length=255)
     product_name = models.CharField(max_length=255, default='default_product_name')
 
+    @property
+    def total_price(self):
+        return self.product.price * self.quantity
 
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
@@ -101,7 +104,8 @@ class UserRegistration(models.Model):
     security_question2 = models.CharField(max_length=255)
     security_answer2 = models.CharField(max_length=255)
     wishlist = models.ManyToManyField('Product', blank=True, related_name='wishlisted_by')
-
+    visit_count = models.IntegerField(default=0)
+    last_visit = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return self.user.username
 

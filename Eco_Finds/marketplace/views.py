@@ -12,7 +12,10 @@ from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm, RewardFo
 from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
 from django.utils import timezone
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+from .models import UserProfile
 def home(request):
     products = Product.objects.all()
     username = request.session.get('username', None)
@@ -377,3 +380,47 @@ def cart_view(request):
         'total_price': total_price
     }
     return render(request, 'cart.html', context)
+
+@login_required
+def profile_view(request):
+    profile = UserRegistration.objects.get(user=user)
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'profile.html', {'user': request.user, 'profile': profile, 'orders': orders})
+
+# to ensure that a Profile object is created whenever a new user is registered
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userregistration.save()
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                # Get or create UserRegistration instance
+                user_registration, created = UserRegistration.objects.get_or_create(user=user)
+                # Update visit count and last visit time
+                user_registration.visit_count += 1
+                user_registration.last_visit = timezone.now()
+                user_registration.save()
+                return HttpResponseRedirect(reverse('myapp:index'))
+            else:
+                return HttpResponse('Your account is disabled.')
+        else:
+            return HttpResponse('Invalid login details.')
+    else:
+        return render(request, 'registration/login.html')
+
+@login_required
+def view_profile(request):
+    user_registration = UserRegistration.objects.get(user=request.user)
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'marketplace/profile.html', {'user_registration': user_registration})
