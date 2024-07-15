@@ -1,25 +1,38 @@
-{% extends "marketplace/base.html" %}
-
-{% block title %}Your Wishlist - Eco-Friendly Products Marketplace{% endblock %}
-
-{% block content %}
-<div class="container mt-5">
-    <h2>Your Wishlist</h2>
-    <div class="row">
-        {% for item in wishlist_items %}
-            <div class="col-md-4">
-                <div class="card-wishlist mb-4">
-                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top">
-                    <div class="card-body-wishlist">
-                        <h5 class="card-title">{{ item.product.name }}</h5>
-                        <p class="card-text">{{ item.product.description }}</p>
-                        <p class="card-text">${{ item.product.price }}</p>
-                        <a href="{% url 'add_to_cart_from_wishlist' item.product.id %}" class="btn btn-success">Add to Cart</a>
-                        <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn btn-danger">Remove</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--    <title>Your Wishlist - Eco-Friendly Products Marketplace</title>-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+<!--        <h2>Your Wishlist</h2>-->
+        <div class="row">
+            {% for product in wishlist_items %}
+                <div class="col-md-4">
+                    <div class="card-wishlist mb-4">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top">
+                        <div class="card-body-wishlist">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.description }}</p>
+                            <p class="card-text">${{ product.price }}</p>
+                            <a href="{% url 'add_to_cart_from_wishlist' product.id %}" class="btn btn-success">Add to Cart</a>
+                            <a href="{% url 'remove_from_wishlist' product.id %}" class="btn btn-danger">Remove</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
-{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

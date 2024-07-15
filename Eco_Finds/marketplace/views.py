@@ -365,14 +365,14 @@ def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user_registration = request.user.userregistration
     user_registration.wishlist.add(product)
-    return redirect('wishlist')
+    return JsonResponse({'success': True})
 
 @login_required
 def remove_from_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user_registration = request.user.userregistration
     user_registration.wishlist.remove(product)
-    return redirect('wishlist')
+    return JsonResponse({'success': True})
 
 @login_required
 def add_to_cart_from_wishlist(request, product_id):
@@ -380,7 +380,8 @@ def add_to_cart_from_wishlist(request, product_id):
     user_registration = request.user.userregistration
     # Add product to cart logic here
     user_registration.wishlist.remove(product)
-    return redirect('cart')
+    return JsonResponse({'success': True})
+    # return redirect('cart')
 
 #View to fetch cart items and pass them to the template >>>
 def cart_view(request):

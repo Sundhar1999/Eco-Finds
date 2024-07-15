@@ -92,14 +92,15 @@
 <section id="products">
     <div class="container">
         <div class="products-header">
-            <h2>popular products</h2>
-            <p>Discover our carefully curated collection of popular products, designed to promote sustainability and a greener lifestyle</p>
+            <h2>Popular Products</h2>
+            <p>Discover our carefully curated collection of popular products, designed to promote sustainability and a greener lifestyle.</p>
         </div>
         <div class="product product-1">
             <figure>
                 <img src="{{ home_essentials.2.image.url }}" alt="product-image">
                 <figcaption>{{ home_essentials.2.name }}</figcaption>
                 <figcaption>$ {{ home_essentials.2.price }}</figcaption>
+                <button class="wishlist-button" onclick="addToWishlist('{{ home_essentials.2.id }}')"><i class="fas fa-heart"></i></button>
             </figure>
         </div>
         <div class="product product-2">
@@ -107,6 +108,7 @@
                 <img src="{{ kids_section.4.image.url }}" alt="product-image">
                 <figcaption>{{ kids_section.4.name }}</figcaption>
                 <figcaption>$ {{ kids_section.4.price }}</figcaption>
+                <button class="wishlist-button" onclick="addToWishlist('{{ kids_section.4.id }}')"><i class="fas fa-heart"></i></button>
             </figure>
         </div>
         <div class="product product-3">
@@ -114,6 +116,7 @@
                 <img src="{{ recycled_products.3.image.url }}" alt="product-image">
                 <figcaption>{{ recycled_products.3.name }}</figcaption>
                 <figcaption>$ {{ recycled_products.3.price }}</figcaption>
+                <button class="wishlist-button" onclick="addToWishlist('{{ recycled_products.3.id }}')"><i class="fas fa-heart"></i></button>
             </figure>
         </div>
         <div class="product product-4">
@@ -121,11 +124,11 @@
                 <img src="{{ women_clothing.1.image.url }}" alt="product-image">
                 <figcaption>{{ women_clothing.1.name }}</figcaption>
                 <figcaption>$ {{ women_clothing.1.price }}</figcaption>
+                <button class="wishlist-button" onclick="addToWishlist('{{ women_clothing.1.id }}')"><i class="fas fa-heart"></i></button>
             </figure>
         </div>
     </div>
 </section>
-
 
 <section id="collections">
     <div class="container">
@@ -133,6 +136,7 @@
             <div class="c-1-image-holder">
                 <img src="{{ bamboo_products.0.image.url }}" alt="image">
                 <p class="product-name">{{ bamboo_products.0.name }}</p>
+                <button class="wishlist-button" onclick="addToWishlist('{{ bamboo_products.0.id }}')"><i class="fas fa-heart"></i></button>
             </div>
         </div>
         <div class="c-2">
@@ -142,18 +146,22 @@
                 <div class="image-wrapper">
                     <img class="left" src="{{ bamboo_products.1.image.url }}" alt="">
                     <p class="product-name">{{ bamboo_products.1.name }}</p>
+                    <button class="wishlist-button" onclick="addToWishlist('{{ bamboo_products.1.id }}')"><i class="fas fa-heart"></i></button>
                 </div>
                 <div class="image-wrapper">
                     <img class="right" src="{{ bamboo_products.2.image.url }}" alt="">
                     <p class="product-name">{{ bamboo_products.2.name }}</p>
+                    <button class="wishlist-button" onclick="addToWishlist('{{ bamboo_products.2.id }}')"><i class="fas fa-heart"></i></button>
                 </div>
                 <div class="image-wrapper">
                     <img class="right" src="{{ bamboo_products.3.image.url }}" alt="">
                     <p class="product-name">{{ bamboo_products.3.name }}</p>
+                    <button class="wishlist-button" onclick="addToWishlist('{{ bamboo_products.3.id }}')"><i class="fas fa-heart"></i></button>
                 </div>
                 <div class="image-wrapper">
                     <img class="right" src="{{ bamboo_products.4.image.url }}" alt="">
                     <p class="product-name">{{ bamboo_products.4.name }}</p>
+                    <button class="wishlist-button" onclick="addToWishlist('{{ bamboo_products.4.id }}')"><i class="fas fa-heart"></i></button>
                 </div>
             </div>
             <p class="button">view all collections</p>
@@ -161,55 +169,47 @@
     </div>
 </section>
 
-
-
-    <section id="blog">
-      <div class="container">
+<section id="blog">
+    <div class="container">
         <div class="blog-header">
-          <h2> Recycled Products </h2>
-          <p>
-            Products made from recycled materials are crafted with sustainability in mind,
-              giving new life to discarded items.
-          </p>
+            <h2> Recycled Products </h2>
+            <p>
+                Products made from recycled materials are crafted with sustainability in mind,
+                giving new life to discarded items.
+            </p>
         </div>
         <div class="blog-content">
-          <div class="blog-1">
-            <div class="blog-1-image-holder">
-              <img
-                src="{{recycled_products.6.image.url }}"
-                alt="image"
-              />
+            <div class="blog-1">
+                <div class="blog-1-image-holder">
+                    <img src="{{recycled_products.6.image.url }}" alt="image">
+                </div>
+                <div class="blog-1-content">
+                    <h4>{{recycled_products.6.name }}</h4>
+                    <h3>$ {{recycled_products.6.price }}</h3>
+                    <p class="description">
+                        {{recycled_products.6.environmental_impact }}<br><br>
+                        <b> Carbon Emission - {{recycled_products.6.carbon_emission }} %</b>
+                    </p>
+                    <button class="wishlist-button" onclick="addToWishlist('{{ recycled_products.6.id }}')"><i class="fas fa-heart"></i></button>
+                </div>
             </div>
-            <div class="blog-1-content">
-              <h4>{{recycled_products.6.name }}</h4>
-              <h3>$ {{recycled_products.6.price }}</h3>
-              <p class="description">
-                    {{recycled_products.6.environmental_impact }}<br><br>
-                    <b> Carbon Emission - {{recycled_products.6.carbon_emission }} %</b>
-              </p>
-              <p class="button">view post</p>
+            <div class="blog-2">
+                <div class="blog-2-image-holder">
+                    <img src="{{recycled_products.5.image.url }}" alt="image">
+                </div>
+                <div class="blog-2-content">
+                    <h4>{{recycled_products.5.name }}</h4>
+                    <h3>$ {{recycled_products.5.price }}</h3>
+                    <p class="description">
+                        {{recycled_products.5.environmental_impact }}<br><br>
+                        <b> Carbon Emission - {{recycled_products.5.carbon_emission }} %</b>
+                    </p>
+                    <button class="wishlist-button" onclick="addToWishlist('{{ recycled_products.5.id }}')"><i class="fas fa-heart"></i></button>
+                </div>
             </div>
-          </div>
-          <div class="blog-2">
-            <div class="blog-2-image-holder">
-              <img
-                src="{{recycled_products.5.image.url }}"
-                alt="image"
-              />
-            </div>
-            <div class="blog-2-content">
-              <h4>{{recycled_products.5.name }}</h4>
-              <h3>$ {{recycled_products.5.price }}</h3>
-              <p class="description">
-                    {{recycled_products.5.environmental_impact }}<br><br>
-                    <b> Carbon Emission - {{recycled_products.5.carbon_emission }} %</b>
-              </p>
-              <p class="button">view post</p>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
 
 <!-- New Carbon Footprint Statistics Section -->
 <section id="carbon-footprint">
@@ -386,7 +386,33 @@
             }
         });
 
-    });
+
+        const wishlistButtons = document.querySelectorAll('.wishlist-button');
+        wishlistButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const productId = button.getAttribute('data-product-id');
+                addToWishlist(productId);
+            });
+        });
+
+
+        function addToWishlist(productId) {
+        fetch(`/add-to-wishlist/${productId}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Product added to wishlist!');
+                } else {
+                    alert('Failed to add product to wishlist.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+            window.addToWishlist = addToWishlist;
+
+        });
 </script>
 </body>
 </html>
