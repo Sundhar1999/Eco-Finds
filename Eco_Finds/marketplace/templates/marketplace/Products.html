@@ -1,18 +1,38 @@
-{% extends "marketplace/base.html" %}
-{% block title %}Products - Eco-Friendly Products Marketplace{% endblock %}
-{% block content %}
-<!--<div class="row">-->
-<!--    {% for product in products %}-->
-<!--        <div class="col-md-4">-->
-<!--            <div class="card mb-4">-->
-<!--                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">{{ product.name }}</h5>-->
-<!--                    <p class="card-text">{{ product.description|truncatewords:20 }}</p>-->
-<!--                    <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Product</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    {% endfor %}-->
-<!--</div>-->
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'prodstyles.css' %}">
+    <title>Product Showcase</title>
+</head>
+
+<body>
+    <header>
+        <div class="RRlogo">EcoFinds</div>
+        <button class="RRbuy-now-button">&#128722; Buy now</button>
+    </header>
+    <main>
+        <div class="RRfilter-section">
+            <select id="RRcategorySelect" onchange="RRfilterProducts()">
+                <option value="all">All Products</option>
+                <option value="men">Men's Styling</option>
+                <option value="women">Women's Styling</option>
+                <option value="home">Home Essentials</option>
+            </select>
+        </div>
+        <section class="RRproduct-section">
+            <div class="RRcontainer RRcategory">
+                <!-- Products will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </main>
+    <script src="{% static 'prod.js' %}"></script>
+</body>
+
+</html>
+
