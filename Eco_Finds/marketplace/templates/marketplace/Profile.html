@@ -5,26 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Eco-Friendly Products Marketplace</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-<div class="container mt-5">
-    <h2>Profile</h2>
-    <h3>Order History</h3>
-    <ul>
-        {% for order in user_orders %}
-        <li>Order ID: {{ order.id }}, Total Price: ${{ order.total_price }}, Date: {{ order.ordered_at }}</li>
-        {% endfor %}
-    </ul>
-    <h3>Browsing History</h3>
-    <p>Number of Visits: {{ history.visits }}</p>
-    <p>Last Visit: {{ history.last_visit }}</p>
+<div class="profile-container">
+    <h1>User Profile</h1>
+    <div class="profile-details">
+        <h2>Profile</h2>
+        <p>Name: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+    </div>
+    <div class="order-history">
+        <h2>Order History</h2>
+        <ul>
+            {% for order in orders %}
+            <li>Order ID: {{ order.id }}, Product: {{ order.product_name }}, Total Price: ${{ order.total_price }}, Date: {{ order.ordered_at }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="visit-info">
+        <h2>Number of Visits:</h2>
+        <p>{{ profile.visit_count }}</p>
+        <h2>Last Visit:</h2>
+        <p>{{ profile.last_visit }}</p>
+    </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="{% static 'script.js' %}"></script>
 </body>
 </html>

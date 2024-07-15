@@ -27,7 +27,7 @@ urlpatterns = [
     path('cart/remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/favorite/<int:product_id>/', views.toggle_favorite, name='toggle_favorite'),
     path('cart/update_quantity/<int:product_id>/<str:action>/', views.update_quantity, name='update_quantity'),
-
+    path('cart/', views.cart_view, name='cart-view'),
     path('forget_password/', forget_password, name='forget_password'),
     path('security_questions/', views.security_questions, name='security_questions'),
     path('set_new_password/', set_new_password, name='set_new_password'),
