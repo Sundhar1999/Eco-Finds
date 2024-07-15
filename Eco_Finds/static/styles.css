@@ -478,6 +478,7 @@ nav {
 #summer-collection .sc-content p.description {
     font-size: 1rem;
     margin: 1rem 0;
+    text-align: justify;
 }
 
 #summer-collection .sc-content a {
@@ -539,7 +540,13 @@ nav {
     width: 100%;
     height: 300px; /* Adjust this value to increase image height */
     object-fit: cover; /* Ensure the image covers the area without distortion */
+    transition: transform 0.3s ease; /* Smooth transition for the transform property */
 }
+
+.product img:hover {
+    transform: scale(1.1); /* Scale up the image on hover */
+}
+
 
 #collections .container {
     display: flex;
@@ -554,9 +561,31 @@ nav {
     box-sizing: border-box;
 }
 
-#collections .c-1-image-holder img {
+#collections .c-1-image-holder img,
+#collections .c-2 .c-2-image-holder img,
+#collections .c-2 .additional-images img {
     width: 100%;
     height: auto;
+    transition: transform 0.3s ease;
+}
+
+#collections .c-1-image-holder,
+#collections .c-2 .image-wrapper,
+#collections .c-2 .additional-images .image-wrapper {
+    position: relative;
+    text-align: center;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#collections .c-1-image-holder .product-name,
+#collections .c-2 .image-wrapper .product-name,
+#collections .c-2 .additional-images .product-name {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #000;
 }
 
 #collections .c-2 h2 {
@@ -571,11 +600,36 @@ nav {
 #collections .c-2 .c-2-image-holder {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-end;
 }
 
-#collections .c-2 .c-2-image-holder img {
+#collections .c-2 .c-2-image-holder .image-wrapper,
+#collections .c-2 .additional-images .image-wrapper {
     width: 48%;
-    height: auto;
+}
+
+#collections .c-2 .c-2-image-holder .image-wrapper:hover img,
+#collections .c-2 .additional-images .image-wrapper:hover img {
+    transform: scale(1.05);
+}
+
+#collections .c-2 .additional-images {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+#collections .c-2 .additional-images .image-wrapper {
+    width: 48%;
+}
+
+/* Ensure both images have the same height */
+#collections .c-2 .additional-images .image-wrapper img {
+    height: 300px; /* Set a fixed height */
+    object-fit: cover; /* Scale the image appropriately */
 }
 
 #collections .c-2 p.button {
@@ -585,7 +639,15 @@ nav {
     color: #fff;
     text-transform: uppercase;
     cursor: pointer;
+    text-align: center;
+    margin: 1rem 3rem 0 150px;
+    max-width: 300px;
 }
+
+
+
+
+
 
 #blog .container {
     text-align: center;

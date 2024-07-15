@@ -45,7 +45,9 @@
                         <a href="{% url 'cart' %}">Cart</a>
                     </div>
                 </div>
-                <span class="material-symbols-outlined"><i class="fas fa-heart fa-2x"></i></span>
+                {% if user.is_authenticated %}
+                    <span class="material-symbols-outlined" id="wishlist-icon" onclick="openWishlist()"><i class="fas fa-heart fa-2x"></i></span>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -76,7 +78,7 @@
     <div class="container">
         <div class="sc-content">
             <h1>summer collection</h1>
-            <p class="description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            <p class="description">Step into the vibrant world of our Summer Collection, where sunshine and style meet. Explore a dazzling array of dresses that capture the essence of summer with their breezy fabrics and vibrant colors. Pamper yourself with our specially curated cosmetics, designed to keep you glowing even on the hottest days. Delight in our adorable kids' summer essentials, perfect for keeping the little ones cool and stylish. From chic accessories to must-have seasonal items, our Summer Collection is your one-stop destination for everything you need to make this summer unforgettable. Embrace the season with flair and let our collection inspire your summer adventures!</p>
             <a href="#">discover now</a>
         </div>
         <div class="sc-media">
@@ -91,90 +93,133 @@
     <div class="container">
         <div class="products-header">
             <h2>popular products</h2>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+            <p>Discover our carefully curated collection of popular products, designed to promote sustainability and a greener lifestyle</p>
         </div>
         <div class="product product-1">
             <figure>
-                <img src="{% static 'images/dress2.jpg' %}" alt="product-image">
-                <figcaption>cold fashion</figcaption>
-                <figcaption>$ 56.00</figcaption>
+                <img src="{{ home_essentials.2.image.url }}" alt="product-image">
+                <figcaption>{{ home_essentials.2.name }}</figcaption>
+                <figcaption>$ {{ home_essentials.2.price }}</figcaption>
             </figure>
         </div>
         <div class="product product-2">
             <figure>
-                <img src="{% static 'images/dress1.webp' %}" alt="product-image">
-                <figcaption>women fashion</figcaption>
-                <figcaption>$ 84.00</figcaption>
+                <img src="{{ kids_section.4.image.url }}" alt="product-image">
+                <figcaption>{{ kids_section.4.name }}</figcaption>
+                <figcaption>$ {{ kids_section.4.price }}</figcaption>
             </figure>
         </div>
         <div class="product product-3">
             <figure>
-                <img src="{% static 'images/dress3.jpg' %}" alt="product-image">
-                <figcaption>women fashion</figcaption>
-                <figcaption>$ 48.00</figcaption>
+                <img src="{{ recycled_products.3.image.url }}" alt="product-image">
+                <figcaption>{{ recycled_products.3.name }}</figcaption>
+                <figcaption>$ {{ recycled_products.3.price }}</figcaption>
             </figure>
         </div>
         <div class="product product-4">
             <figure>
-                <img src="{% static 'images/product4.jpg' %}" alt="product-image">
-                <figcaption>men fashion</figcaption>
-                <figcaption>$ 89.00</figcaption>
+                <img src="{{ women_clothing.1.image.url }}" alt="product-image">
+                <figcaption>{{ women_clothing.1.name }}</figcaption>
+                <figcaption>$ {{ women_clothing.1.price }}</figcaption>
             </figure>
         </div>
     </div>
 </section>
+
 
 <section id="collections">
     <div class="container">
         <div class="c-1">
             <div class="c-1-image-holder">
-                <img src="{% static 'images/BambooProduct3.jpg' %}" alt="image">
+                <img src="{{ bamboo_products.0.image.url }}" alt="image">
+                <p class="product-name">{{ bamboo_products.0.name }}</p>
             </div>
         </div>
         <div class="c-2">
-            <h2>featured Bamboo collections</h2>
+            <h2>Featured Bamboo Collections</h2>
             <hr />
             <div class="c-2-image-holder">
-                <img class="left" src="{% static 'images/BambooProduct1.jpg' %}" alt="">
-                <img class="right" src="{% static 'images/BambooProduct2_.jpg' %}" alt="">
+                <div class="image-wrapper">
+                    <img class="left" src="{{ bamboo_products.1.image.url }}" alt="">
+                    <p class="product-name">{{ bamboo_products.1.name }}</p>
+                </div>
+                <div class="image-wrapper">
+                    <img class="right" src="{{ bamboo_products.2.image.url }}" alt="">
+                    <p class="product-name">{{ bamboo_products.2.name }}</p>
+                </div>
+                <div class="image-wrapper">
+                    <img class="right" src="{{ bamboo_products.3.image.url }}" alt="">
+                    <p class="product-name">{{ bamboo_products.3.name }}</p>
+                </div>
+                <div class="image-wrapper">
+                    <img class="right" src="{{ bamboo_products.4.image.url }}" alt="">
+                    <p class="product-name">{{ bamboo_products.4.name }}</p>
+                </div>
             </div>
+<!--            <div class="additional-images">-->
+<!--                <div class="image-wrapper">-->
+<!--                    <img class="additional" src="{{ bamboo_products.5.image.url }}" alt="">-->
+<!--                    <p class="product-name">{{ bamboo_products.5.name }}</p>-->
+<!--                </div>-->
+<!--                <div class="image-wrapper">-->
+<!--                    <img class="additional" src="{{ bamboo_products.6.image.url }}" alt="">-->
+<!--                    <p class="product-name">{{ bamboo_products.6.name }}</p>-->
+<!--                </div>-->
+<!--            </div>-->
             <p class="button">view all collections</p>
         </div>
     </div>
 </section>
 
-<section id="blog">
-    <div class="container">
+
+
+    <section id="blog">
+      <div class="container">
         <div class="blog-header">
-            <h2>latest from blog</h2>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+          <h2> Recycled Products </h2>
+          <p>
+            Products made from recycled materials are crafted with sustainability in mind,
+              giving new life to discarded items.
+          </p>
         </div>
         <div class="blog-content">
-            <div class="blog-1">
-                <div class="blog-1-image-holder">
-                    <img src="https://res.cloudinary.com/de8cuyd0n/image/upload/v1520412548/E-commerce%20landing%20page/blog/blog-2-img_3x.jpg" alt="image">
-                </div>
-                <div class="blog-1-content">
-                    <h4>Lorem Ipsum</h4>
-                    <h3>Lorem ipsum dolor sit amet.</h3>
-                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                    <p class="button">view post</p>
-                </div>
+          <div class="blog-1">
+            <div class="blog-1-image-holder">
+              <img
+                src="{{recycled_products.6.image.url }}"
+                alt="image"
+              />
             </div>
-            <div class="blog-2">
-                <div class="blog-2-image-holder">
-                    <img src="https://res.cloudinary.com/de8cuyd0n/image/upload/v1520412543/E-commerce%20landing%20page/blog/blog-1-img_3x.jpg" alt="image">
-                </div>
-                <div class="blog-2-content">
-                    <h4>Lorem Ipsum</h4>
-                    <h3>Lorem ipsum dolor sit amet.</h3>
-                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                    <p class="button">view post</p>
-                </div>
+            <div class="blog-1-content">
+              <h4>{{recycled_products.6.name }}</h4>
+              <h3>$ {{recycled_products.6.price }}</h3>
+              <p class="description">
+                    {{recycled_products.6.environmental_impact }}<br><br>
+                    <b> Carbon Emission - {{recycled_products.6.carbon_emission }} %</b>
+              </p>
+              <p class="button">view post</p>
             </div>
+          </div>
+          <div class="blog-2">
+            <div class="blog-2-image-holder">
+              <img
+                src="{{recycled_products.5.image.url }}"
+                alt="image"
+              />
+            </div>
+            <div class="blog-2-content">
+              <h4>{{recycled_products.5.name }}</h4>
+              <h3>$ {{recycled_products.5.price }}</h3>
+              <p class="description">
+                    {{recycled_products.5.environmental_impact }}<br><br>
+                    <b> Carbon Emission - {{recycled_products.5.carbon_emission }} %</b>
+              </p>
+              <p class="button">view post</p>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
 <!-- New Carbon Footprint Statistics Section -->
 <section id="carbon-footprint">
@@ -306,7 +351,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == document.getElementById("wishlistModal")) {
                 closeWishlist();
             }
@@ -333,7 +378,7 @@
         });
 
         const searchButton = document.getElementById('searchQuerySubmit');
-        searchButton.addEventListener('click', function(event) {
+        searchButton.addEventListener('click', function (event) {
             event.preventDefault();
             const query = document.getElementById('searchQueryInput').value.toLowerCase();
             if (query) {
@@ -341,7 +386,7 @@
                 let found = false;
                 elements.forEach(element => {
                     if (element.innerText.toLowerCase().includes(query)) {
-                        element.scrollIntoView({ behavior: 'smooth' });
+                        element.scrollIntoView({behavior: 'smooth'});
                         found = true;
                     }
                 });
@@ -350,6 +395,24 @@
                 }
             }
         });
+
+
+        // const recycledProducts = JSON.parse('{{ recycled_products|escapejs }}');
+        //
+        // if (recycledProducts.length > 0) {
+        //     document.getElementById('blog-1-image').src = recycledProducts[0].image;
+        //     document.getElementById('blog-1-name').textContent = recycledProducts[0].name;
+        //     document.getElementById('blog-1-title').textContent = recycledProducts[0].name; // Assuming title is the name
+        //     document.getElementById('blog-1-description').textContent = recycledProducts[0].description;
+        // }
+        //
+        // if (recycledProducts.length > 1) {
+        //     document.getElementById('blog-2-image').src = recycledProducts[1].image;
+        //     document.getElementById('blog-2-name').textContent = recycledProducts[1].name;
+        //     document.getElementById('blog-2-title').textContent = recycledProducts[1].name; // Assuming title is the name
+        //     document.getElementById('blog-2-description').textContent = recycledProducts[1].description;
+        // }
+
     });
 </script>
 </body>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Product, Review, CartItem, Reward
+from .models import Product, Review, CartItem, Reward, Category
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -13,10 +13,38 @@ from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
 from django.utils import timezone
 
+
 def home(request):
     products = Product.objects.all()
+    bamboo_category = Category.objects.get(name="Bamboo_Products")
+    bamboo_products = Product.objects.filter(category=bamboo_category)[:5]
+
+    home_essentials_category = Category.objects.get(name="Home_Essentials")
+    kids_section_category = Category.objects.get(name="Kids_Section")
+    men_clothing_category = Category.objects.get(name="Men_Clothing")
+    women_clothing_category = Category.objects.get(name="Women_Clothing")
+    recycled_category = Category.objects.get(name="Recycled_Products")
+
+    home_essentials = Product.objects.filter(category=home_essentials_category)
+    kids_section = Product.objects.filter(category=kids_section_category)
+    men_clothing = Product.objects.filter(category=men_clothing_category)
+    women_clothing = Product.objects.filter(category=women_clothing_category)
+    recycled_products = Product.objects.filter(category=recycled_category)
+
     username = request.session.get('username', None)
-    return render(request, 'marketplace/home.html', {'products': products, 'username': username})
+
+    context = {
+        'products': products,
+        'bamboo_products': bamboo_products,
+        'home_essentials': home_essentials,
+        'kids_section': kids_section,
+        'recycled_products': recycled_products,
+        'men_clothing': men_clothing,
+        'women_clothing': women_clothing,
+        'username': username,
+    }
+
+    return render(request, 'marketplace/home.html', context)
 
 def login_view(request):
     if request.method == 'POST':
@@ -281,18 +309,6 @@ def wishlist(request):
     wishlist_items = user_registration.wishlist.all()
     return render(request, 'marketplace/partials/wishlist_items.html', {'wishlist_items': wishlist_items})
 
-
-# @login_required
-# def add_reward(request):
-#     if request.method == 'POST':
-#         form = RewardForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('rewards')
-#     else:
-#         form = RewardForm()
-#     return render(request, 'marketplace/add_reward.html', {'form': form})
-# return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 @login_required
 def view_cart(request):
