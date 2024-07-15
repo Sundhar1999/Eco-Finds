@@ -12,6 +12,7 @@ from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm, RewardFo
 from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
 from django.utils import timezone
+from django.http import JsonResponse
 
 
 def home(request):
@@ -198,25 +199,23 @@ def set_new_password(request):
             confirm_password = form.cleaned_data['confirm_password']
 
             if new_password != confirm_password:
-                messages.error(request, "Passwords do not match.")
-                return render(request, 'registration/set_new_password.html', {'form': form, 'username': username})
+                return JsonResponse({'success': False, 'error': 'Passwords do not match.'})
 
             try:
                 user_registration = UserRegistration.objects.get(user__username=username)
                 user = user_registration.user
                 user.set_password(new_password)  # Use set_password method to hash the password
                 user.save()
-                messages.success(request, "Password reset successful. Please log in with your new password.")
-                return redirect('login')
+                return JsonResponse({'success': True, 'message': 'Password reset successful. Please log in with your new password.'})
             except UserRegistration.DoesNotExist:
-                messages.error(request, "User does not exist.")
-                return redirect('forget_password')
+                return JsonResponse({'success': False, 'error': 'User does not exist.'})
+        else:
+            return JsonResponse({'success': False, 'error': 'Form is not valid.'})
     else:
         form = SetNewPasswordForm()
         username = request.session.get('username')
-    return render(request, 'registration/set_new_password.html', {'form': form, 'username': username})
-
-
+        return render(request, 'registration/set_new_password.html', {'form': form, 'username': username})
+    
 @login_required
 def awaiting_payment(request):
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
