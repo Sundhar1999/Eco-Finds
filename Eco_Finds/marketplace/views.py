@@ -14,7 +14,6 @@ from .models import UserRegistration
 from django.utils import timezone
 from django.http import JsonResponse
 
-
 def home(request):
     products = Product.objects.all()
     username = request.session.get('username', None)
@@ -29,6 +28,9 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                request.session['username'] = username
+                request.session.set_expiry(180)  # Set session to expire in 3 minutes
+                request.session['last_touch'] = timezone.now().timestamp()
                 messages.info(request, f'You are now logged in as {username}.')
                 return redirect('home')
             else:
@@ -37,9 +39,7 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
-    return render(request, 'registration/login.html', {'form': form})
-
-
+    return render(request, 'registration/Login.html', {'form': form})
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -69,7 +69,6 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
-
 
 def logout_view(request):
     logout(request)
@@ -239,7 +238,7 @@ def card_details(request):
 @login_required
 def submit_payment(request):
     if request.method == 'POST':
-        
+        # Process the payment details here
         return redirect('order_success')
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
@@ -247,19 +246,20 @@ def submit_payment(request):
 def order_success(request):
     return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
-def aboutus(request):  
+def aboutus(request):  # For aboutus
     return render(request, 'marketplace/aboutus.html')
-
-
-######REWARDS
-
 @login_required
 def rewards(request):
+    # Calculate the total amount spent by the user
     user_orders = Order.objects.filter(user=request.user)
-    total_order = sum(order.items for order in user_orders)
-    total_points = total_order * 0.25
-    points_value = total_points * 4
+    total_spent = sum(order.total_price for order in user_orders)
 
+    # Calculate the total reward points (0.5 points per dollar spent)
+    total_points = total_spent * 0.5
+
+    points_value = total_points * 2
+
+    # Get the user's rewards
     rewards = Reward.objects.all()
 
     return render(request, 'marketplace/rewards.html', {
@@ -281,6 +281,17 @@ def wishlist(request):
     return render(request, 'marketplace/partials/wishlist_items.html', {'wishlist_items': wishlist_items})
 
 
+# @login_required
+# def add_reward(request):
+#     if request.method == 'POST':
+#         form = RewardForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('rewards')
+#     else:
+#         form = RewardForm()
+#     return render(request, 'marketplace/add_reward.html', {'form': form})
+# return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 @login_required
 def view_cart(request):
@@ -348,8 +359,20 @@ def add_to_cart_from_wishlist(request, product_id):
     user_registration.wishlist.remove(product)
     return redirect('cart')
 
+#View to fetch cart items and pass them to the template >>>
+def cart_view(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        items = CartItem.objects.filter(cart=cart)
+        total_price = sum(item.get_total_price() for item in items)
+    except Cart.DoesNotExist:
+        cart = None
+        items = []
+        total_price = 0
 
-
-
-#username: vignesh
-#password: vignesh123
+    context = {
+        'cart': cart,
+        'items': items,
+        'total_price': total_price
+    }
+    return render(request, 'cart.html', context)
