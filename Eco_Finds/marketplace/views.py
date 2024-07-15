@@ -18,6 +18,21 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 def home(request):
     products = Product.objects.all()
+    bamboo_category = Category.objects.get(name="Bamboo_Products")
+    bamboo_products = Product.objects.filter(category=bamboo_category)[:5]
+
+    home_essentials_category = Category.objects.get(name="Home_Essentials")
+    kids_section_category = Category.objects.get(name="Kids_Section")
+    men_clothing_category = Category.objects.get(name="Men_Clothing")
+    women_clothing_category = Category.objects.get(name="Women_Clothing")
+    recycled_category = Category.objects.get(name="Recycled_Products")
+
+    home_essentials = Product.objects.filter(category=home_essentials_category)
+    kids_section = Product.objects.filter(category=kids_section_category)
+    men_clothing = Product.objects.filter(category=men_clothing_category)
+    women_clothing = Product.objects.filter(category=women_clothing_category)
+    recycled_products = Product.objects.filter(category=recycled_category)
+
     username = request.session.get('username', None)
     return render(request, 'marketplace/home.html', {'products': products, 'username': username})
 
