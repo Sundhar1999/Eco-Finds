@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Product, Review, CartItem, Reward
+from .models import Cart, Product, Review, CartItem, Reward
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -41,6 +41,7 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'registration/Login.html', {'form': form})
 
+
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     reviews = product.reviews.all()
@@ -56,6 +57,7 @@ def product_detail(request, product_id):
         review_form = ReviewForm()
     return render(request, 'marketplace/Products.html', {'product': product, 'reviews': reviews, 'review_form': review_form, 'username': request.session.get('username')})
 
+
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST, request.FILES)
@@ -70,10 +72,12 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+
 def logout_view(request):
     logout(request)
     messages.info(request, 'Your session has expired. Please log in again.')
     return redirect('login')
+
 
 @login_required
 def profile(request):
@@ -81,10 +85,12 @@ def profile(request):
     history, created = UserHistory.objects.get_or_create(user=request.user)
     return render(request, 'marketplace/profile.html', {'user_orders': user_orders, 'history': history, 'username': request.session.get('username')})
 
+
 def products(request):
     products = Product.objects.all()
     username = request.session.get('username', None)
     return render(request, 'marketplace/Products.html', {'products': products, 'username': username})
+
 
 @login_required
 def view_cart(request):
@@ -92,6 +98,8 @@ def view_cart(request):
     cart_items = cart.items.all()
     total_price = sum(item.product.price * item.quantity for item in cart_items)
     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -101,6 +109,7 @@ def add_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
     return redirect('view_cart')
+
 
 @login_required
 def remove_from_cart(request, product_id):
@@ -118,6 +127,7 @@ def toggle_favorite(request, product_id):
     cart_item.save()
     return redirect('view_cart')
 
+
 @login_required
 def update_quantity(request, product_id, action):
     cart = get_object_or_404(Cart, user=request.user)
@@ -128,10 +138,13 @@ def update_quantity(request, product_id, action):
         cart_item.quantity -= 1
     cart_item.save()
     return redirect('view_cart')
+
+
 @login_required
 def cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
     return render(request, 'marketplace/cart.html', {'cart_items': cart_items, 'username': request.session.get('username')})
+
 
 @login_required
 def checkout(request):
@@ -215,9 +228,11 @@ def set_new_password(request):
         username = request.session.get('username')
         return render(request, 'registration/set_new_password.html', {'form': form, 'username': username})
     
+    
 @login_required
 def awaiting_payment(request):
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
+
 
 @login_required
 def card_details_view(request, card_type):
@@ -230,36 +245,37 @@ def card_details_view(request, card_type):
         form = CardDetailsForm(initial={'card_type': card_type})
     return render(request, 'marketplace/card_details.html', {'form': form})
 
+
 @login_required
 def card_details(request):
     payment_type = request.POST.get('payment')
     return render(request, 'marketplace/card_details.html', {'payment_type': payment_type, 'username': request.session.get('username')})
 
+
 @login_required
 def submit_payment(request):
     if request.method == 'POST':
-        # Process the payment details here
+       
         return redirect('order_success')
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
+
 
 @login_required
 def order_success(request):
     return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
+
 def aboutus(request):  # For aboutus
     return render(request, 'marketplace/aboutus.html')
+
+
 @login_required
 def rewards(request):
-    # Calculate the total amount spent by the user
+
     user_orders = Order.objects.filter(user=request.user)
     total_spent = sum(order.total_price for order in user_orders)
-
-    # Calculate the total reward points (0.5 points per dollar spent)
     total_points = total_spent * 0.5
-
     points_value = total_points * 2
-
-    # Get the user's rewards
     rewards = Reward.objects.all()
 
     return render(request, 'marketplace/rewards.html', {
@@ -270,10 +286,6 @@ def rewards(request):
 
 
 
-
-
-
-
 @login_required
 def wishlist(request):
     user_registration = request.user.userregistration
@@ -281,23 +293,13 @@ def wishlist(request):
     return render(request, 'marketplace/partials/wishlist_items.html', {'wishlist_items': wishlist_items})
 
 
-# @login_required
-# def add_reward(request):
-#     if request.method == 'POST':
-#         form = RewardForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('rewards')
-#     else:
-#         form = RewardForm()
-#     return render(request, 'marketplace/add_reward.html', {'form': form})
-# return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 @login_required
 def view_cart(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = cart.items.all()
     return render(request, 'cart.html', {'cart_items': cart_items})
+
 
 @login_required
 def add_to_cart(request, product_id):
@@ -309,12 +311,14 @@ def add_to_cart(request, product_id):
         cart_item.save()
     return redirect('view_cart')
 
+
 @login_required
 def remove_from_cart(request, product_id):
     cart = get_object_or_404(Cart, user=request.user)
     cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
     cart_item.delete()
     return redirect('view_cart')
+
 
 @login_required
 def toggle_favorite(request, product_id):
@@ -336,13 +340,13 @@ def update_quantity(request, product_id, action):
     return redirect('view_cart')
 
 
-
 @login_required
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user_registration = request.user.userregistration
     user_registration.wishlist.add(product)
     return redirect('wishlist')
+
 
 @login_required
 def remove_from_wishlist(request, product_id):
@@ -359,7 +363,7 @@ def add_to_cart_from_wishlist(request, product_id):
     user_registration.wishlist.remove(product)
     return redirect('cart')
 
-#View to fetch cart items and pass them to the template >>>
+
 def cart_view(request):
     try:
         cart = Cart.objects.get(user=request.user)

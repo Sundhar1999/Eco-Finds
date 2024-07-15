@@ -18,6 +18,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
 
 class UserHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,6 +27,7 @@ class UserHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.visits} visits"
+    
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
@@ -36,6 +38,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
+    
 
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -46,12 +49,14 @@ class CartItem(models.Model):
 
     def __str__(self):
         return self.product.price * self.quantity
+    
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return f'Cart ({self.user.username})'
+    
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -65,6 +70,7 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
+    
 
 class Checkout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -81,6 +87,7 @@ class Checkout(models.Model):
 
     def __str__(self):
         return f'Checkout for {self.user.username}'
+    
 
 class CardDetails(models.Model):
     checkout = models.ForeignKey(Checkout, on_delete=models.CASCADE, default=1)
@@ -92,6 +99,7 @@ class CardDetails(models.Model):
 
     def __str__(self):
         return f'Card Details for {self.checkout.user.username}'
+    
 
 class UserRegistration(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -114,12 +122,6 @@ class Reward(models.Model):
 
     def __str__(self):
         return self.name
-
-# Uname - sundhark
-# pswd - Will2win@1148
-
-# uname - sundhar
-# pswd - sundhar@123
 
 
 class UserProfile(models.Model):
@@ -149,3 +151,13 @@ def profile_view(request):
         'orders': orders
     }
     return render(request, 'profile.html', context)
+
+
+
+
+
+# Uname - sundhark
+# pswd - Will2win@1148
+
+# uname - sundhar
+# pswd - sundhar@123
