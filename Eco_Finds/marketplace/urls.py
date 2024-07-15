@@ -33,8 +33,9 @@ urlpatterns = [
     path('set_new_password/', set_new_password, name='set_new_password'),
 
     path('wishlist/', wishlist, name='wishlist'),
+    path('add-to-wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('wishlist/add_to_cart/<int:product_id>/', add_to_cart_from_wishlist, name='add_to_cart_from_wishlist'),
-    path('wishlist/remove/<int:product_id>/', remove_from_wishlist, name='remove_from_wishlist'),
+    path('remove-from-wishlist/<int:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
 ]
 
