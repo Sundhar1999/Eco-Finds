@@ -1,40 +1,4 @@
-<!--{% load static %}-->
-<!--{% load multiply %}-->
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart | EcoFinds</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="container">-->
-<!--        <h1>Shopping Cart</h1>-->
-<!--        <div class="cart-items">-->
-<!--            <div class="cart-item">-->
-<!--                <img src="{% static 'images/BambooProduct1.jpg' %}" alt="Bamboo Product">-->
-<!--                <div class="item-info">-->
-<!--                    <p>Product Name: Bamboo Toothbrush</p>-->
-<!--                    <p>Price: $2.99</p>-->
-<!--                    <p>Quantity: 1</p>-->
-<!--                    <button>Remove</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Repeat for other products &ndash;&gt;-->
-<!--        </div>-->
-<!--        <div class="total">-->
-<!--            <h2>Total: $2.99</h2>-->
-<!--            <button>Checkout</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
-
 {% load static %}
-{% load multiply %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,102 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
     <link rel="stylesheet" href="{% static 'css/cart.css' %}">
-        <script src="{% static 'js/cart.js' %}"></script>
-
+    <script src="{% static 'js/cart.js' %}"></script>
 </head>
 <body>
     <div class="shopping-cart">
         <div class="title">Shopping Cart</div>
 
-        <div class="item">
-            <div class="buttons">
-                <span class="delete-btn"></span>
-                <span class="like-btn"></span>
+        {% if items %}
+            {% for item in items %}
+                <div class="item">
+                    <div class="buttons">
+                        <span class="delete-btn"></span>
+                        <span class="like-btn"></span>
+                    </div>
+
+                    <div class="image">
+                        <img src="{{ item.product.image.url }}" alt="Product Image" />
+                    </div>
+
+                    <div class="description">
+                        <span>{{ item.product.name }}</span>
+                        <span>{{ item.product.description }}</span>
+                    </div>
+
+                    <div class="quantity">
+                        <button class="minus-btn" type="button" name="button">
+                            <img src="{% static 'images/minus.svg' %}" alt="Minus" />
+                        </button>
+                        <input type="text" name="name" value="{{ item.quantity }}">
+                        <button class="plus-btn" type="button" name="button">
+                            <img src="{% static 'images/plus.svg' %}" alt="Plus" />
+                        </button>
+                    </div>
+
+                    <div class="total-price">${{ item.get_total_price }}</div>
+                </div>
+            {% endfor %}
+            <div class="total">
+                <h2>Total: ${{ total_price }}</h2>
+                <button>Proceed to Checkout</button>
             </div>
-
-            <div class="image">
-                <img src="{% static 'images/BambooProduct1.jpg' %}" alt="Product Image" />
-            </div>
-
-            <div class="description">
-                <span>Common Projects</span>
-                <span>Bball High</span>
-                <span>White</span>
-            </div>
-
-            <div class="quantity">
-                <button class="minus-btn" type="button" name="button">
-                    <img src="{% static 'images/minus.svg' %}" alt="Minus" />
-                </button>
-                <input type="text" name="name" value="1">
-                <button class="plus-btn" type="button" name="button">
-                    <img src="{% static 'images/plus.svg' %}" alt="Plus" />
-                </button>
-            </div>
-
-            <div class="total-price">$549</div>
-        </div>
-
-        <!-- Repeat the .item div for each product in the cart -->
-
-        <div class="item">
-            <div class="buttons">
-                <span class="delete-btn"></span>
-                <span class="like-btn"></span>
-            </div>
-
-            <div class="image">
-                <img src="{% static 'images/BambooProduct2_.jpg' %}" alt="Product Image" />
-            </div>
-
-            <div class="description">
-                <span>Common Projects</span>
-                <span>Bball High</span>
-                <span>White</span>
-            </div>
-
-            <div class="quantity">
-                <button class="minus-btn" type="button" name="button">
-                    <img src="{% static 'images/minus.svg' %}" alt="Minus" />
-                </button>
-                <input type="text" name="name" value="1">
-                <button class="plus-btn" type="button" name="button">
-                    <img src="{% static 'images/plus.svg' %}" alt="Plus" />
-                </button>
-            </div>
-
-            <div class="total-price">$549</div>
-        </div>
-
-        <div class="item">
-            <div class="buttons">
-                <span class="delete-btn"></span>
-                <span class="like-btn"></span>
-            </div>
-
-            <div class="image">
-                <img src="{% static 'images/BambooProduct3.jpg' %}" alt="Product Image" />
-            </div>
-
-            <div class="description">
-                <span>Common Projects</span>
-                <span>Bball High</span>
-                <span>White</span>
-            </div>
-
-            <div class="quantity">
-                <button class="minus-btn" type="button" name="button">
-                    <img src="{% static 'images/minus.svg' %}" alt="Minus" />
-                </button>
-                <input type="text" name="name" value="1">
-                <button class="plus-btn" type="button" name="button">
-                    <img src="{% static 'images/plus.svg' %}" alt="Plus" />
-                </button>
-            </div>
-
-            <div class="total-price">$549</div>
-        </div>
+        {% else %}
+            <p>There are no more items in your cart</p>
+        {% endif %}
     </div>
-
 </body>
 </html>
