@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Product, Review, CartItem, Reward, Category
+from .models import Product, Review, CartItem, Reward
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -12,7 +12,6 @@ from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm, RewardFo
 from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
 from django.utils import timezone
-
 
 def home(request):
     products = Product.objects.all()
@@ -56,7 +55,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 request.session['username'] = username
-                request.session.set_expiry(180)  # Set session to expire in 3 minutes
+                request.session.set_expiry(300)  # Set session to expire in 3 minutes
                 request.session['last_touch'] = timezone.now().timestamp()
                 messages.info(request, f'You are now logged in as {username}.')
                 return redirect('home')
@@ -66,7 +65,9 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
-    return render(request, 'registration/Login.html', {'form': form})
+    return render(request, 'registration/login.html', {'form': form})
+
+
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -277,18 +278,17 @@ def order_success(request):
 
 def aboutus(request):  # For aboutus
     return render(request, 'marketplace/aboutus.html')
+
+
+######REWARDS
+
 @login_required
 def rewards(request):
-    # Calculate the total amount spent by the user
     user_orders = Order.objects.filter(user=request.user)
-    total_spent = sum(order.total_price for order in user_orders)
+    total_order = sum(order.items for order in user_orders)
+    total_points = total_order * 0.25
+    points_value = total_points * 4
 
-    # Calculate the total reward points (0.5 points per dollar spent)
-    total_points = total_spent * 0.5
-
-    points_value = total_points * 2
-
-    # Get the user's rewards
     rewards = Reward.objects.all()
 
     return render(request, 'marketplace/rewards.html', {
