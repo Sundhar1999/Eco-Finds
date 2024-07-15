@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Product, Review, CartItem, Reward, Category
+from .models import Product, Review, CartItem, Reward
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -12,8 +12,10 @@ from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm, RewardFo
 from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
 from django.utils import timezone
-
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+from .models import UserProfile
 def home(request):
     products = Product.objects.all()
     bamboo_category = Category.objects.get(name="Bamboo_Products")
@@ -32,19 +34,7 @@ def home(request):
     recycled_products = Product.objects.filter(category=recycled_category)
 
     username = request.session.get('username', None)
-
-    context = {
-        'products': products,
-        'bamboo_products': bamboo_products,
-        'home_essentials': home_essentials,
-        'kids_section': kids_section,
-        'recycled_products': recycled_products,
-        'men_clothing': men_clothing,
-        'women_clothing': women_clothing,
-        'username': username,
-    }
-
-    return render(request, 'marketplace/home.html', context)
+    return render(request, 'marketplace/home.html', {'products': products, 'username': username})
 
 def login_view(request):
     if request.method == 'POST':
@@ -56,7 +46,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 request.session['username'] = username
-                request.session.set_expiry(300)  # Set session to expire in 3 minutes
+                request.session.set_expiry(180)  # Set session to expire in 3 minutes
                 request.session['last_touch'] = timezone.now().timestamp()
                 messages.info(request, f'You are now logged in as {username}.')
                 return redirect('home')
@@ -66,9 +56,7 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
-    return render(request, 'registration/login.html', {'form': form})
-
-
+    return render(request, 'registration/Login.html', {'form': form})
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -98,7 +86,6 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
-
 
 def logout_view(request):
     logout(request)
@@ -270,7 +257,7 @@ def card_details(request):
 @login_required
 def submit_payment(request):
     if request.method == 'POST':
-        
+        # Process the payment details here
         return redirect('order_success')
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
@@ -278,19 +265,17 @@ def submit_payment(request):
 def order_success(request):
     return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
-def aboutus(request):  
+def aboutus(request):  # For aboutus
     return render(request, 'marketplace/aboutus.html')
-
-
-######REWARDS
-
 @login_required
 def rewards(request):
     # Calculate the total amount spent by the user
     user_orders = Order.objects.filter(user=request.user)
     total_spent = sum(order.total_price for order in user_orders)
+
     # Calculate the total reward points (0.5 points per dollar spent)
     total_points = total_spent * 0.5
+
     points_value = total_points * 2
 
     # Get the user's rewards
@@ -315,6 +300,17 @@ def wishlist(request):
     return render(request, 'marketplace/partials/wishlist_items.html', {'wishlist_items': wishlist_items})
 
 
+# @login_required
+# def add_reward(request):
+#     if request.method == 'POST':
+#         form = RewardForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('rewards')
+#     else:
+#         form = RewardForm()
+#     return render(request, 'marketplace/add_reward.html', {'form': form})
+# return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 @login_required
 def view_cart(request):
@@ -400,3 +396,47 @@ def cart_view(request):
         'total_price': total_price
     }
     return render(request, 'cart.html', context)
+
+@login_required
+def profile_view(request):
+    profile = UserRegistration.objects.get(user=user)
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'profile.html', {'user': request.user, 'profile': profile, 'orders': orders})
+
+# to ensure that a Profile object is created whenever a new user is registered
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userregistration.save()
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                # Get or create UserRegistration instance
+                user_registration, created = UserRegistration.objects.get_or_create(user=user)
+                # Update visit count and last visit time
+                user_registration.visit_count += 1
+                user_registration.last_visit = timezone.now()
+                user_registration.save()
+                return HttpResponseRedirect(reverse('myapp:index'))
+            else:
+                return HttpResponse('Your account is disabled.')
+        else:
+            return HttpResponse('Invalid login details.')
+    else:
+        return render(request, 'registration/login.html')
+
+@login_required
+def view_profile(request):
+    user_registration = UserRegistration.objects.get(user=request.user)
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'marketplace/profile.html', {'user_registration': user_registration})
