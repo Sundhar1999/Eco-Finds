@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Product, Review, CartItem, Reward
+from .models import Product, Review, CartItem, Reward, Category
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
