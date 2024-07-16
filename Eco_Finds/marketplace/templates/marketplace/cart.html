@@ -422,6 +422,7 @@
 <body>
     <div class="shopping-cart">
         <div class="title">Cart</div>
+        {% if items %}
         <table class="cart-table">
             <thead>
                 <tr>
@@ -472,6 +473,9 @@
                 <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>
             </div>
         </div>
+        {% else %}
+        <p>There are no items in your cart!  </p>
+        {% endif %}
     </div>
 </body>
 </html>
