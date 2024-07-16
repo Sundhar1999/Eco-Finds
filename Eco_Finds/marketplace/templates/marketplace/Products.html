@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    {%load static%}
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -20,14 +20,34 @@
         <div class="RRfilter-section">
             <select id="RRcategorySelect" onchange="RRfilterProducts()">
                 <option value="all">All Products</option>
-                <option value="men">Men's Styling</option>
-                <option value="women">Women's Styling</option>
-                <option value="home">Home Essentials</option>
+                {% for category in categories %}
+                    <option value="{{ category.name|slugify }}">{{ category.name }}</option>
+                {% endfor %}
             </select>
         </div>
         <section class="RRproduct-section">
             <div class="RRcontainer RRcategory">
-                <!-- Products will be inserted here by JavaScript -->
+                {% for product in products %}
+                    <div class="RRcard" data-category="{{ product.category.name|slugify }}">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="height:200px; width:100%; object-fit:cover;">
+<!--                        <button class="wishlist" aria-label="Add to wishlist">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">-->
+<!--                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>-->
+<!--                            </svg>-->
+<!--                        </button>-->
+                        <div class="info">
+                            <h3 class="name">{{ product.name }}</h3>
+                            <p class="price">${{ product.price }}</p>
+                            <div class="additional-info">
+                                <span class="carbon-emission">Carbon: {{ product.carbon_emission }}% CO2</span> |
+                                <span class="environmental-impact" title="Click for more info">Environmental Impact</span>
+                                <div class="impact-info hidden">{{ product.environmental_impact|default:"No data available" }}</div><br>
+                                <span class="quantity-info">QTY: {{ product.quantity|default:"N/A" }}</span>
+                            </div>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </section>
     </main>
