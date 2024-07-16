@@ -12,6 +12,7 @@ from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm, RewardFo
 from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
 from django.utils import timezone
+from django.http import JsonResponse
 
 
 def home(request):
@@ -372,7 +373,7 @@ def remove_from_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user_registration = request.user.userregistration
     user_registration.wishlist.remove(product)
-    return JsonResponse({'success': True})
+    return redirect('home')
 
 @login_required
 def add_to_cart_from_wishlist(request, product_id):
