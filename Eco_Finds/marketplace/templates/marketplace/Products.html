@@ -44,7 +44,11 @@
                                 <div class="impact-info hidden">{{ product.environmental_impact|default:"No data available" }}</div><br>
                                 <span class="quantity-info">QTY: {{ product.quantity|default:"N/A" }}</span>
                             </div>
-                            <button class="add-to-cart">Add to Cart</button>
+<!--                            <button class="add-to-cart">Add to Cart</button>-->
+                            <form action="{% url 'add_to_cart' product.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Add to Cart</button>
+                            </form>
                         </div>
                     </div>
                 {% endfor %}
