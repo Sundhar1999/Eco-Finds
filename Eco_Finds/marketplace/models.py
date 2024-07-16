@@ -59,8 +59,12 @@ class CartItem(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
     is_favorite = models.BooleanField(default=False)
 
-    def __str__(self):
+    @property
+    def total_price(self):
         return self.product.price * self.quantity
+
+    # def __str__(self):
+    #     return self.product.price * self.quantity
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -77,9 +81,9 @@ class Order(models.Model):
     shipping_address = models.CharField(max_length=255)
     product_name = models.CharField(max_length=255, default='default_product_name')
 
-    @property
     def total_price(self):
         return self.product.price * self.quantity
+
 
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
