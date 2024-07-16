@@ -24,25 +24,36 @@ document.addEventListener('DOMContentLoaded', function () {
         const cardHtml = `
             <div class="RRcard" data-category="${product.category}">
                 <img src="${product.imageUrl}" alt="${product.name}" style="height:200px; width:100%; object-fit:cover;">
+                
+<!--                &lt;!&ndash; Wishlist button &ndash;&gt;-->
+<!--                <button class="wishlist" aria-label="Add to wishlist">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">-->
+<!--                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>-->
+<!--                    </svg>-->
+<!--                </button>-->
+<!--                -->
                 <div class="info">
                     <h3 class="name">${product.name}</h3>
                     <p class="price">$${product.price}</p>
                     <div class="additional-info">
                         <span class="carbon-emission">Carbon: ${product.carbonEmission}</span> |
                         <span class="environmental-impact" title="Click for more info">Environmental Impact</span>
-                        <div class="impact-info hidden">${product.environmentalImpact}</div>
+                        <div class="impact-info hidden">${product.environmentalImpact || 'No data available'}</div>
+                        <span class="quantity-info">QTY: <span class="quantity-value">${product.quantity || 'N/A'}</span>
                     </div>
-                    <div class="rating">${'&#9733;'.repeat(product.rating) + '&#9734;'.repeat(5 - product.rating)}</div>
-                    <button>Add to Cart</button>
+                    
+                    <button class="add-to-cart">Add to Cart</button>
+                    
                 </div>
             </div>
         `;
         container.innerHTML += cardHtml;
     });
 
+    // Filter function
     function RRfilterProducts() {
-        var selectedCategory = document.getElementById('RRcategorySelect').value;
-        var cards = document.querySelectorAll('.RRcard');
+        const selectedCategory = document.getElementById('RRcategorySelect').value;
+        const cards = document.querySelectorAll('.RRcard');
 
         cards.forEach(card => {
             if (selectedCategory === 'all' || card.getAttribute('data-category') === selectedCategory) {
@@ -55,4 +66,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('RRcategorySelect').addEventListener('change', RRfilterProducts);
     RRfilterProducts();
+
+    // Toggle wishlist button color on click
+    document.querySelectorAll('.wishlist').forEach(button => {
+        button.addEventListener('click', function () {
+            button.classList.toggle('active');
+        });
+    });
+
+    // Redirect to aboutus page on Add to Cart button click
+    document.querySelectorAll('.RRcard .add-to-cart').forEach(button => {
+        button.addEventListener('click', function () {
+            window.location.href = aboutusUrl;
+        });
+    });
 });
