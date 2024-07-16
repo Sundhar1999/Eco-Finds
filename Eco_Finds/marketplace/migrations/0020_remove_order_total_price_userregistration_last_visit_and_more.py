@@ -10,10 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='order',
-            name='total_price',
-        ),
+
         migrations.AddField(
             model_name='userregistration',
             name='last_visit',
