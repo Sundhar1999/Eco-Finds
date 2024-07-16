@@ -105,6 +105,7 @@ def logout_view(request):
     messages.info(request, 'Your session has expired. Please log in again.')
     return redirect('login')
 
+
 @login_required
 def profile(request):
     user_orders = Order.objects.filter(user=request.user)
@@ -122,6 +123,7 @@ def view_cart(request):
     cart_items = cart.items.all()
     total_price = sum(item.product.price * item.quantity for item in cart_items)
     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -158,6 +160,7 @@ def update_quantity(request, product_id, action):
         cart_item.quantity -= 1
     cart_item.save()
     return redirect('view_cart')
+
 @login_required
 def cart(request):
     cart_items = CartItem.objects.filter(user=request.user)

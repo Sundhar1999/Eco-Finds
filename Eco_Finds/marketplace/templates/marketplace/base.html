@@ -1,208 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Eco-Friendly Products Marketplace{% endblock %}</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body>
-<header>
-    <div class="header-content">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}Eco-Friendly Products Marketplace{% endblock %}
+    </title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
         <div id="logo">
-            <img src="{% static 'images/logo3.jpg' %}" alt="Logo" width="60" height="72">
+          <img
+            src="{% static 'images/logo3.jpg' %}"
+            alt="Logo"
+            width="60"
+            height="72"
+          />
         </div>
-        <div id="center-text">
-            Eco Finds
-        </div>
+        <div id="center-text">Eco Finds</div>
         <div class="user-info">
-            {% if user.is_authenticated %}
-                <span class="welcome-text"> {{ user.username }}</span>
-                <div class="profile-picture">
-                    {% if user.userregistration.profile_picture %}
-                        <img src="{{ user.userregistration.profile_picture.url }}" alt="Profile Picture" width="50" height="50">
-                    {% else %}
-                        <img src="{% static 'images/default_profile_picture.png' %}" alt="Default Profile Picture" width="50" height="50">
-                    {% endif %}
-                </div>
+          {% if user.is_authenticated %}
+          <span class="welcome-text"> {{ user.username }}</span>
+          <div class="profile-picture">
+            {% if user.userregistration.profile_picture %}
+            <img
+              src="{{ user.userregistration.profile_picture.url }}"
+              alt="Profile Picture"
+              width="50"
+              height="50"
+            />
+            {% else %}
+            <img
+              src="{% static 'images/default_profile_picture.png' %}"
+              alt="Default Profile Picture"
+              width="50"
+              height="50"
+            />
             {% endif %}
-            <div class="icons">
-                <div class="dropdown">
-                    <span class="material-symbols-outlined user-icon"><i class="fas fa-user fa-2x"></i></span>
-                    <div class="dropdown-content">
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'profile' %}">Profile</a>
-                            <a href="{% url 'logout' %}">Logout</a>
-                        {% else %}
-                            <a href="{% url 'login' %}">Login</a>
-                            <a href="{% url 'register' %}">Register</a>
-                        {% endif %}
-                        <a href="#" onclick="openWishlist()">Wishlist</a>
-                        <a href="{% url 'cart' %}">Cart</a>
-                    </div>
-                </div>
+          </div>
+          {% endif %}
+          <div class="icons">
+            <div class="dropdown">
+              <span class="material-symbols-outlined user-icon"
+                ><i class="fas fa-user fa-2x"></i
+              ></span>
+              <div class="dropdown-content">
                 {% if user.is_authenticated %}
-                    <span class="material-symbols-outlined" id="wishlist-icon" onclick="openWishlist()"><i class="fas fa-heart fa-2x"></i></span>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
                 {% endif %}
+                <a href="#" onclick="openWishlist()">Wishlist</a>
+                <a href="{% url 'cart' %}">Cart</a>
+              </div>
             </div>
+            {% if user.is_authenticated %}
+            <span
+              class="material-symbols-outlined"
+              id="wishlist-icon"
+              onclick="openWishlist()"
+              ><i class="fas fa-heart fa-2x"></i
+            ></span>
+            {% endif %}
+          </div>
         </div>
-    </div>
+      </div>
 
-    <div class="wrapper">
+      <div class="wrapper">
         <div class="searchBar">
-            <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="What are you looking for?" value="" />
-            <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">Search</button>
+          <input
+            id="searchQueryInput"
+            type="text"
+            name="searchQueryInput"
+            placeholder="What are you looking for?"
+            value=""
+          />
+          <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+            Search
+          </button>
         </div>
-    </div>
+      </div>
 
-    <nav>
+      <nav>
         <ul class="navigation-menu">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'products' %}">Products</a></li>
-            <li><a href="{% url 'rewards' %}"><i class="rewards"></i> Eco-Finds+</a></li>
-            <li><a href="{% url 'aboutus' %}">About Us</a></li>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'products' %}">Products</a></li>
+          <li>
+            <a href="{% url 'rewards' %}"><i class="rewards"></i> Eco-Finds+</a>
+          </li>
+          <li><a href="{% url 'aboutus' %}">About Us</a></li>
         </ul>
-    </nav>
-</header>
+      </nav>
+    </header>
 
-<main>
-    {% block content %}
-    {% endblock %}
-</main>
+    <main>{% block content %} {% endblock %}</main>
 
-<section id="summer-collection">
-    <div class="container">
+    <section id="summer-collection">
+      <div class="container">
         <div class="sc-content">
-            <h1>summer collection</h1>
-            <p class="description">Step into the vibrant world of our Summer Collection, where sunshine and style meet. Explore a dazzling array of dresses that capture the essence of summer with their breezy fabrics and vibrant colors. Pamper yourself with our specially curated cosmetics, designed to keep you glowing even on the hottest days. Delight in our adorable kids' summer essentials, perfect for keeping the little ones cool and stylish. From chic accessories to must-have seasonal items, our Summer Collection is your one-stop destination for everything you need to make this summer unforgettable. Embrace the season with flair and let our collection inspire your summer adventures!</p>
-            <a href="#">discover now</a>
+          <h1>summer collection</h1>
+          <p class="description">
+            Step into the vibrant world of our Summer Collection, where sunshine
+            and style meet. Explore a dazzling array of dresses that capture the
+            essence of summer with their breezy fabrics and vibrant colors.
+            Pamper yourself with our specially curated cosmetics, designed to
+            keep you glowing even on the hottest days. Delight in our adorable
+            kids' summer essentials, perfect for keeping the little ones cool
+            and stylish. From chic accessories to must-have seasonal items, our
+            Summer Collection is your one-stop destination for everything you
+            need to make this summer unforgettable. Embrace the season with
+            flair and let our collection inspire your summer adventures!
+          </p>
+          <a href="#">discover now</a>
         </div>
         <div class="sc-media">
-            <div class="sc-media-bg">
-                <img src="{% static 'images/slide3.jpg' %}" alt="sc-image" />
-            </div>
+          <div class="sc-media-bg">
+            <img src="{% static 'images/slide3.jpg' %}" alt="sc-image" />
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<section id="products">
-    <div class="container">
+    <section id="products">
+      <div class="container">
         <div class="products-header">
-            <h2>popular products</h2>
-            <p>Discover our carefully curated collection of popular products, designed to promote sustainability and a greener lifestyle</p>
+          <h2>popular products</h2>
+          <p>
+            Discover our carefully curated collection of popular products,
+            designed to promote sustainability and a greener lifestyle
+          </p>
         </div>
         <div class="product product-1">
-            <figure>
-                <img src="{{ home_essentials.2.image.url }}" alt="product-image">
-                <figcaption>{{ home_essentials.2.name }}</figcaption>
-                <figcaption>$ {{ home_essentials.2.price }}</figcaption>
-            </figure>
+          <figure>
+            <img src="{{ home_essentials.2.image.url }}" alt="product-image" />
+            <figcaption>{{ home_essentials.2.name }}</figcaption>
+            <figcaption>$ {{ home_essentials.2.price }}</figcaption>
+          </figure>
         </div>
         <div class="product product-2">
-            <figure>
-                <img src="{{ kids_section.4.image.url }}" alt="product-image">
-                <figcaption>{{ kids_section.4.name }}</figcaption>
-                <figcaption>$ {{ kids_section.4.price }}</figcaption>
-            </figure>
+          <figure>
+            <img src="{{ kids_section.4.image.url }}" alt="product-image" />
+            <figcaption>{{ kids_section.4.name }}</figcaption>
+            <figcaption>$ {{ kids_section.4.price }}</figcaption>
+          </figure>
         </div>
         <div class="product product-3">
-            <figure>
-                <img src="{{ recycled_products.3.image.url }}" alt="product-image">
-                <figcaption>{{ recycled_products.3.name }}</figcaption>
-                <figcaption>$ {{ recycled_products.3.price }}</figcaption>
-            </figure>
+          <figure>
+            <img
+              src="{{ recycled_products.3.image.url }}"
+              alt="product-image"
+            />
+            <figcaption>{{ recycled_products.3.name }}</figcaption>
+            <figcaption>$ {{ recycled_products.3.price }}</figcaption>
+          </figure>
         </div>
         <div class="product product-4">
-            <figure>
-                <img src="{{ women_clothing.1.image.url }}" alt="product-image">
-                <figcaption>{{ women_clothing.1.name }}</figcaption>
-                <figcaption>$ {{ women_clothing.1.price }}</figcaption>
-            </figure>
+          <figure>
+            <img src="{{ women_clothing.1.image.url }}" alt="product-image" />
+            <figcaption>{{ women_clothing.1.name }}</figcaption>
+            <figcaption>$ {{ women_clothing.1.price }}</figcaption>
+          </figure>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<section id="collections">
-    <div class="container">
+    <section id="collections">
+      <div class="container">
         <div class="c-1">
-            <div class="c-1-image-holder">
-                <img src="{{ bamboo_products.0.image.url }}" alt="image">
-                <p class="product-name">{{ bamboo_products.0.name }}</p>
-            </div>
+          <div class="c-1-image-holder">
+            <img src="{{ bamboo_products.0.image.url }}" alt="image" />
+            <p class="product-name">{{ bamboo_products.0.name }}</p>
+          </div>
         </div>
         <div class="c-2">
-            <h2>Featured Bamboo Collections</h2>
-            <hr />
-            <div class="c-2-image-holder">
-                <div class="image-wrapper">
-                    <img class="left" src="{{ bamboo_products.1.image.url }}" alt="">
-                    <p class="product-name">{{ bamboo_products.1.name }}</p>
-                </div>
-                <div class="image-wrapper">
-                    <img class="right" src="{{ bamboo_products.2.image.url }}" alt="">
-                    <p class="product-name">{{ bamboo_products.2.name }}</p>
-                </div>
-                <div class="image-wrapper">
-                    <img class="right" src="{{ bamboo_products.3.image.url }}" alt="">
-                    <p class="product-name">{{ bamboo_products.3.name }}</p>
-                </div>
-                <div class="image-wrapper">
-                    <img class="right" src="{{ bamboo_products.4.image.url }}" alt="">
-                    <p class="product-name">{{ bamboo_products.4.name }}</p>
-                </div>
+          <h2>Featured Bamboo Collections</h2>
+          <hr />
+          <div class="c-2-image-holder">
+            <div class="image-wrapper">
+              <img
+                class="left"
+                src="{{ bamboo_products.1.image.url }}"
+                alt=""
+              />
+              <p class="product-name">{{ bamboo_products.1.name }}</p>
             </div>
-            <p class="button">view all collections</p>
+            <div class="image-wrapper">
+              <img
+                class="right"
+                src="{{ bamboo_products.2.image.url }}"
+                alt=""
+              />
+              <p class="product-name">{{ bamboo_products.2.name }}</p>
+            </div>
+            <div class="image-wrapper">
+              <img
+                class="right"
+                src="{{ bamboo_products.3.image.url }}"
+                alt=""
+              />
+              <p class="product-name">{{ bamboo_products.3.name }}</p>
+            </div>
+            <div class="image-wrapper">
+              <img
+                class="right"
+                src="{{ bamboo_products.4.image.url }}"
+                alt=""
+              />
+              <p class="product-name">{{ bamboo_products.4.name }}</p>
+            </div>
+          </div>
+          <p class="button">view all collections</p>
         </div>
-    </div>
-</section>
-
-
+      </div>
+    </section>
 
     <section id="blog">
       <div class="container">
         <div class="blog-header">
-          <h2> Recycled Products </h2>
+          <h2>Recycled Products</h2>
           <p>
-            Products made from recycled materials are crafted with sustainability in mind,
-              giving new life to discarded items.
+            Products made from recycled materials are crafted with
+            sustainability in mind, giving new life to discarded items.
           </p>
         </div>
         <div class="blog-content">
           <div class="blog-1">
             <div class="blog-1-image-holder">
-              <img
-                src="{{recycled_products.6.image.url }}"
-                alt="image"
-              />
+              <img src="{{recycled_products.6.image.url }}" alt="image" />
             </div>
             <div class="blog-1-content">
               <h4>{{recycled_products.6.name }}</h4>
               <h3>$ {{recycled_products.6.price }}</h3>
               <p class="description">
-                    {{recycled_products.6.environmental_impact }}<br><br>
-                    <b> Carbon Emission - {{recycled_products.6.carbon_emission }} %</b>
+                {{recycled_products.6.environmental_impact }}<br /><br />
+                <b>
+                  Carbon Emission - {{recycled_products.6.carbon_emission }}
+                  %</b
+                >
               </p>
               <p class="button">view post</p>
             </div>
           </div>
           <div class="blog-2">
             <div class="blog-2-image-holder">
-              <img
-                src="{{recycled_products.5.image.url }}"
-                alt="image"
-              />
+              <img src="{{recycled_products.5.image.url }}" alt="image" />
             </div>
             <div class="blog-2-content">
               <h4>{{recycled_products.5.name }}</h4>
               <h3>$ {{recycled_products.5.price }}</h3>
               <p class="description">
-                    {{recycled_products.5.environmental_impact }}<br><br>
-                    <b> Carbon Emission - {{recycled_products.5.carbon_emission }} %</b>
+                {{recycled_products.5.environmental_impact }}<br /><br />
+                <b>
+                  Carbon Emission - {{recycled_products.5.carbon_emission }}
+                  %</b
+                >
               </p>
               <p class="button">view post</p>
             </div>
@@ -211,182 +279,216 @@
       </div>
     </section>
 
-<!-- New Carbon Footprint Statistics Section -->
-<section id="carbon-footprint">
-    <div class="container">
+    <!-- New Carbon Footprint Statistics Section -->
+    <section id="carbon-footprint">
+      <div class="container">
         <div class="stats-header">
-            <h2>Carbon Footprint Statistics</h2>
-            <p>Understanding the impact of eco-friendly products.</p>
+          <h2>Carbon Footprint Statistics</h2>
+          <p>Understanding the impact of eco-friendly products.</p>
         </div>
         <div class="stats-content">
-            <div class="stat-item" data-stat="80">
-                <div class="circle">
-                    <div class="circle-content">1st</div>
-                </div>
-                <div class="percentage">80%</div>
-                <div class="description">Reduction in carbon footprint in the first year of using eco-friendly products.</div>
+          <div class="stat-item" data-stat="80">
+            <div class="circle">
+              <div class="circle-content">1st</div>
             </div>
-            <div class="stat-item" data-stat="70">
-                <div class="circle">
-                    <div class="circle-content">2nd</div>
-                </div>
-                <div class="percentage">70%</div>
-                <div class="description">Reduction in carbon footprint in the second year of using eco-friendly products.</div>
+            <div class="percentage">80%</div>
+            <div class="description">
+              Reduction in carbon footprint in the first year of using
+              eco-friendly products.
             </div>
-            <div class="stat-item" data-stat="50">
-                <div class="circle">
-                    <div class="circle-content">5th</div>
-                </div>
-                <div class="percentage">50%</div>
-                <div class="description">Reduction in carbon footprint in the fifth year of using eco-friendly products.</div>
+          </div>
+          <div class="stat-item" data-stat="70">
+            <div class="circle">
+              <div class="circle-content">2nd</div>
             </div>
-            <div class="stat-item" data-stat="30">
-                <div class="circle">
-                    <div class="circle-content">10th</div>
-                </div>
-                <div class="percentage">30%</div>
-                <div class="description">Reduction in carbon footprint in the tenth year of using eco-friendly products.</div>
+            <div class="percentage">70%</div>
+            <div class="description">
+              Reduction in carbon footprint in the second year of using
+              eco-friendly products.
             </div>
+          </div>
+          <div class="stat-item" data-stat="50">
+            <div class="circle">
+              <div class="circle-content">5th</div>
+            </div>
+            <div class="percentage">50%</div>
+            <div class="description">
+              Reduction in carbon footprint in the fifth year of using
+              eco-friendly products.
+            </div>
+          </div>
+          <div class="stat-item" data-stat="30">
+            <div class="circle">
+              <div class="circle-content">10th</div>
+            </div>
+            <div class="percentage">30%</div>
+            <div class="description">
+              Reduction in carbon footprint in the tenth year of using
+              eco-friendly products.
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<div id="wishlistModal" class="modal-wishlist">
-    <div class="modal-content-wishlist">
+    <div id="wishlistModal" class="modal-wishlist">
+      <div class="modal-content-wishlist">
         <span class="close-wishlist" onclick="closeWishlist()">&times;</span>
         <h2>Your Wishlist</h2>
-        <div class="wishlist-container" id="wishlist-container">
-        </div>
+        <div class="wishlist-container" id="wishlist-container"></div>
+      </div>
     </div>
-</div>
 
-<footer class="footer bg-light text-center text-md-left">
-    <div class="container">
+    <footer class="footer bg-light text-center text-md-left">
+      <div class="container">
         <div class="row">
-            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                <h5 class="text-uppercase font-weight-bold">About</h5>
-                <ul>
-                    <li><a href="#">Company</a></li>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Quality Gift</a></li>
-                    <li><a href="#">Cards</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                <h5 class="text-uppercase font-weight-bold">Shop</h5>
-                <ul>
-                    <li><a href="#">Loose Leaf Tea</a></li>
-                    <li><a href="#">Green Teas</a></li>
-                    <li><a href="#">Packaged Teas</a></li>
-                    <li><a href="#">Teaware</a></li>
-                    <li><a href="#">Tea Gifts</a></li>
-                    <li><a href="#">Iced Tea</a></li>
-                </ul>
-            </div>
-            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                <h5 class="text-uppercase font-weight-bold">Help Center</h5>
-                <ul>
-                    <li><a href="#">Delivery Information</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Returns & Refunds</a></li>
-                    <li><a href="#">Privacy Notice</a></li>
-                    <li><a href="#">Shopping FAQs</a></li>
-                </ul>
-            </div>
-            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
-                <h5 class="text-uppercase font-weight-bold">Get in Touch</h5>
-                <ul>
-                    <li>2972 Westheimer Rd. Santa Ana, Illinois 85486</li>
-                    <li>Email: info@eco-friendlymarketplace.com</li>
-                    <li>Need help? Call us: <a href="tel:0124456789">0124 456 6789</a></li>
-                </ul>
-            </div>
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <h5 class="text-uppercase font-weight-bold">About</h5>
+            <ul>
+              <li><a href="#">Company</a></li>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Quality Gift</a></li>
+              <li><a href="#">Cards</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <h5 class="text-uppercase font-weight-bold">Shop</h5>
+            <ul>
+              <li><a href="#">Loose Leaf Tea</a></li>
+              <li><a href="#">Green Teas</a></li>
+              <li><a href="#">Packaged Teas</a></li>
+              <li><a href="#">Teaware</a></li>
+              <li><a href="#">Tea Gifts</a></li>
+              <li><a href="#">Iced Tea</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <h5 class="text-uppercase font-weight-bold">Help Center</h5>
+            <ul>
+              <li><a href="#">Delivery Information</a></li>
+              <li><a href="#">Terms & Conditions</a></li>
+              <li><a href="#">Returns & Refunds</a></li>
+              <li><a href="#">Privacy Notice</a></li>
+              <li><a href="#">Shopping FAQs</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
+            <h5 class="text-uppercase font-weight-bold">Get in Touch</h5>
+            <ul>
+              <li>2972 Westheimer Rd. Santa Ana, Illinois 85486</li>
+              <li>Email: info@eco-friendlymarketplace.com</li>
+              <li>
+                Need help? Call us: <a href="tel:0124456789">0124 456 6789</a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="row d-flex justify-content-center">
-            <div class="col-md-12">
-                <ul class="list-inline">
-                    <li class="list-inline-item"><i class="fab fa-google-pay fa-2x"></i></li>
-                    <li class="list-inline-item"><i class="fab fa-amazon-pay fa-2x"></i></li>
-                    <li class="list-inline-item"><i class="fab fa-cc-paypal fa-2x"></i></li>
-                    <li class="list-inline-item"><i class="fab fa-paytm fa-2x"></i></li>
-                    <li class="list-inline-item"><i class="fab fa-cc-visa fa-2x"></i></li>
-                    <li class="list-inline-item"><i class="fab fa-cc-mastercard fa-2x"></i></li>
-                    <li class="list-inline-item"><i class="fab fa-cc-discover fa-2x"></i></li>
-                    <li class="list-inline-item"><i class="fas fa-money-bill-wave fa-2x"></i></li>
-                </ul>
-            </div>
+          <div class="col-md-12">
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <i class="fab fa-google-pay fa-2x"></i>
+              </li>
+              <li class="list-inline-item">
+                <i class="fab fa-amazon-pay fa-2x"></i>
+              </li>
+              <li class="list-inline-item">
+                <i class="fab fa-cc-paypal fa-2x"></i>
+              </li>
+              <li class="list-inline-item">
+                <i class="fab fa-paytm fa-2x"></i>
+              </li>
+              <li class="list-inline-item">
+                <i class="fab fa-cc-visa fa-2x"></i>
+              </li>
+              <li class="list-inline-item">
+                <i class="fab fa-cc-mastercard fa-2x"></i>
+              </li>
+              <li class="list-inline-item">
+                <i class="fab fa-cc-discover fa-2x"></i>
+              </li>
+              <li class="list-inline-item">
+                <i class="fas fa-money-bill-wave fa-2x"></i>
+              </li>
+            </ul>
+          </div>
         </div>
-    </div>
-    <div class="text-center py-3">&copy; 2024 Eco-Friendly Products Marketplace. All rights reserved.</div>
-</footer>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+      </div>
+      <div class="text-center py-3">
+        &copy; 2024 Eco-Friendly Products Marketplace. All rights reserved.
+      </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
         function openWishlist() {
-            fetch("{% url 'wishlist' %}")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("wishlist-container").innerHTML = data;
-                    document.getElementById("wishlistModal").style.display = "block";
-                    document.body.style.overflow = 'hidden';
-                });
+          fetch("{% url 'wishlist' %}")
+            .then((response) => response.text())
+            .then((data) => {
+              document.getElementById("wishlist-container").innerHTML = data;
+              document.getElementById("wishlistModal").style.display = "block";
+              document.body.style.overflow = "hidden";
+            });
         }
 
         function closeWishlist() {
-            document.getElementById("wishlistModal").style.display = "none";
-            document.body.style.overflow = 'auto';
+          document.getElementById("wishlistModal").style.display = "none";
+          document.body.style.overflow = "auto";
         }
 
         window.onclick = function (event) {
-            if (event.target == document.getElementById("wishlistModal")) {
-                closeWishlist();
-            }
-        }
+          if (event.target == document.getElementById("wishlistModal")) {
+            closeWishlist();
+          }
+        };
 
         window.openWishlist = openWishlist;
         window.closeWishlist = closeWishlist;
 
         const stats = document.querySelectorAll(".stat-item");
-        stats.forEach(stat => {
-            const percentage = stat.querySelector(".percentage");
-            const target = +stat.getAttribute("data-stat");
-            let count = 0;
-            const updateCount = () => {
-                percentage.innerText = `${count}%`;
-                if (count < target) {
-                    count++;
-                    setTimeout(updateCount, 20);
-                } else {
-                    percentage.innerText = `${target}%`;
-                }
-            };
-            updateCount();
-        });
-
-        const searchButton = document.getElementById('searchQuerySubmit');
-        searchButton.addEventListener('click', function (event) {
-            event.preventDefault();
-            const query = document.getElementById('searchQueryInput').value.toLowerCase();
-            if (query) {
-                const elements = document.querySelectorAll('section, footer, nav, header, main');
-                let found = false;
-                elements.forEach(element => {
-                    if (element.innerText.toLowerCase().includes(query)) {
-                        element.scrollIntoView({behavior: 'smooth'});
-                        found = true;
-                    }
-                });
-                if (!found) {
-                    alert('No matching sections found');
-                }
+        stats.forEach((stat) => {
+          const percentage = stat.querySelector(".percentage");
+          const target = +stat.getAttribute("data-stat");
+          let count = 0;
+          const updateCount = () => {
+            percentage.innerText = `${count}%`;
+            if (count < target) {
+              count++;
+              setTimeout(updateCount, 20);
+            } else {
+              percentage.innerText = `${target}%`;
             }
+          };
+          updateCount();
         });
 
-    });
-</script>
-</body>
+        const searchButton = document.getElementById("searchQuerySubmit");
+        searchButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          const query = document
+            .getElementById("searchQueryInput")
+            .value.toLowerCase();
+          if (query) {
+            const elements = document.querySelectorAll(
+              "section, footer, nav, header, main"
+            );
+            let found = false;
+            elements.forEach((element) => {
+              if (element.innerText.toLowerCase().includes(query)) {
+                element.scrollIntoView({ behavior: "smooth" });
+                found = true;
+              }
+            });
+            if (!found) {
+              alert("No matching sections found");
+            }
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
