@@ -347,6 +347,68 @@
 <!--    </div>-->
 <!--</body>-->
 <!--</html>-->
+<!--{% load static %}-->
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Shopping Cart</title>-->
+<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
+<!--    <script src="{% static 'js/cart.js' %}"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div class="shopping-cart">-->
+<!--        <div class="title">Cart</div>-->
+<!--        <table class="cart-table">-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    <th>Product</th>-->
+<!--                    <th>Price</th>-->
+<!--                    <th>Quantity</th>-->
+<!--                    <th>Subtotal</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                <tr class="item">-->
+<!--                    <td class="product">-->
+<!--                        <button class="delete-btn" type="button">X</button>-->
+<!--                        <img src="{% static 'Eco_Finds/static/images/BambooProduct1.jpg' %}" alt="Lemon Ginger Herbal Tea" />-->
+<!--                        <div class="description">-->
+<!--                            <span>Lemon Ginger Herbal Tea</span>-->
+<!--                        </div>-->
+<!--                    </td>-->
+<!--                    <td>$682.93</td>-->
+<!--                    <td>-->
+<!--                        <div class="quantity">-->
+<!--                            <button class="minus-btn" type="button" name="button">-->
+<!--                                <img src="{% static 'images/minus.svg' %}" alt="Minus" />-->
+<!--                            </button>-->
+<!--                            <input type="text" name="name" value="1">-->
+<!--                            <button class="plus-btn" type="button" name="button">-->
+<!--                                <img src="{% static 'images/plus.svg' %}" alt="Plus" />-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </td>-->
+<!--                    <td class="total-price">$682.93</td>-->
+<!--                     <td>-->
+<!--                        <button class="wishlist-btn" type="button">-->
+<!--                            <img src="{% static 'images/heart.svg' %}" alt="Add to Wishlist" />-->
+<!--                        </button>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--        <div class="cart-footer">-->
+<!--            <div class="total">-->
+<!--                <h2>Cart totals</h2>-->
+<!--                <p>Subtotal: $682.93</p>-->
+<!--                <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -367,42 +429,46 @@
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Subtotal</th>
+                    <th>Wishlist</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="item">
+                {% for item in items %}
+                <tr class="item" data-product-id="{{ item.product.id }}">
                     <td class="product">
                         <button class="delete-btn" type="button">X</button>
-                        <img src="{% static 'Eco_Finds/static/images/BambooProduct1.jpg' %}" alt="Lemon Ginger Herbal Tea" />
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
                         <div class="description">
-                            <span>Lemon Ginger Herbal Tea</span>
+                            <span>{{ item.product.name }}</span>
+                            <span>{{ item.product.description }}</span>
                         </div>
                     </td>
-                    <td>$682.93</td>
+                    <td>${{ item.product.price }}</td>
                     <td>
                         <div class="quantity">
                             <button class="minus-btn" type="button" name="button">
                                 <img src="{% static 'images/minus.svg' %}" alt="Minus" />
                             </button>
-                            <input type="text" name="name" value="1">
+                            <input type="text" name="name" value="{{ item.quantity }}">
                             <button class="plus-btn" type="button" name="button">
                                 <img src="{% static 'images/plus.svg' %}" alt="Plus" />
                             </button>
                         </div>
                     </td>
-                    <td class="total-price">$682.93</td>
-                     <td>
+                    <td class="total-price">${{ item.get_total_price }}</td>
+                    <td>
                         <button class="wishlist-btn" type="button">
                             <img src="{% static 'images/heart.svg' %}" alt="Add to Wishlist" />
                         </button>
                     </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
         <div class="cart-footer">
             <div class="total">
                 <h2>Cart totals</h2>
-                <p>Subtotal: $682.93</p>
+                <p>Subtotal: ${{ total_price }}</p>
                 <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>
             </div>
         </div>
