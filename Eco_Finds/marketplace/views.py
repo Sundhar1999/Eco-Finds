@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Product, Review, CartItem, Reward
+from .models import Category, Product, Review, CartItem, Reward
 from django.contrib.auth import logout
 from .forms import ReviewForm
 from django.contrib import messages
@@ -16,6 +16,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from .models import UserProfile
+
+
+
 def home(request):
     products = Product.objects.all()
     bamboo_category = Category.objects.get(name="Bamboo_Products")
@@ -34,7 +37,18 @@ def home(request):
     recycled_products = Product.objects.filter(category=recycled_category)
 
     username = request.session.get('username', None)
-    return render(request, 'marketplace/home.html', {'products': products, 'username': username})
+    context = {
+    'products': products,
+    'bamboo_products': bamboo_products,
+    'home_essentials': home_essentials,
+    'kids_section': kids_section,
+    'recycled_products': recycled_products,
+    'men_clothing': men_clothing,
+    'women_clothing': women_clothing,
+    'username': username,
+    }
+
+    return render(request, 'marketplace/home.html', context)
 
 def login_view(request):
     if request.method == 'POST':
@@ -155,17 +169,33 @@ def cart(request):
 
 @login_required
 def checkout(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    if not cart_items.exists():
+        return redirect('cart')
+
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            checkout = form.save(commit=False)
-            checkout.user = request.user
-            checkout.save()
-            selected_card_type = form.cleaned_data['payment_method']
-            return redirect('card_details', card_type=selected_card_type)
+            billing_address = form.cleaned_data['billing_address']
+            shipping_address = form.cleaned_data['shipping_address']
+            payment_method = form.cleaned_data['payment_method']
+
+            order = Order.objects.create(
+                user=request.user,
+                billing_address=billing_address,
+                shipping_address=shipping_address,
+            )
+            order.items.set(cart_items)
+            order.save()
+
+            # Clear the cart after creating the order
+            cart_items.delete()
+
+            return redirect('order_success', order_id=order.id)
     else:
         form = CheckoutForm()
-    return render(request, 'marketplace/checkout.html', {'form': form})
+
+    return render(request, 'marketplace/checkout.html', {'form': form, 'cart_items': cart_items})
 
 
 def forget_password(request):
@@ -246,7 +276,9 @@ def card_details_view(request, card_type):
     if request.method == 'POST':
         form = CardDetailsForm(request.POST)
         if form.is_valid():
-            form.save()
+            card_details = form.save(commit=False)
+            card_details.user = request.user
+            card_details.save()
             return redirect('order_success')
     else:
         form = CardDetailsForm(initial={'card_type': card_type})
@@ -270,6 +302,7 @@ def order_success(request):
 
 def aboutus(request):  # For aboutus
     return render(request, 'marketplace/aboutus.html')
+
 @login_required
 def rewards(request):
     # Calculate the total amount spent by the user
@@ -292,28 +325,12 @@ def rewards(request):
 
 
 
-
-
-
-
 @login_required
 def wishlist(request):
     user_registration = request.user.userregistration
     wishlist_items = user_registration.wishlist.all()
     return render(request, 'marketplace/partials/wishlist_items.html', {'wishlist_items': wishlist_items})
 
-
-# @login_required
-# def add_reward(request):
-#     if request.method == 'POST':
-#         form = RewardForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('rewards')
-#     else:
-#         form = RewardForm()
-#     return render(request, 'marketplace/add_reward.html', {'form': form})
-# return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 @login_required
 def view_cart(request):
@@ -382,7 +399,7 @@ def add_to_cart_from_wishlist(request, product_id):
     return JsonResponse({'success': True})
     # return redirect('cart')
 
-#View to fetch cart items and pass them to the template >>>
+
 def cart_view(request):
     try:
         cart = Cart.objects.get(user=request.user)
@@ -443,3 +460,8 @@ def view_profile(request):
     user_registration = UserRegistration.objects.get(user=request.user)
     orders = Order.objects.filter(user=request.user)
     return render(request, 'marketplace/profile.html', {'user_registration': user_registration})
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-ordered_at')
+    return render(request, 'marketplace/order_history.html', {'orders': orders})

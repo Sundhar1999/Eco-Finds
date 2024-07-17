@@ -151,7 +151,11 @@ class CardDetailsForm(forms.ModelForm):
         model = CardDetails
         fields = ['card_type', 'card_number', 'expiry_date', 'cardholder_name', 'cvv']
         widgets = {
-            'card_type': forms.TextInput(attrs={'readonly': 'readonly'})
+            'card_type': forms.TextInput(attrs={'readonly': 'readonly', 'placeholder':'Card Type'}),
+            'card_number': forms.TextInput(attrs={'placeholder': 'Card Number'}),
+            'expiry_date': forms.TextInput(attrs={'placeholder': 'MM/YY'}),
+            'cardholder_name': forms.TextInput(attrs={'placeholder': 'Cardholder Name'}),
+            'cvv': forms.TextInput(attrs={'placeholder': 'CVV'}),
         }
 
 #rewards

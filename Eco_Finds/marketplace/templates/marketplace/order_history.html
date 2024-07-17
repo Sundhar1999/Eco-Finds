@@ -1,0 +1,25 @@
+{% extends "marketplace/base.html" %} {% block title %}Order History -
+Eco-Friendly Products Marketplace{% endblock %} {% block content %}
+<div class="container">
+  <h1>Order History</h1>
+  {% if orders %}
+  <ul class="list-group">
+    {% for order in orders %}
+    <li class="list-group-item">
+      <h5>Order ID: {{ order.id }}</h5>
+      <p>Ordered At: {{ order.ordered_at }}</p>
+      <p>Total Price: ${{ order.total_price }}</p>
+      <p>Items:</p>
+      <ul>
+        {% for item in order.items.all %}
+        <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>You have no past orders.</p>
+  {% endif %}
+</div>
+{% endblock %}
