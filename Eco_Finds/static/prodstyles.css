@@ -192,3 +192,35 @@ button:hover {
 .environmental-impact:hover+.impact-info {
     display: block;
 }
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.add-to-cart {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.wishlist {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: red;
+    transition: color 0.3s ease;
+}
+
+.wishlist svg {
+    width: 24px;
+    height: 24px;
+    fill: red;
+}
+
+.wishlist:hover {
+    color: darkred;
+
+}
