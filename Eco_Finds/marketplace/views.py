@@ -481,16 +481,3 @@ def view_profile(request):
     user_registration = UserRegistration.objects.get(user=request.user)
     orders = Order.objects.filter(user=request.user)
     return render(request, 'marketplace/profile.html', {'user_registration': user_registration})
-
-def product_showcase(request):
-    categories = Category.objects.all()
-    products = Product.objects.all()
-    return render(request, 'marketplace/Products.html', {
-        'categories': categories,
-        'products': products
-    })
-
-@login_required
-def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-ordered_at')
-    return render(request, 'marketplace/order_history.html', {'orders': orders})
