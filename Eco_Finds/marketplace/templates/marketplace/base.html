@@ -79,7 +79,7 @@
         <div class="sc-content">
             <h1>summer collection</h1>
             <p class="description">Step into the vibrant world of our Summer Collection, where sunshine and style meet. Explore a dazzling array of dresses that capture the essence of summer with their breezy fabrics and vibrant colors. Pamper yourself with our specially curated cosmetics, designed to keep you glowing even on the hottest days. Delight in our adorable kids' summer essentials, perfect for keeping the little ones cool and stylish. From chic accessories to must-have seasonal items, our Summer Collection is your one-stop destination for everything you need to make this summer unforgettable. Embrace the season with flair and let our collection inspire your summer adventures!</p>
-            <a href="#">discover now</a>
+            <a href="{% url 'products' %}?category=Summer_Collection">discover now</a>
         </div>
         <div class="sc-media">
             <div class="sc-media-bg">
@@ -88,6 +88,7 @@
         </div>
     </div>
 </section>
+
 
 <section id="products">
     <div class="container">
@@ -164,7 +165,7 @@
                     <button class="wishlist-button" onclick="addToWishlist('{{ bamboo_products.4.id }}')"><i class="fas fa-heart"></i></button>
                 </div>
             </div>
-            <p class="button">view all collections</p>
+            <p class="button"><a href="{% url 'products' %}?category=Bamboo_Products" class="view-all-collections-link">view all collections</a></p>
         </div>
     </div>
 </section>
@@ -254,11 +255,13 @@
 <div id="wishlistModal" class="modal-wishlist">
     <div class="modal-content-wishlist">
         <span class="close-wishlist" onclick="closeWishlist()">&times;</span>
-        <h2>Your Wishlist</h2>
         <div class="wishlist-container" id="wishlist-container">
+            <!-- Wishlist items will be dynamically inserted here -->
         </div>
     </div>
 </div>
+
+
 
 <footer class="footer bg-light text-center text-md-left">
     <div class="container">

@@ -117,9 +117,22 @@ def profile(request):
     return render(request, 'marketplace/profile.html', {'user_orders': user_orders, 'history': history, 'username': request.session.get('username')})
 
 def products(request):
-    products = Product.objects.all()
+    category_name = request.GET.get('category', None)
+    if category_name:
+        products = Product.objects.filter(category__name=category_name)
+    else:
+        products = Product.objects.all()
+
+    categories = Category.objects.all()
     username = request.session.get('username', None)
-    return render(request, 'marketplace/Products.html', {'products': products, 'username': username})
+    return render(request, 'marketplace/Products.html', {
+        'products': products,
+        'categories': categories,
+        'username': username,
+        'category_name': category_name
+    })
+
+
 
 @login_required
 def view_cart(request):
