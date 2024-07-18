@@ -128,7 +128,9 @@
             need to make this summer unforgettable. Embrace the season with
             flair and let our collection inspire your summer adventures!
           </p>
-          <a href="#">discover now</a>
+          <a href="{% url 'products' %}?category=Summer_Collection"
+            >discover now</a
+          >
         </div>
         <div class="sc-media">
           <div class="sc-media-bg">
@@ -141,10 +143,10 @@
     <section id="products">
       <div class="container">
         <div class="products-header">
-          <h2>popular products</h2>
+          <h2>Popular Products</h2>
           <p>
             Discover our carefully curated collection of popular products,
-            designed to promote sustainability and a greener lifestyle
+            designed to promote sustainability and a greener lifestyle.
           </p>
         </div>
         <div class="product product-1">
@@ -152,6 +154,12 @@
             <img src="{{ home_essentials.2.image.url }}" alt="product-image" />
             <figcaption>{{ home_essentials.2.name }}</figcaption>
             <figcaption>$ {{ home_essentials.2.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ home_essentials.2.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
           </figure>
         </div>
         <div class="product product-2">
@@ -159,6 +167,12 @@
             <img src="{{ kids_section.4.image.url }}" alt="product-image" />
             <figcaption>{{ kids_section.4.name }}</figcaption>
             <figcaption>$ {{ kids_section.4.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ kids_section.4.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
           </figure>
         </div>
         <div class="product product-3">
@@ -169,6 +183,12 @@
             />
             <figcaption>{{ recycled_products.3.name }}</figcaption>
             <figcaption>$ {{ recycled_products.3.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ recycled_products.3.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
           </figure>
         </div>
         <div class="product product-4">
@@ -176,6 +196,12 @@
             <img src="{{ women_clothing.1.image.url }}" alt="product-image" />
             <figcaption>{{ women_clothing.1.name }}</figcaption>
             <figcaption>$ {{ women_clothing.1.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ women_clothing.1.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
           </figure>
         </div>
       </div>
@@ -187,6 +213,12 @@
           <div class="c-1-image-holder">
             <img src="{{ bamboo_products.0.image.url }}" alt="image" />
             <p class="product-name">{{ bamboo_products.0.name }}</p>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ bamboo_products.0.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
           </div>
         </div>
         <div class="c-2">
@@ -200,6 +232,12 @@
                 alt=""
               />
               <p class="product-name">{{ bamboo_products.1.name }}</p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ bamboo_products.1.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
             </div>
             <div class="image-wrapper">
               <img
@@ -208,6 +246,12 @@
                 alt=""
               />
               <p class="product-name">{{ bamboo_products.2.name }}</p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ bamboo_products.2.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
             </div>
             <div class="image-wrapper">
               <img
@@ -216,6 +260,12 @@
                 alt=""
               />
               <p class="product-name">{{ bamboo_products.3.name }}</p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ bamboo_products.3.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
             </div>
             <div class="image-wrapper">
               <img
@@ -224,9 +274,21 @@
                 alt=""
               />
               <p class="product-name">{{ bamboo_products.4.name }}</p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ bamboo_products.4.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
             </div>
           </div>
-          <p class="button">view all collections</p>
+          <p class="button">
+            <a
+              href="{% url 'products' %}?category=Bamboo_Products"
+              class="view-all-collections-link"
+              >view all collections</a
+            >
+          </p>
         </div>
       </div>
     </section>
@@ -255,7 +317,12 @@
                   %</b
                 >
               </p>
-              <p class="button">view post</p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ recycled_products.6.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
             </div>
           </div>
           <div class="blog-2">
@@ -272,7 +339,12 @@
                   %</b
                 >
               </p>
-              <p class="button">view post</p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ recycled_products.5.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -334,8 +406,9 @@
     <div id="wishlistModal" class="modal-wishlist">
       <div class="modal-content-wishlist">
         <span class="close-wishlist" onclick="closeWishlist()">&times;</span>
-        <h2>Your Wishlist</h2>
-        <div class="wishlist-container" id="wishlist-container"></div>
+        <div class="wishlist-container" id="wishlist-container">
+          <!-- Wishlist items will be dynamically inserted here -->
+        </div>
       </div>
     </div>
 
@@ -488,6 +561,30 @@
             }
           }
         });
+
+        const wishlistButtons = document.querySelectorAll(".wishlist-button");
+        wishlistButtons.forEach((button) => {
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+            const productId = button.getAttribute("data-product-id");
+            addToWishlist(productId);
+          });
+        });
+
+        function addToWishlist(productId) {
+          fetch(`/add-to-wishlist/${productId}/`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Product added to wishlist!");
+              } else {
+                alert("Failed to add product to wishlist.");
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        }
+
+        window.addToWishlist = addToWishlist;
       });
     </script>
   </body>

@@ -12,7 +12,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     path('profile/', views.profile, name='profile'),
-    #path('products/', views.products, name='products'),
+    path('products/', views.products, name='products'),
     path('products/', views.product_showcase, name='product_showcase'),
     path('rewards/', views.rewards, name='rewards'),
     path('aboutus/', views.aboutus, name='aboutus'),
@@ -38,7 +38,7 @@ urlpatterns = [
     path('wishlist/add_to_cart/<int:product_id>/', add_to_cart_from_wishlist, name='add_to_cart_from_wishlist'),
     path('remove-from-wishlist/<int:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
-    path('order_history/', views.order_history, name='order_history'),
+    # path('order_history/', views.order_history, name='order_history'),
 
 ]
 

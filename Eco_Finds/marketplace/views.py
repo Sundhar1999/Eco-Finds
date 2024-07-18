@@ -118,9 +118,22 @@ def profile(request):
     return render(request, 'marketplace/profile.html', {'user_orders': user_orders, 'history': history, 'username': request.session.get('username')})
 
 def products(request):
-    products = Product.objects.all()
+    category_name = request.GET.get('category', None)
+    if category_name:
+        products = Product.objects.filter(category__name=category_name)
+    else:
+        products = Product.objects.all()
+
+    categories = Category.objects.all()
     username = request.session.get('username', None)
-    return render(request, 'marketplace/Products.html', {'products': products, 'username': username})
+    return render(request, 'marketplace/Products.html', {
+        'products': products,
+        'categories': categories,
+        'username': username,
+        'category_name': category_name
+    })
+
+
 
 @login_required
 def view_cart(request):
@@ -174,33 +187,17 @@ def cart(request):
 
 @login_required
 def checkout(request):
-    cart_items = CartItem.objects.filter(user=request.user)
-    if not cart_items.exists():
-        return redirect('cart')
-
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            billing_address = form.cleaned_data['billing_address']
-            shipping_address = form.cleaned_data['shipping_address']
-            payment_method = form.cleaned_data['payment_method']
-
-            order = Order.objects.create(
-                user=request.user,
-                billing_address=billing_address,
-                shipping_address=shipping_address,
-            )
-            order.items.set(cart_items)
-            order.save()
-
-            # Clear the cart after creating the order
-            cart_items.delete()
-
-            return redirect('order_success', order_id=order.id)
+            checkout = form.save(commit=False)
+            checkout.user = request.user
+            checkout.save()
+            selected_card_type = form.cleaned_data['payment_method']
+            return redirect('card_details', card_type=selected_card_type)
     else:
         form = CheckoutForm()
-
-    return render(request, 'marketplace/checkout.html', {'form': form, 'cart_items': cart_items})
+    return render(request, 'marketplace/checkout.html', {'form': form})
 
 
 def forget_password(request):
@@ -481,3 +478,11 @@ def view_profile(request):
     user_registration = UserRegistration.objects.get(user=request.user)
     orders = Order.objects.filter(user=request.user)
     return render(request, 'marketplace/profile.html', {'user_registration': user_registration})
+
+def product_showcase(request):
+    categories = Category.objects.all()
+    products = Product.objects.all()
+    return render(request, 'marketplace/Products.html', {
+        'categories': categories,
+        'products': products
+    })
