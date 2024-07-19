@@ -9,6 +9,7 @@
                 <div class="card-body">
                     <h2 class="card-title">Thank you for your order!</h2>
                     <p class="card-text">Your order has been placed successfully. You will receive a confirmation email shortly.</p>
+                    <p class="card-text">Total Price: ${{ order.get_total_price }}</p>
                     <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
                 </div>
             </div>

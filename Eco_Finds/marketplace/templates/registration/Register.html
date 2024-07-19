@@ -1,33 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {% load static %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register - Eco-Friendly Products Marketplace</title>
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'style1.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    />
-  </head>
-  <body>
+{% extends 'marketplace/header.html' %}
+
+{% block content %}
+<main>
     <div class="vicky-loginDiv" id="loginDiv">
-      <h1>Eco-Finds</h1>
-      <h1>Register</h1>
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %} {{ form.as_p }}
-        <button type="submit" class="vicky-login">Register</button>
-      </form>
-      <a href="{% url 'login' %}">Already Registered? Login here!</a>
+        <h1 class="vicky-title">Eco-Finds</h1>
+        <h1 class="vicky-subtitle">Register</h1>
+        <form id="registrationForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="vicky-inputField">
+                {{ form.username.label_tag }}{{ form.username }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.email.label_tag }}{{ form.email }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.password1.label_tag }}{{ form.password1 }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.password2.label_tag }}{{ form.password2 }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.profile_picture.label_tag }}{{ form.profile_picture }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.security_question1.label_tag }}{{ form.security_question1 }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.security_answer1.label_tag }}{{ form.security_answer1 }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.security_question2.label_tag }}{{ form.security_question2 }}
+            </div>
+            <div class="vicky-inputField">
+                {{ form.security_answer2.label_tag }}{{ form.security_answer2 }}
+            </div>
+            <button type="submit" class="vicky-login">Register</button>
+        </form>
+        <br><br>
+        <a href="{% url 'login' %}" style="color: #4a7d47;">Already Registered? Login here!</a>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-  </body>
-</html>
+
+    <div id="errorPopup" class="vicky-error-popup">
+        <p id="errorPopupText"></p>
+    </div>
+
+{% block styles %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #ddf7e3;
+    }
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 150vh;
+        padding: 20px 0;
+    }
+    .vicky-loginDiv {
+        position: relative;
+        margin: auto;
+        width: clamp(350px, 30%, 420px);
+        background-color: #c7e8ca;
+        border-radius: 35px;
+        box-shadow: 0 0 20px -8px #4a7d47;
+        padding: 20px;
+    }
+    .vicky-inputField {
+        margin-bottom: 20px;
+        position: relative;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="file"] {
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+        min-width: 100px;
+        height: 30px;
+        padding: 4px;
+        border: none;
+        border-radius: 2px;
+        background-color: #c7e8ca;
+        border-bottom: 2px solid #4a7d47;
+        font-size: 18px;
+        z-index: 3;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="email"]:focus,
+    input[type="file"]:focus {
+        outline: none;
+    }
+    .vicky-login {
+        width: 100%;
+        padding: 10px;
+        background-color: #4a7d47;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 15px;
+        font-size: 18px;
+        box-shadow: 0 0 10px -5px #2d5c29;
+        transition: all 0.1s;
+        user-select: none;
+        margin-top: 20px;
+    }
+    .vicky-login:hover {
+        font-size: 20px;
+        background-color: #5d9c59;
+        transition: all 0.1s;
+        box-shadow: 0 0 20px -2px #2d5c29;
+    }
+    .vicky-login:active {
+        font-size: 18px;
+        background-color: #385e35;
+        transition: all 0.1s;
+        box-shadow: 0 0 10px -7px #2d5c29;
+    }
+    .vicky-title, .vicky-subtitle {
+        text-align: center;
+        color: #253e24;
+        user-select: none;
+    }
+    .vicky-title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    .vicky-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .vicky-error-popup {
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #ffdddd;
+        color: #d9534f;
+        padding: 15px;
+        border: 1px solid #d9534f;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showErrorPopup(message) {
+        const errorPopup = document.getElementById('errorPopup');
+        const errorPopupText = document.getElementById('errorPopupText');
+        errorPopupText.textContent = message;
+        errorPopup.style.display = 'block';
+        setTimeout(() => {
+            errorPopup.style.display = 'none';
+        }, 5000); // Hide after 5 seconds
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const errorFields = document.querySelectorAll('.vicky-error');
+        errorFields.forEach(field => {
+            if (field.textContent.trim() !== '') {
+                showErrorPopup(field.textContent.trim());
+                field.style.display = 'none'; // Hide the error message within the form
+            }
+        });
+    });
+</script>
+{% endblock %}
+    </main>
+
+{% endblock %}
