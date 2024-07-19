@@ -1,428 +1,11 @@
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--    <script src="{% static 'js/cart.js' %}"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="shopping-cart">-->
-<!--        <div class="title">Shopping Cart</div>-->
-<!--        {% if items %}-->
-<!--            {% for item in items %}-->
-<!--                <div class="item">-->
-<!--                    <div class="buttons">-->
-<!--                        <span class="delete-btn"></span>-->
-<!--                        <span class="like-btn"></span>-->
-<!--                    </div>-->
-<!--                    <div class="image">-->
-<!--                        <img src="{{ item.product.image.url }}" alt="Product Image" />-->
-<!--                    </div>-->
-<!--                    <div class="description">-->
-<!--                        <span>{{ item.product.name }}</span>-->
-<!--                        <span>{{ item.product.description }}</span>-->
-<!--                    </div>-->
-<!--                    <div class="quantity">-->
-<!--                        <button class="minus-btn" type="button" name="button">-->
-<!--                            <img src="{% static 'images/minus.svg' %}" alt="Minus" />-->
-<!--                        </button>-->
-<!--                        <input type="text" name="name" value="{{ item.quantity }}">-->
-<!--                        <button class="plus-btn" type="button" name="button">-->
-<!--                            <img src="{% static 'images/plus.svg' %}" alt="Plus" />-->
-<!--                        </button>-->
-<!--                    </div>-->
-<!--                    <div class="total-price">${{ item.get_total_price }}</div>-->
-<!--                </div>-->
-<!--            {% endfor %}-->
-<!--            <div class="total">-->
-<!--                <h2>Total: ${{ total_price }}</h2>-->
-<!--                <a href="{% url 'checkout' %}"><button>Proceed to Checkout</button></a>-->
-<!--            </div>-->
-<!--        {% else %}-->
-<!--            <p>There are no more items in your cart</p>-->
-<!--        {% endif %}-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
-
-
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--    <script src="{% static 'js/cart.js' %}"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="shopping-cart">-->
-<!--        <div class="title">Cart</div>-->
-<!--        {% if items %}-->
-<!--            <table class="cart-table">-->
-<!--                <thead>-->
-<!--                    <tr>-->
-<!--                        <th>Product</th>-->
-<!--                        <th>Price</th>-->
-<!--                        <th>Quantity</th>-->
-<!--                        <th>Subtotal</th>-->
-<!--                    </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                    {% for item in items %}-->
-<!--                        <tr class="item">-->
-<!--                            <td class="product">-->
-<!--                                <button class="delete-btn" type="button"></button>-->
-<!--                                <img src="{{ item.product.image.url }}" alt="Product Image" />-->
-<!--                                <div class="description">-->
-<!--                                    <span>{{ item.product.name }}</span>-->
-<!--                                    <span>{{ item.product.description }}</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td>${{ item.product.price }}</td>-->
-<!--                            <td>-->
-<!--                                <div class="quantity">-->
-<!--                                    <button class="minus-btn" type="button" name="button">-->
-<!--                                        <img src="{% static 'images/minus.svg' %}" alt="Minus" />-->
-<!--                                    </button>-->
-<!--                                    <input type="text" name="name" value="{{ item.quantity }}">-->
-<!--                                    <button class="plus-btn" type="button" name="button">-->
-<!--                                        <img src="{% static 'images/plus.svg' %}" alt="Plus" />-->
-<!--                                    </button>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td class="total-price">${{ item.get_total_price }}</td>-->
-<!--                        </tr>-->
-<!--                    {% endfor %}-->
-<!--                </tbody>-->
-<!--            </table>-->
-<!--            <div class="cart-footer">-->
-<!--                <div class="coupon">-->
-<!--                    <input type="text" placeholder="Coupon code">-->
-<!--                    <button type="button">Apply Coupon</button>-->
-<!--                </div>-->
-<!--                <div class="total">-->
-<!--                    <h2>Cart totals</h2>-->
-<!--                    <p>Subtotal: ${{ total_price }}</p>-->
-<!--                    <p>Total: ${{ total_price }}</p>-->
-<!--                    <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        {% else %}-->
-<!--            <p>There are no more items in your cart</p>-->
-<!--        {% endif %}-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
-
-
-
-
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--    <script src="{% static 'js/cart.js' %}"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="shopping-cart">-->
-<!--        <div class="title">Cart</div>-->
-<!--        <table class="cart-table">-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th>Product</th>-->
-<!--                    <th>Price</th>-->
-<!--                    <th>Quantity</th>-->
-<!--                    <th>Subtotal</th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr class="item">-->
-<!--                    <td class="product">-->
-<!--                        <button class="delete-btn" type="button">X</button>-->
-<!--                        <img src="{% static 'Eco_Finds/static/images/BambooProduct1.jpg' %}" alt="Bamboo Prod1" />-->
-<!--                        <div class="description">-->
-<!--                            <span>Bamboo Product 1</span>-->
-<!--                            <span>Carbon: 0.2kg CO2</span>-->
-<!--                        </div>-->
-<!--                        <button class="heart-btn" type="button">❤️</button>-->
-<!--                    </td>-->
-<!--                    <td>$10</td>-->
-<!--                    <td>-->
-<!--                        <div class="quantity">-->
-<!--                            <button class="minus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/minus.svg' %}" alt="Minus" />-->
-<!--                            </button>-->
-<!--                            <input type="text" name="name" value="1">-->
-<!--                            <button class="plus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/plus.svg' %}" alt="Plus" />-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                    <td class="total-price">$10</td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
-<!--        <div class="cart-footer">-->
-<!--            <div class="coupon">-->
-<!--                <input type="text" placeholder="Coupon code">-->
-<!--                <button type="button">Apply Coupon</button>-->
-<!--            </div>-->
-<!--            <div class="total">-->
-<!--                <h2>Cart totals</h2>-->
-<!--                <p>Subtotal: $10</p>-->
-<!--                <p>Total: $10</p>-->
-<!--                <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
-
-
-
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--    <script src="{% static 'js/cart.js' %}"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="shopping-cart">-->
-<!--        <div class="title">Cart</div>-->
-<!--        <table class="cart-table">-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th>Product</th>-->
-<!--                    <th>Price</th>-->
-<!--                    <th>Quantity</th>-->
-<!--                    <th>Subtotal</th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr class="item">-->
-<!--                    <td class="product">-->
-
-
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--    <script src="{% static 'js/cart.js' %}"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="shopping-cart">-->
-<!--        <div class="title">Cart</div>-->
-<!--        <table class="cart-table">-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th>Product</th>-->
-<!--                    <th>Price</th>-->
-<!--                    <th>Quantity</th>-->
-<!--                    <th>Subtotal</th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr class="item">-->
-<!--                    <td class="product">-->
-<!--                        <button class="delete-btn" type="button">X</button>-->
-<!--                        <img src="{% static 'images/SoapBar.jpg' %}" alt="Soap Bar" />-->
-<!--                        <div class="description">-->
-<!--                            <span>Bamboo Product 1</span>-->
-<!--                            <span>Carbon: 0.2kg CO2</span>-->
-<!--                        </div>-->
-<!--                        <button class="heart-btn" type="button">❤️</button>-->
-<!--                    </td>-->
-<!--                    <td>$10</td>-->
-<!--                    <td>-->
-<!--                        <div class="quantity">-->
-<!--                            <button class="minus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/minus.svg' %}" alt="Minus" />-->
-<!--                            </button>-->
-<!--                            <input type="text" name="name" value="1">-->
-<!--                            <button class="plus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/plus.svg' %}" alt="Plus" />-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                    <td class="total-price">$10</td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
-<!--        <div class="cart-footer">-->
-
-<!--            <div class="total">-->
-<!--                <h2>Cart totals</h2>-->
-<!--                <p>Total: $0</p>-->
-<!--                 <div class="right-align-btn">-->
-<!--&lt;!&ndash;                <p>Total: $10</p>&ndash;&gt;-->
-<!--                <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>-->
-<!--                 </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
-
-
-
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--    <script src="{% static 'js/cart.js' %}"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="shopping-cart">-->
-<!--        <div class="title">Cart</div>-->
-<!--        <table class="cart-table">-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th>Product</th>-->
-<!--                    <th>Price</th>-->
-<!--                    <th>Quantity</th>-->
-<!--                    <th>Subtotal</th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr class="item">-->
-<!--                    <td class="product">-->
-<!--                        <button class="delete-btn" type="button">X</button>-->
-<!--                        <img src="{% static 'images/LemonGingerHerbalTea.jpg' %}" alt="Lemon Ginger Herbal Tea" />-->
-<!--                        <div class="description">-->
-<!--                            <span>Lemon Ginger Herbal Tea</span>-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                    <td>$682.93</td>-->
-<!--                    <td>-->
-<!--                        <div class="quantity">-->
-<!--                            <button class="minus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/minus.svg' %}" alt="Minus" />-->
-<!--                            </button>-->
-<!--                            <input type="text" name="name" value="1">-->
-<!--                            <button class="plus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/plus.svg' %}" alt="Plus" />-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                    <td class="total-price">$682.93</td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
-<!--        <div class="cart-footer">-->
-<!--            <div class="coupon">-->
-<!--                <input type="text" placeholder="Coupon code">-->
-<!--                <button type="button">Apply Coupon</button>-->
-<!--            </div>-->
-<!--            <div class="update-cart">-->
-<!--                <button type="button">Update Cart</button>-->
-<!--            </div>-->
-<!--            <div class="total">-->
-<!--                <h2>Cart totals</h2>-->
-<!--                <p>Subtotal: $682.93</p>-->
-<!--                <p>Total: <strong>$682.93</strong></p>-->
-<!--                <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Shopping Cart</title>-->
-<!--    <link rel="stylesheet" href="{% static 'css/cart.css' %}">-->
-<!--    <script src="{% static 'js/cart.js' %}"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div class="shopping-cart">-->
-<!--        <div class="title">Cart</div>-->
-<!--        <table class="cart-table">-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th>Product</th>-->
-<!--                    <th>Price</th>-->
-<!--                    <th>Quantity</th>-->
-<!--                    <th>Subtotal</th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr class="item">-->
-<!--                    <td class="product">-->
-<!--                        <button class="delete-btn" type="button">X</button>-->
-<!--                        <img src="{% static 'Eco_Finds/static/images/BambooProduct1.jpg' %}" alt="Lemon Ginger Herbal Tea" />-->
-<!--                        <div class="description">-->
-<!--                            <span>Lemon Ginger Herbal Tea</span>-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                    <td>$682.93</td>-->
-<!--                    <td>-->
-<!--                        <div class="quantity">-->
-<!--                            <button class="minus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/minus.svg' %}" alt="Minus" />-->
-<!--                            </button>-->
-<!--                            <input type="text" name="name" value="1">-->
-<!--                            <button class="plus-btn" type="button" name="button">-->
-<!--                                <img src="{% static 'images/plus.svg' %}" alt="Plus" />-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                    </td>-->
-<!--                    <td class="total-price">$682.93</td>-->
-<!--                     <td>-->
-<!--                        <button class="wishlist-btn" type="button">-->
-<!--                            <img src="{% static 'images/heart.svg' %}" alt="Add to Wishlist" />-->
-<!--                        </button>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
-<!--        <div class="cart-footer">-->
-<!--            <div class="total">-->
-<!--                <h2>Cart totals</h2>-->
-<!--                <p>Subtotal: $682.93</p>-->
-<!--                <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</body>-->
-<!--</html>-->
+{% extends 'marketplace/header.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
-    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
-    <script src="{% static 'js/cart.js' %}"></script>
-</head>
-<body>
+
+{% block content %}
+<main>
     <div class="shopping-cart">
         <div class="title">Cart</div>
-        {% if items %}
+        {% if cart_items %}
         <table class="cart-table">
             <thead>
                 <tr>
@@ -434,31 +17,31 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in items %}
-                <tr class="item" data-product-id="{{ item.product.id }}">
+                {% for item in cart_items %}
+                <tr class="item" data-product-id="{{ item.product.id }}" data-product-category="{{ item.product.category }}">
                     <td class="product">
-                        <button class="delete-btn" type="button">X</button>
+                        <button class="delete-btn" data-url="{% url 'remove_from_cart' item.product.id %}" type="button"><a href="{% url 'remove_from_cart' item.product.id %}">X</a></button>
                         <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
                         <div class="description">
                             <span>{{ item.product.name }}</span>
                             <span>{{ item.product.description }}</span>
                         </div>
                     </td>
-                    <td>${{ item.product.price }}</td>
+                    <td class="price">${{ item.product.price }}</td>
                     <td>
                         <div class="quantity">
-                            <button class="minus-btn" type="button" name="button">
+                            <button class="minus-btn" data-url="{% url 'update_quantity' item.product.id 'decrease' %}" type="button" name="button">
                                 <img src="{% static 'images/minus.svg' %}" alt="Minus" />
                             </button>
-                            <input type="text" name="name" value="{{ item.quantity }}">
-                            <button class="plus-btn" type="button" name="button">
+                            <input type="text" name="name" value="{{ item.quantity }}" readonly>
+                            <button class="plus-btn" data-url="{% url 'update_quantity' item.product.id 'increase' %}" type="button" name="button">
                                 <img src="{% static 'images/plus.svg' %}" alt="Plus" />
                             </button>
                         </div>
                     </td>
-                    <td class="total-price">${{ item.get_total_price }}</td>
+                    <td class="total-price">${{ item.total_price }}</td>
                     <td>
-                        <button class="wishlist-btn" type="button">
+                        <button class="wishlist-btn" data-url="{% url 'add_to_wishlist' item.product.id %}" type="button">
                             <img src="{% static 'images/heart.svg' %}" alt="Add to Wishlist" />
                         </button>
                     </td>
@@ -469,13 +52,18 @@
         <div class="cart-footer">
             <div class="total">
                 <h2>Cart totals</h2>
-                <p>Subtotal: ${{ total_price }}</p>
+                <p>Subtotal: $<span class="cart-total">{{ total_price }}</span></p>
+                <p>Tax: $<span class="cart-tax">0.00</span></p>
                 <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>
             </div>
         </div>
         {% else %}
-        <p>There are no items in your cart!  </p>
+        <p>There are no items in your cart!</p>
         {% endif %}
     </div>
-</body>
-</html>
+
+{% block scripts %}
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
+</main>
+{% endblock %}

@@ -3,13 +3,13 @@
 {% block title %}Checkout - Eco-Friendly Products Marketplace{% endblock %}
 
 {% block content %}
-<div class = "checkout-container">
+<div class="checkout-container">
     <h2>Checkout</h2>
     <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+        {% csrf_token %}
+        {{ form.as_p }}
         <input type="hidden" id="selected_card_type" name="selected_card_type" value="">
-    <button type="submit" class="btn btn-success"> NEXT </button>
+        <button type="submit" class="btn btn-success">NEXT</button>
     </form>
 </div>
 <script>
