@@ -8,7 +8,7 @@ Eco-Friendly Products Marketplace{% endblock %} {% block content %}
     <li class="list-group-item">
       <h5>Order ID: {{ order.id }}</h5>
       <p>Ordered At: {{ order.ordered_at }}</p>
-      <p>Total Price: ${{ order.total_price }}</p>
+      <p>Total Price: ${{ order.get_total_price }}</p>
       <p>Items:</p>
       <ul>
         {% for item in order.items.all %}

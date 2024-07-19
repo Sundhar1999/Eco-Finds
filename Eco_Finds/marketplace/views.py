@@ -17,6 +17,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from .models import UserProfile
 from django.http import JsonResponse
+from django.db import transaction
 
 
 def home(request):
@@ -280,6 +281,7 @@ def card_details_view(request, card_type):
         if form.is_valid():
             card_details = form.save(commit=False)
             card_details.user = request.user
+            card_details.checkout=Checkout.objects.filter(user=request.user).order_by('-id').first()
             card_details.save()
             return redirect('order_success')
     else:
@@ -299,8 +301,6 @@ def submit_payment(request):
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
 @login_required
-def order_success(request):
-    return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
 
 def aboutus(request):  
     return render(request, 'marketplace/aboutus.html')
@@ -486,3 +486,57 @@ def product_showcase(request):
         'categories': categories,
         'products': products
     })
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-ordered_at')
+    return render(request, 'marketplace/order_history.html', {'orders': orders})
+
+@login_required
+def create_order(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.total_price for item in cart_items)
+
+    checkout = Checkout.objects.get(user=request.user)
+    order = Order.objects.create(
+        user=request.user,
+        total_price=total_price,
+        billing_address=checkout.shipping_street,
+        shipping_address=checkout.shipping_street,
+        ordered_at=timezone.now()
+    )
+    order.items.set(cart_items)
+    order.save()
+
+    # Clear the cart after saving the order
+    cart_items.delete()
+
+    return redirect('order_success')
+
+
+@login_required
+def order_success(request):
+    # Assuming you have the product information from the request or session
+    # product_name = request.GET.get('product_name')
+
+
+    user = request.user
+    cart_items = CartItem.objects.filter(user=user)
+
+    if not cart_items:
+        # Handle the case where the cart is empty
+        return redirect('some_error_page')
+    checkout = Checkout.objects.filter(user=request.user).order_by('-id').first()
+    # Create an order
+    order = Order.objects.create(
+        user=user,
+        billing_address=checkout.shipping_street,
+        shipping_address=checkout.shipping_street,
+        # product_name='summa' # Set the product_name field
+    )
+
+    # Add items to the order
+    order.items.set(cart_items)
+    order.save()
+
+    return render(request, 'marketplace/order_success.html', {'order': order})

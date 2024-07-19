@@ -1,44 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile - Eco-Friendly Products Marketplace</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body>
-<div class="profile-container">
-    <h1>User Profile</h1>
-    <div class="profile-details">
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body>
+    <div class="profile-container">
+      <h1>User Profile</h1>
+      <div class="profile-details">
         <h2>Profile</h2>
         <p>Name: {{ user.username }}</p>
         <p>Email: {{ user.email }}</p>
         {% if user_registration.profile_picture %}
-            <p><img src="{{ user_registration.profile_picture.url }}" alt="Profile Picture" style="width:150px;height:150px;"></p>
+        <p>
+          <img
+            src="{{ user_registration.profile_picture.url }}"
+            alt="Profile Picture"
+            style="width: 150px; height: 150px"
+          />
+        </p>
         {% endif %}
-    </div>
-    <div class="order-history">
+      </div>
+      <div class="order-history">
         <h2>Order History</h2>
         <ul>
-            {% for order in orders %}
-                <li>Order ID: {{ order.id }}, Product: {{ order.product_name }}, Total Price: ${{ order.total_price }}, Date: {{ order.ordered_at }}</li>
-            {% empty %}
-                <li>No orders yet.</li>
-            {% endfor %}
+          {% for order in orders %}
+          <li>
+            Order ID: {{ order.id }}, Product: {{ order }}, Total Price: ${{
+            order.total_price }}, Date: {{ order.ordered_at }}
+          </li>
+          {% empty %}
+          <li>No orders yet.</li>
+          {% endfor %}
         </ul>
-    </div>
-    <div class="visit-info">
+      </div>
+      <div class="visit-info">
         <h2>Number of Visits:</h2>
         <p>{{ user_registration.visit_count }}</p>
         <h2>Last Visit:</h2>
         {% if user_registration.last_visit %}
-            <p>{{ user_registration.last_visit }}</p>
+        <p>{{ user_registration.last_visit }}</p>
         {% else %}
-            <p>No visit recorded yet.</p>
+        <p>No visit recorded yet.</p>
         {% endif %}
+      </div>
     </div>
-</div>
-<script src="{% static 'script.js' %}"></script>
-</body>
+    <script src="{% static 'script.js' %}"></script>
+  </body>
 </html>

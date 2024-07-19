@@ -83,7 +83,7 @@ class Order(models.Model):
     ordered_at = models.DateTimeField(auto_now_add=True)
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
-    product_name = models.CharField(max_length=255, default='default_product_name')
+    # product_name = models.CharField(max_length=255, default='default_product_name')
 
     def total_price(self):
         return sum(item.total_price for item in self.items.all())
