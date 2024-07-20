@@ -914,6 +914,8 @@ nav {
 
 
 
+
+
 /* wishlist.css */
 /* wishlist.css */
 .modal-wishlist {
@@ -1073,72 +1075,91 @@ nav {
     background-color: #ef5350; /* Darker red on hover */
 }
 
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Montserrat:wght@600&display=swap");
 
-
-/* Center the checkout container */
-.checkout-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-}
-
-/* Style the form fields */
-.checkout-container form {
-  display: flex;
-  flex-direction: column;
-}
-
-.checkout-container form .form-group {
-  margin-bottom: 15px;
-}
-
-.checkout-container form label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: inline-block;
-}
-
-.checkout-container form input,
-.checkout-container form select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-/* Style the radio buttons */
-.checkout-container form .form-check {
+.credit-card-form {
+  margin-top: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+
+  padding: 1em;
+  border-radius: 10px;
+  box-shadow: 0px 6px 10px rgba(255, 255, 255, 0.1);
+  font-family: "Montserrat", sans-serif;
+  background-color: #dbdbdb;
+  text-align: center;
+  color: #424242;
+}
+
+.credit-card-form h2 {
+  margin-bottom: 10%;
+  font-size: 24px;
+}
+
+.credit-card-form .form-group {
+  margin-bottom: 15px;
+}
+
+.credit-card-form .form-row {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px;
 }
 
-.checkout-container form .form-check label {
-  margin-left: 5px;
+.credit-card-form label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  color: #777;
 }
 
-.checkout-container form .form-check-input {
-  margin-right: 10px;
-}
-
-/* Style the submit button */
-.checkout-container form .btn {
-  padding: 10px;
+.credit-card-form input[type="text"],
+.credit-card-form select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
   font-size: 16px;
-  border-radius: 5px;
-  background-color: #28a745;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
 }
 
-.checkout-container form .btn:hover {
-  background-color: #218838;
+.credit-card-form button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background-color: #585858;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  font-family: "Montserrat", sans-serif;
+}
+
+.credit-card-form button[type="submit"]:hover {
+  background-color: #808080;
+  color: #424242;
+  box-shadow: 0px 6px 10px rgba(255, 255, 255, 0.1);
+}
+
+.credit-card-form button[type="submit"]:focus {
+  outline: none;
+}
+
+.Image1 {
+  margin-top: 0;
+  width: 220px;
+}
+
+.h2 {
+  margin: 0px;
 }
 
 .eco-finds-container {

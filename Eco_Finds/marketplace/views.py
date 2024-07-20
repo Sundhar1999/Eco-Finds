@@ -135,6 +135,7 @@ def products(request):
     })
 
 
+
 @login_required
 def view_cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
@@ -550,6 +551,7 @@ def add_to_cart_from_wishlist(request, product_id):
 
     # Optionally, you can remove the product from the wishlist after adding it to the cart
     user_registration = request.user.userregistration
+    # Add product to cart logic here
     user_registration.wishlist.remove(product)
 
     return redirect('view_cart')  # Redirect to the cart page after adding the product
