@@ -111,6 +111,7 @@ def logout_view(request):
     messages.info(request, 'Your session has expired. Please log in again.')
     return redirect('login')
 
+
 @login_required
 def profile(request):
     user_orders = Order.objects.filter(user=request.user)
@@ -317,11 +318,26 @@ def submit_payment(request):
         user = request.user
         cart_items = CartItem.objects.filter(user=user)
 
+        # Fetch the latest checkout information for the user
+        checkout_instance = Checkout.objects.filter(user=request.user).order_by('-id').first()
+
+        if not checkout_instance:
+            # Handle the case where there is no checkout instance
+            return redirect('checkout')
+
+        # Debug: Print the checkout_instance fields
+        print(f'Shipping Unit No: {checkout_instance.shipping_unit_no}')
+        print(f'Shipping Street: {checkout_instance.shipping_street}')
+        print(f'Shipping City: {checkout_instance.shipping_city}')
+        print(f'Shipping Pin: {checkout_instance.shipping_pin}')
+
+        # Construct the shipping address
+        shipping_address = f'{checkout_instance.shipping_unit_no}, {checkout_instance.shipping_street}, {checkout_instance.shipping_city}, {checkout_instance.shipping_pin}'
+
         # Save order
         order = Order.objects.create(
             user=user,
-            billing_address=request.POST.get('billing_address', 'default billing address'),
-            shipping_address=request.POST.get('shipping_address', 'default shipping address')
+            shipping_address=shipping_address,
         )
         order.items.set(cart_items)
         order.save()
@@ -342,9 +358,11 @@ def submit_payment(request):
 
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
+
 @login_required
 def order_success(request):
     return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
+
 
 def aboutus(request):  
     return render(request, 'marketplace/aboutus.html')
@@ -465,7 +483,7 @@ def add_to_cart_from_wishlist(request, product_id):
     return JsonResponse({'success': True})
     # return redirect('cart')
 
-#View to fetch cart items and pass them to the template >>>
+
 def cart_view(request):
     try:
         cart = Cart.objects.get(user=request.user)
@@ -534,3 +552,4 @@ def product_showcase(request):
         'categories': categories,
         'products': products
     })
+

@@ -1,20 +1,36 @@
-{% extends "marketplace/base.html" %}
-
-{% block title %}Checkout - Eco-Friendly Products Marketplace{% endblock %}
-
-{% block content %}
-<div class="checkout-container">
-    <h2>Checkout</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" id="selected_card_type" name="selected_card_type" value="">
-        <button type="submit" class="btn btn-success">NEXT</button>
-    </form>
+{% extends "marketplace/base.html" %} {% block title %}Card Details -
+Eco-Friendly Products Marketplace{% endblock %} {% block content %}
+<div class="credit-card-form">
+  <h2>SHIPPING DETAILS</h2>
+  <img class="Image1" src="https://i.ibb.co/hgJ7z3J/6375aad33dbabc9c424b5713-card-mockup-01.png" alt="6375aad33dbabc9c424b5713-card-mockup-01" border="0"></a>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="shipping_unit_no">Shipping Unit No:</label>
+      {{ form.shipping_unit_no }}
+    </div>
+    <div class="form-group">
+      <label for="shipping_street">Shipping Street:</label>
+      {{ form.shipping_street }}
+    </div>
+    <div class="form-group">
+      <label for="shipping_city">Shipping City:</label>
+      {{ form.shipping_city }}
+    </div>
+    <div class="form-group">
+        <label for="shipping_pin">Shipping Pin:</label>
+        {{ form.shipping_pin }}
+      </div>
+    <div class="form-group">
+        <label for="phone">Contact No:</label>
+        {{ form.phone }}
+    </div>
+    <div class="form-group">
+        <label for="payment_method">Payment Method:</label>
+        {{ form.payment_method }}
+    </div>
+    
+    <button type="submit">SUBMIT</button>
+  </form>
 </div>
-<script>
-    document.querySelector('select[name="payment_method"]').addEventListener('change', function() {
-        document.getElementById('selected_card_type').value = this.value;
-    });
-</script>
 {% endblock %}

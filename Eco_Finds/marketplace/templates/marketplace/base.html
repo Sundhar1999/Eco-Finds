@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Eco-Friendly Products Marketplace{% endblock %}</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body>
-<header>
-    <div class="header-content">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}Eco-Friendly Products Marketplace{% endblock %}
+    </title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
         <div id="logo">
             <img src="{% static 'images/logo3.png' %}" alt="Logo" width="60" height="72">
         </div>
-        <div id="center-text">
-            Eco Finds
-        </div>
+        <div id="center-text">Eco Finds</div>
         <div class="user-info">
             {% if user.is_authenticated %}
                 <span class="welcome-text"> {{ user.username }}</span>
@@ -50,16 +59,24 @@
                 {% endif %}
             </div>
         </div>
-    </div>
+      </div>
 
-    <div class="wrapper">
+      <div class="wrapper">
         <div class="searchBar">
-            <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="What are you looking for?" value="" />
-            <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">Search</button>
+          <input
+            id="searchQueryInput"
+            type="text"
+            name="searchQueryInput"
+            placeholder="What are you looking for?"
+            value=""
+          />
+          <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+            Search
+          </button>
         </div>
-    </div>
+      </div>
 
-    <nav>
+      <nav>
         <ul class="navigation-menu">
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'product_showcase' %}">Products</a></li>
@@ -70,76 +87,116 @@
 </header>
 
 
-<main>
-    {% block content %}
-    {% endblock %}
-</main>
+    <main>{% block content %} {% endblock %}</main>
 
-<section id="summer-collection">
-    <div class="container">
+    <section id="summer-collection">
+      <div class="container">
         <div class="sc-content">
-            <h1>summer collection</h1>
-            <p class="description">Step into the vibrant world of our Summer Collection, where sunshine and style meet. Explore a dazzling array of dresses that capture the essence of summer with their breezy fabrics and vibrant colors. Pamper yourself with our specially curated cosmetics, designed to keep you glowing even on the hottest days. Delight in our adorable kids' summer essentials, perfect for keeping the little ones cool and stylish. From chic accessories to must-have seasonal items, our Summer Collection is your one-stop destination for everything you need to make this summer unforgettable. Embrace the season with flair and let our collection inspire your summer adventures!</p>
-            <a href="{% url 'products' %}?category=Summer_Collection">discover now</a>
+          <h1>summer collection</h1>
+          <p class="description">
+            Step into the vibrant world of our Summer Collection, where sunshine
+            and style meet. Explore a dazzling array of dresses that capture the
+            essence of summer with their breezy fabrics and vibrant colors.
+            Pamper yourself with our specially curated cosmetics, designed to
+            keep you glowing even on the hottest days. Delight in our adorable
+            kids' summer essentials, perfect for keeping the little ones cool
+            and stylish. From chic accessories to must-have seasonal items, our
+            Summer Collection is your one-stop destination for everything you
+            need to make this summer unforgettable. Embrace the season with
+            flair and let our collection inspire your summer adventures!
+          </p>
+          <a href="{% url 'products' %}?category=Summer_Collection"
+            >discover now</a
+          >
         </div>
         <div class="sc-media">
-            <div class="sc-media-bg">
-                <img src="{% static 'images/slide3.jpg' %}" alt="sc-image" />
-            </div>
+          <div class="sc-media-bg">
+            <img src="{% static 'images/slide3.jpg' %}" alt="sc-image" />
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<section id="products">
-    <div class="container">
+    <section id="products">
+      <div class="container">
         <div class="products-header">
-            <h2>Popular Products</h2>
-            <p>Discover our carefully curated collection of popular products, designed to promote sustainability and a greener lifestyle.</p>
+          <h2>Popular Products</h2>
+          <p>
+            Discover our carefully curated collection of popular products,
+            designed to promote sustainability and a greener lifestyle.
+          </p>
         </div>
         <div class="product product-1">
-            <figure>
-                <img src="{{ home_essentials.2.image.url }}" alt="product-image">
-                <figcaption>{{ home_essentials.2.name }}</figcaption>
-                <figcaption>$ {{ home_essentials.2.price }}</figcaption>
-                <button class="wishlist-button" onclick="addToWishlist('{{ home_essentials.2.id }}')"><i class="fas fa-heart"></i></button>
-            </figure>
+          <figure>
+            <img src="{{ home_essentials.2.image.url }}" alt="product-image" />
+            <figcaption>{{ home_essentials.2.name }}</figcaption>
+            <figcaption>$ {{ home_essentials.2.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ home_essentials.2.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </figure>
         </div>
         <div class="product product-2">
-            <figure>
-                <img src="{{ kids_section.4.image.url }}" alt="product-image">
-                <figcaption>{{ kids_section.4.name }}</figcaption>
-                <figcaption>$ {{ kids_section.4.price }}</figcaption>
-                <button class="wishlist-button" onclick="addToWishlist('{{ kids_section.4.id }}')"><i class="fas fa-heart"></i></button>
-            </figure>
+          <figure>
+            <img src="{{ kids_section.4.image.url }}" alt="product-image" />
+            <figcaption>{{ kids_section.4.name }}</figcaption>
+            <figcaption>$ {{ kids_section.4.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ kids_section.4.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </figure>
         </div>
         <div class="product product-3">
-            <figure>
-                <img src="{{ recycled_products.3.image.url }}" alt="product-image">
-                <figcaption>{{ recycled_products.3.name }}</figcaption>
-                <figcaption>$ {{ recycled_products.3.price }}</figcaption>
-                <button class="wishlist-button" onclick="addToWishlist('{{ recycled_products.3.id }}')"><i class="fas fa-heart"></i></button>
-            </figure>
+          <figure>
+            <img
+              src="{{ recycled_products.3.image.url }}"
+              alt="product-image"
+            />
+            <figcaption>{{ recycled_products.3.name }}</figcaption>
+            <figcaption>$ {{ recycled_products.3.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ recycled_products.3.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </figure>
         </div>
         <div class="product product-4">
-            <figure>
-                <img src="{{ women_clothing.1.image.url }}" alt="product-image">
-                <figcaption>{{ women_clothing.1.name }}</figcaption>
-                <figcaption>$ {{ women_clothing.1.price }}</figcaption>
-                <button class="wishlist-button" onclick="addToWishlist('{{ women_clothing.1.id }}')"><i class="fas fa-heart"></i></button>
-            </figure>
+          <figure>
+            <img src="{{ women_clothing.1.image.url }}" alt="product-image" />
+            <figcaption>{{ women_clothing.1.name }}</figcaption>
+            <figcaption>$ {{ women_clothing.1.price }}</figcaption>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ women_clothing.1.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </figure>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<section id="collections">
-    <div class="container">
+    <section id="collections">
+      <div class="container">
         <div class="c-1">
-            <div class="c-1-image-holder">
-                <img src="{{ bamboo_products.0.image.url }}" alt="image">
-                <p class="product-name">{{ bamboo_products.0.name }}</p>
-                <button class="wishlist-button" onclick="addToWishlist('{{ bamboo_products.0.id }}')"><i class="fas fa-heart"></i></button>
-            </div>
+          <div class="c-1-image-holder">
+            <img src="{{ bamboo_products.0.image.url }}" alt="image" />
+            <p class="product-name">{{ bamboo_products.0.name }}</p>
+            <button
+              class="wishlist-button"
+              onclick="addToWishlist('{{ bamboo_products.0.id }}')"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
         </div>
         <div class="c-2">
             <h2>Featured Bamboo Collections</h2>
@@ -153,56 +210,79 @@
                 </div>
                 {% endfor %}
             </div>
-            <p class="button"><a href="{% url 'products' %}?category=Bamboo_Products" class="view-all-collections-link">view all collections</a></p>
+          </div>
+          <p class="button">
+            <a
+              href="{% url 'products' %}?category=Bamboo_Products"
+              class="view-all-collections-link"
+              >view all collections</a
+            >
+          </p>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<section id="blog">
-    <div class="container">
+    <section id="blog">
+      <div class="container">
         <div class="blog-header">
-            <h2> Recycled Products </h2>
-            <p>
-                Products made from recycled materials are crafted with sustainability in mind,
-                giving new life to discarded items.
-            </p>
+          <h2>Recycled Products</h2>
+          <p>
+            Products made from recycled materials are crafted with
+            sustainability in mind, giving new life to discarded items.
+          </p>
         </div>
         <div class="blog-content">
-            <div class="blog-1">
-                <div class="blog-1-image-holder">
-                    <img src="{{recycled_products.6.image.url }}" alt="image">
-                </div>
-                <div class="blog-1-content">
-                    <h4>{{recycled_products.6.name }}</h4>
-                    <h3>$ {{recycled_products.6.price }}</h3>
-                    <p class="description">
-                        {{recycled_products.6.environmental_impact }}<br><br>
-                        <b> Carbon Emission - {{recycled_products.6.carbon_emission }} %</b>
-                    </p>
-                    <button class="wishlist-button" onclick="addToWishlist('{{ recycled_products.6.id }}')"><i class="fas fa-heart"></i></button>
-                </div>
+          <div class="blog-1">
+            <div class="blog-1-image-holder">
+              <img src="{{recycled_products.6.image.url }}" alt="image" />
             </div>
-            <div class="blog-2">
-                <div class="blog-2-image-holder">
-                    <img src="{{recycled_products.5.image.url }}" alt="image">
-                </div>
-                <div class="blog-2-content">
-                    <h4>{{recycled_products.5.name }}</h4>
-                    <h3>$ {{recycled_products.5.price }}</h3>
-                    <p class="description">
-                        {{recycled_products.5.environmental_impact }}<br><br>
-                        <b> Carbon Emission - {{recycled_products.5.carbon_emission }} %</b>
-                    </p>
-                    <button class="wishlist-button" onclick="addToWishlist('{{ recycled_products.5.id }}')"><i class="fas fa-heart"></i></button>
-                </div>
+            <div class="blog-1-content">
+              <h4>{{recycled_products.6.name }}</h4>
+              <h3>$ {{recycled_products.6.price }}</h3>
+              <p class="description">
+                {{recycled_products.6.environmental_impact }}<br /><br />
+                <b>
+                  Carbon Emission - {{recycled_products.6.carbon_emission }}
+                  %</b
+                >
+              </p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ recycled_products.6.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
             </div>
+          </div>
+          <div class="blog-2">
+            <div class="blog-2-image-holder">
+              <img src="{{recycled_products.5.image.url }}" alt="image" />
+            </div>
+            <div class="blog-2-content">
+              <h4>{{recycled_products.5.name }}</h4>
+              <h3>$ {{recycled_products.5.price }}</h3>
+              <p class="description">
+                {{recycled_products.5.environmental_impact }}<br /><br />
+                <b>
+                  Carbon Emission - {{recycled_products.5.carbon_emission }}
+                  %</b
+                >
+              </p>
+              <button
+                class="wishlist-button"
+                onclick="addToWishlist('{{ recycled_products.5.id }}')"
+              >
+                <i class="fas fa-heart"></i>
+              </button>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<!-- New Carbon Footprint Statistics Section -->
-<section id="carbon-footprint">
-    <div class="container">
+    <!-- New Carbon Footprint Statistics Section -->
+    <section id="carbon-footprint">
+      <div class="container">
         <div class="stats-header">
             <h2>  Reduction of Carbon Emission </h2>
             <p>Understanding the impact of eco-friendly products through different stages over the years.</p>
@@ -265,11 +345,11 @@
 </section>
 
 
-<div id="wishlistModal" class="modal-wishlist">
-    <div class="modal-content-wishlist">
+    <div id="wishlistModal" class="modal-wishlist">
+      <div class="modal-content-wishlist">
         <span class="close-wishlist" onclick="closeWishlist()">&times;</span>
         <div class="wishlist-container" id="wishlist-container">
-            <!-- Wishlist items will be dynamically inserted here -->
+          <!-- Wishlist items will be dynamically inserted here -->
         </div>
     </div>
 </div>
@@ -379,25 +459,25 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         function openWishlist() {
-            fetch("{% url 'wishlist' %}")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("wishlist-container").innerHTML = data;
-                    document.getElementById("wishlistModal").style.display = "block";
-                    document.body.style.overflow = 'hidden';
-                });
+          fetch("{% url 'wishlist' %}")
+            .then((response) => response.text())
+            .then((data) => {
+              document.getElementById("wishlist-container").innerHTML = data;
+              document.getElementById("wishlistModal").style.display = "block";
+              document.body.style.overflow = "hidden";
+            });
         }
 
         function closeWishlist() {
-            document.getElementById("wishlistModal").style.display = "none";
-            document.body.style.overflow = 'auto';
+          document.getElementById("wishlistModal").style.display = "none";
+          document.body.style.overflow = "auto";
         }
 
         window.onclick = function (event) {
-            if (event.target == document.getElementById("wishlistModal")) {
-                closeWishlist();
-            }
-        }
+          if (event.target == document.getElementById("wishlistModal")) {
+            closeWishlist();
+          }
+        };
 
         window.openWishlist = openWishlist;
         window.closeWishlist = closeWishlist;
@@ -423,52 +503,53 @@
                     observer.observe(item);
                 });
 
-        const searchButton = document.getElementById('searchQuerySubmit');
-        searchButton.addEventListener('click', function (event) {
-            event.preventDefault();
-            const query = document.getElementById('searchQueryInput').value.toLowerCase();
-            if (query) {
-                const elements = document.querySelectorAll('section, footer, nav, header, main');
-                let found = false;
-                elements.forEach(element => {
-                    if (element.innerText.toLowerCase().includes(query)) {
-                        element.scrollIntoView({behavior: 'smooth'});
-                        found = true;
-                    }
-                });
-                if (!found) {
-                    alert('No matching sections found');
-                }
-            }
-        });
-
-
-        const wishlistButtons = document.querySelectorAll('.wishlist-button');
-        wishlistButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault();
-                const productId = button.getAttribute('data-product-id');
-                addToWishlist(productId);
+        const searchButton = document.getElementById("searchQuerySubmit");
+        searchButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          const query = document
+            .getElementById("searchQueryInput")
+            .value.toLowerCase();
+          if (query) {
+            const elements = document.querySelectorAll(
+              "section, footer, nav, header, main"
+            );
+            let found = false;
+            elements.forEach((element) => {
+              if (element.innerText.toLowerCase().includes(query)) {
+                element.scrollIntoView({ behavior: "smooth" });
+                found = true;
+              }
             });
+            if (!found) {
+              alert("No matching sections found");
+            }
+          }
         });
 
+        const wishlistButtons = document.querySelectorAll(".wishlist-button");
+        wishlistButtons.forEach((button) => {
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+            const productId = button.getAttribute("data-product-id");
+            addToWishlist(productId);
+          });
+        });
 
         function addToWishlist(productId) {
-        fetch(`/add-to-wishlist/${productId}/`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Product added to wishlist!');
-                } else {
-                    alert('Failed to add product to wishlist.');
-                }
+          fetch(`/add-to-wishlist/${productId}/`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Product added to wishlist!");
+              } else {
+                alert("Failed to add product to wishlist.");
+              }
             })
-            .catch(error => console.error('Error:', error));
-    }
+            .catch((error) => console.error("Error:", error));
+        }
 
-            window.addToWishlist = addToWishlist;
-
-        });
-</script>
-</body>
+        window.addToWishlist = addToWishlist;
+      });
+    </script>
+  </body>
 </html>

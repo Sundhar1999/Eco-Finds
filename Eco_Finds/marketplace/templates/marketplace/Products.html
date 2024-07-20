@@ -1,232 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'prodstyles.css' %}">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'prodstyles.css' %}" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
 
-<body>
-
-<header>
-    <div class="header-content">
+  <body>
+    <header>
+      <div class="header-content">
         <div id="logo">
-            <img src="{% static 'images/logo3.png' %}" alt="Logo" width="60" height="72">
+          <img
+            src="{% static 'images/logo3.png' %}"
+            alt="Logo"
+            width="60"
+            height="72"
+          />
         </div>
-        <div id="center-text">
-            Eco Finds
-        </div>
+        <div id="center-text">Eco Finds</div>
         <div class="user-info">
-            {% if user.is_authenticated %}
-                <span class="welcome-text"> {{ user.username }}</span>
-                <div class="profile-picture">
-                    {% if user.userregistration.profile_picture %}
-                        <img src="{{ user.userregistration.profile_picture.url }}" alt="Profile Picture" width="50" height="50">
-                    {% else %}
-                        <img src="{% static 'images/default_profile_picture.png' %}" alt="Default Profile Picture" width="50" height="50">
-                    {% endif %}
-                </div>
+          {% if user.is_authenticated %}
+          <span class="welcome-text"> {{ user.username }}</span>
+          <div class="profile-picture">
+            {% if user.userregistration.profile_picture %}
+            <img
+              src="{{ user.userregistration.profile_picture.url }}"
+              alt="Profile Picture"
+              width="50"
+              height="50"
+            />
+            {% else %}
+            <img
+              src="{% static 'images/default_profile_picture.png' %}"
+              alt="Default Profile Picture"
+              width="50"
+              height="50"
+            />
             {% endif %}
-            <div class="icons">
-                <div class="dropdown">
-                    <span class="material-symbols-outlined user-icon"><i class="fas fa-user fa-2x"></i></span>
-                    <div class="dropdown-content">
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'profile' %}">Profile</a>
-                            <a href="{% url 'logout' %}">Logout</a>
-                        {% else %}
-                            <a href="{% url 'login' %}">Login</a>
-                            <a href="{% url 'register' %}">Register</a>
-                        {% endif %}
-                        <a href="#" onclick="openWishlist()">Wishlist</a>
-                        <a href="{% url 'view_cart' %}">Cart</a>
-
-                    </div>
-                </div>
+          </div>
+          {% endif %}
+          <div class="icons">
+            <div class="dropdown">
+              <span class="material-symbols-outlined user-icon"
+                ><i class="fas fa-user fa-2x"></i
+              ></span>
+              <div class="dropdown-content">
                 {% if user.is_authenticated %}
-                    <span class="material-symbols-outlined" id="wishlist-icon" onclick="openWishlist()"><i class="fas fa-heart fa-2x"></i></span>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
                 {% endif %}
+                <a href="#" onclick="openWishlist()">Wishlist</a>
+                <a href="{% url 'view_cart' %}">Cart</a>
+              </div>
             </div>
+            {% if user.is_authenticated %}
+            <span
+              class="material-symbols-outlined"
+              id="wishlist-icon"
+              onclick="openWishlist()"
+              ><i class="fas fa-heart fa-2x"></i
+            ></span>
+            {% endif %}
+          </div>
         </div>
-    </div>
+      </div>
 
-    <div class="wrapper">
+      <div class="wrapper">
         <div class="searchBar">
-            <input id="searchQueryInput" type="text" name="searchQueryInput" placeholder="What are you looking for?" value="" />
-            <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">Search</button>
+          <input
+            id="searchQueryInput"
+            type="text"
+            name="searchQueryInput"
+            placeholder="What are you looking for?"
+            value=""
+          />
+          <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+            Search
+          </button>
         </div>
-    </div>
+      </div>
 
-    <nav>
+      <nav>
         <ul class="navigation-menu">
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'product_showcase' %}">Products</a></li>
-            <li><a href="{% url 'rewards' %}"><i class="rewards"></i> Rewards </a></li>
-            <li><a href="{% url 'aboutus' %}">About Us</a></li>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'product_showcase' %}">Products</a></li>
+          <li>
+            <a href="{% url 'rewards' %}"><i class="rewards"></i> Rewards </a>
+          </li>
+          <li><a href="{% url 'aboutus' %}">About Us</a></li>
         </ul>
-    </nav>
-</header>
+      </nav>
+    </header>
 
-
-   <main>
-<div class="RRfilter-section">
-    <select id="RRcategorySelect" onchange="RRfilterProducts()">
-        <option value="all"> Categories </option>
-        {% for category in categories %}
-            <option value="{{ category.name|slugify }}">{{ category.name }}</option>
-        {% endfor %}
-    </select>
-</div>
-<section class="RRproduct-section">
-    <div class="RRcontainer RRcategory">
-        {% for product in products %}
-            <div class="RRcard" data-category="{{ product.category.name|slugify }}">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="height:200px; width:100%; object-fit:cover;">
-                <div class="info">
-                    <h3 class="name">{{ product.name }}</h3>
-                    <p class="price">${{ product.price }}</p>
-                    <div class="additional-info">
-                        <span class="carbon-emission">Carbon: {{ product.carbon_emission }}% CO2</span> |
-                        <span class="environmental-impact" title="Click for more info">Environmental Impact</span>
-                        <div class="impact-info hidden">{{ product.environmental_impact|default:"No data available" }}</div><br>
-                        <span class="quantity-info">QTY: {{ product.quantity|default:"N/A" }}</span>
-                    </div>
-                    {% if product.quantity > 0 %}
-                    <form action="{% url 'add_to_cart' product.id %}" method="post" class="add-to-cart-form">
-                        {% csrf_token %}
-                        <button type="submit">Add to Cart</button>
-                    </form>
-                    {% else %}
-                    <p class="out-of-stock">Out of Stock</p>
-                    {% endif %}
+    <main>
+      <div class="RRfilter-section">
+        <select id="RRcategorySelect" onchange="RRfilterProducts()">
+          <option value="all">Categories</option>
+          {% for category in categories %}
+          <option value="{{ category.name|slugify }}">
+            {{ category.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <section class="RRproduct-section">
+        <div class="RRcontainer RRcategory">
+          {% for product in products %}
+          <div
+            class="RRcard"
+            data-category="{{ product.category.name|slugify }}"
+          >
+            <img
+              src="{{ product.image.url }}"
+              alt="{{ product.name }}"
+              style="height: 200px; width: 100%; object-fit: cover"
+            />
+            <div class="info">
+              <h3 class="name">{{ product.name }}</h3>
+              <p class="price">${{ product.price }}</p>
+              <div class="additional-info">
+                <span class="carbon-emission"
+                  >Carbon: {{ product.carbon_emission }}% CO2</span
+                >
+                |
+                <span class="environmental-impact" title="Click for more info"
+                  >Environmental Impact</span
+                >
+                <div class="impact-info hidden">
+                  {{ product.environmental_impact|default:"No data available" }}
                 </div>
+                <br />
+                <span class="quantity-info"
+                  >QTY: {{ product.quantity|default:"N/A" }}</span
+                >
+              </div>
+              {% if product.quantity > 0 %}
+              <form
+                action="{% url 'add_to_cart' product.id %}"
+                method="post"
+                class="add-to-cart-form"
+              >
+                {% csrf_token %}
+                <button type="submit">Add to Cart</button>
+              </form>
+              {% else %}
+              <p class="out-of-stock">Out of Stock</p>
+              {% endif %}
             </div>
-        {% endfor %}
-    </div>
-</section>
-
-</main>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+    </main>
 
     <div id="wishlistModal" class="modal-wishlist">
-    <div class="modal-content-wishlist">
+      <div class="modal-content-wishlist">
         <span class="close-wishlist" onclick="closeWishlist()">&times;</span>
         <div class="wishlist-container" id="wishlist-container">
-            <!-- Wishlist items will be dynamically inserted here -->
+          <!-- Wishlist items will be dynamically inserted here -->
         </div>
-    </div>
-    </div>
-
-<footer>
-  <div class="fo-container">
-    <div class="fo-row fo-text-center">
-      <div class="fo-col-md-4 fo-footer-column">
-        <ul class="fo-nav fo-flex-column">
-          <li class="fo-nav-item">
-            <span class="fo-footer-title">Product</span>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Product 1</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Product 2</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Plans & Prices</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Frequently asked questions</a>
-          </li>
-        </ul>
-      </div>
-      <div class="fo-col-md-4 fo-footer-column">
-        <ul class="fo-nav fo-flex-column">
-          <li class="fo-nav-item">
-            <span class="fo-footer-title">Company</span>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">About us</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Job postings</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">News and articles</a>
-          </li>
-        </ul>
-      </div>
-      <div class="fo-col-md-4 fo-footer-column">
-        <ul class="fo-nav fo-flex-column">
-          <li class="fo-nav-item">
-            <span class="fo-footer-title">Contact & Support</span>
-          </li>
-          <li class="fo-nav-item">
-            <span class="fo-nav-link"><i class="fas fa-phone"></i>+47 45 80 80 80</span>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#"><i class="fas fa-comments"></i>Live chat</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#"><i class="fas fa-envelope"></i>Contact us</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#"><i class="fas fa-star"></i>Give feedback</a>
-          </li>
-        </ul>
       </div>
     </div>
 
-    <div class="fo-text-center"><i class="fas fa-ellipsis-h"></i></div>
+    <footer>
+      <div class="fo-container">
+        <div class="fo-row fo-text-center">
+          <div class="fo-col-md-4 fo-footer-column">
+            <ul class="fo-nav fo-flex-column">
+              <li class="fo-nav-item">
+                <span class="fo-footer-title">Product</span>
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#">Product 1</a>
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#">Product 2</a>
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#">Plans & Prices</a>
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#">Frequently asked questions</a>
+              </li>
+            </ul>
+          </div>
+          <div class="fo-col-md-4 fo-footer-column">
+            <ul class="fo-nav fo-flex-column">
+              <li class="fo-nav-item">
+                <span class="fo-footer-title">Company</span>
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#">About us</a>
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#">Job postings</a>
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#">News and articles</a>
+              </li>
+            </ul>
+          </div>
+          <div class="fo-col-md-4 fo-footer-column">
+            <ul class="fo-nav fo-flex-column">
+              <li class="fo-nav-item">
+                <span class="fo-footer-title">Contact & Support</span>
+              </li>
+              <li class="fo-nav-item">
+                <span class="fo-nav-link"
+                  ><i class="fas fa-phone"></i>+47 45 80 80 80</span
+                >
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#"
+                  ><i class="fas fa-comments"></i>Live chat</a
+                >
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#"
+                  ><i class="fas fa-envelope"></i>Contact us</a
+                >
+              </li>
+              <li class="fo-nav-item">
+                <a class="fo-nav-link" href="#"
+                  ><i class="fas fa-star"></i>Give feedback</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
 
-    <div class="fo-row fo-text-center">
-      <div class="fo-col-md-4 fo-box">
-        <span class="fo-copyright fo-quick-links">Copyright &copy; Your Website <script>document.write(new Date().getFullYear())</script>
-        </span>
-      </div>
-      <div class="fo-col-md-4 fo-box">
-        <ul class="fo-list-inline fo-social-buttons">
-          <li class="fo-list-inline-item">
-            <a href="#">
-            <i class="fab fa-twitter"></i>
-          </a>
-          </li>
-          <li class="fo-list-inline-item">
-            <a href="#">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          </li>
-          <li class="fo-list-inline-item">
-            <a href="#">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
-          </li>
-        </ul>
-      </div>
-      <div class="fo-col-md-4 fo-box">
-        <ul class="fo-list-inline fo-quick-links">
-          <li class="fo-list-inline-item">
-            <a href="#">Privacy Policy</a>
-          </li>
-          <li class="fo-list-inline-item">
-            <a href="#">Terms of Use</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
+        <div class="fo-text-center"><i class="fas fa-ellipsis-h"></i></div>
 
-
+        <div class="fo-row fo-text-center">
+          <div class="fo-col-md-4 fo-box">
+            <span class="fo-copyright fo-quick-links"
+              >Copyright &copy; Your Website
+              <script>
+                document.write(new Date().getFullYear());
+              </script>
+            </span>
+          </div>
+          <div class="fo-col-md-4 fo-box">
+            <ul class="fo-list-inline fo-social-buttons">
+              <li class="fo-list-inline-item">
+                <a href="#">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li class="fo-list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="fo-list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="fo-col-md-4 fo-box">
+            <ul class="fo-list-inline fo-quick-links">
+              <li class="fo-list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li class="fo-list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script>
-        const aboutusUrl = "{% url 'view_cart' %}";
+      const aboutusUrl = "{% url 'view_cart' %}";
     </script>
     <script src="{% static 'prod.js' %}"></script>
 
@@ -235,98 +308,95 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function openWishlist() {
-                fetch("{% url 'wishlist' %}")
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById("wishlist-container").innerHTML = data;
-                        document.getElementById("wishlistModal").style.display = "block";
-                        document.body.style.overflow = 'hidden';
-                    });
-            }
-
-            function closeWishlist() {
-                document.getElementById("wishlistModal").style.display = "none";
-                document.body.style.overflow = 'auto';
-            }
-
-            window.onclick = function (event) {
-                if (event.target == document.getElementById("wishlistModal")) {
-                    closeWishlist();
-                }
-            }
-
-            window.openWishlist = openWishlist;
-            window.closeWishlist = closeWishlist;
-
-            const stats = document.querySelectorAll(".stat-item");
-            stats.forEach(stat => {
-                const percentage = stat.querySelector(".percentage");
-                const target = +stat.getAttribute("data-stat");
-                let count = 0;
-                const updateCount = () => {
-                    percentage.innerText = `${count}%`;
-                    if (count < target) {
-                        count++;
-                        setTimeout(updateCount, 20);
-                    } else {
-                        percentage.innerText = `${target}%`;
-                    }
-                };
-                updateCount();
+      document.addEventListener("DOMContentLoaded", function () {
+        function openWishlist() {
+          fetch("{% url 'wishlist' %}")
+            .then((response) => response.text())
+            .then((data) => {
+              document.getElementById("wishlist-container").innerHTML = data;
+              document.getElementById("wishlistModal").style.display = "block";
+              document.body.style.overflow = "hidden";
             });
-
-            const searchButton = document.getElementById('searchQuerySubmit');
-            searchButton.addEventListener('click', function (event) {
-                event.preventDefault();
-                const query = document.getElementById('searchQueryInput').value.toLowerCase();
-                if (query) {
-                    const elements = document.querySelectorAll('section, footer, nav, header, main');
-                    let found = false;
-                    elements.forEach(element => {
-                        if (element.innerText.toLowerCase().includes(query)) {
-                            element.scrollIntoView({behavior: 'smooth'});
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        alert('No matching sections found');
-                    }
-                }
-            });
-
-
-            const wishlistButtons = document.querySelectorAll('.wishlist-button');
-            wishlistButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    const productId = button.getAttribute('data-product-id');
-                    addToWishlist(productId);
-                });
-            });
-
-
-            function addToWishlist(productId) {
-            fetch(`/add-to-wishlist/${productId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Product added to wishlist!');
-                    } else {
-                        alert('Failed to add product to wishlist.');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
         }
 
-                window.addToWishlist = addToWishlist;
+        function closeWishlist() {
+          document.getElementById("wishlistModal").style.display = "none";
+          document.body.style.overflow = "auto";
+        }
 
+        window.onclick = function (event) {
+          if (event.target == document.getElementById("wishlistModal")) {
+            closeWishlist();
+          }
+        };
+
+        window.openWishlist = openWishlist;
+        window.closeWishlist = closeWishlist;
+
+        const stats = document.querySelectorAll(".stat-item");
+        stats.forEach((stat) => {
+          const percentage = stat.querySelector(".percentage");
+          const target = +stat.getAttribute("data-stat");
+          let count = 0;
+          const updateCount = () => {
+            percentage.innerText = `${count}%`;
+            if (count < target) {
+              count++;
+              setTimeout(updateCount, 20);
+            } else {
+              percentage.innerText = `${target}%`;
+            }
+          };
+          updateCount();
+        });
+
+        const searchButton = document.getElementById("searchQuerySubmit");
+        searchButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          const query = document
+            .getElementById("searchQueryInput")
+            .value.toLowerCase();
+          if (query) {
+            const elements = document.querySelectorAll(
+              "section, footer, nav, header, main"
+            );
+            let found = false;
+            elements.forEach((element) => {
+              if (element.innerText.toLowerCase().includes(query)) {
+                element.scrollIntoView({ behavior: "smooth" });
+                found = true;
+              }
             });
+            if (!found) {
+              alert("No matching sections found");
+            }
+          }
+        });
+
+        const wishlistButtons = document.querySelectorAll(".wishlist-button");
+        wishlistButtons.forEach((button) => {
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+            const productId = button.getAttribute("data-product-id");
+            addToWishlist(productId);
+          });
+        });
+
+        function addToWishlist(productId) {
+          fetch(`/add-to-wishlist/${productId}/`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Product added to wishlist!");
+              } else {
+                alert("Failed to add product to wishlist.");
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        }
+
+        window.addToWishlist = addToWishlist;
+      });
     </script>
-
-
-
-</body>
-
+  </body>
 </html>
