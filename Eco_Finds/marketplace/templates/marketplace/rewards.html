@@ -1,28 +1,127 @@
-{% extends "marketplace/base.html" %}
+{% extends 'marketplace/header.html' %}
 
 {% block content %}
-  <div class="eco-finds-container">
-    <h2 class="eco-finds-heading">Eco-Finds+</h2>
-    <div class="points-box">
-      <p>Total Reward Points: <span class="points">{{ total_points }}</span></p>
+<main>
+    <div class="eco-finds-container">
+        <h2 class="eco-finds-heading">Rewards Earned</h2>
+        <div class="points-box">
+            <p>Total Reward Points: <span class="points">{{ total_points }}</span></p>
+        </div>
+        <div class="value-box">
+            <p>Value of Reward Points: <span class="value">${{ points_value }}</span></p>
+        </div>
+        <button id="about-eco-finds-btn" class="about-button">About Eco-Finds+</button>
+        <div id="about-eco-finds-details" class="about-details" style="display: none;">
+            <p>Eco-Finds+ is a program designed to reward our loyal customers. For every dollar you spend, you earn 0.5 reward points which can be redeemed for discounts and special offers. We appreciate your commitment to eco-friendly products and strive to provide the best value for your purchases.</p>
+        </div>
     </div>
-    <div class="value-box">
-      <p>Value of Reward Points: <span class="value">${{ points_value }}</span></p>
-    </div>
-    <button id="about-eco-finds-btn" class="about-button">About Eco-Finds+</button>
-    <div id="about-eco-finds-details" class="about-details" style="display: none;">
-      <p>Eco-Finds+ is a program designed to reward our loyal customers. For every dollar you spend, you earn 0.5 reward points which can be redeemed for discounts and special offers. We appreciate your commitment to eco-friendly products and strive to provide the best value for your purchases.</p>
-    </div>
-  </div>
-  <script>
-    document.getElementById('about-eco-finds-btn').onclick = function() {
-      var details = document.getElementById('about-eco-finds-details');
-      if (details.style.display === 'none') {
-        details.style.display = 'block';
-      } else {
-        details.style.display = 'none';
-      }
+
+
+{% block styles %}
+<style>
+    /* General styling */
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9fc;
     }
-  </script>
+    header {
+    z-index: 1000;
+    width: 100%;
+    background: linear-gradient(to right, #556b2f, #6b8e23); /* Gradient background */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0; /* Add padding */
+}
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 30px 0;
+    }
+    .eco-finds-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        max-width: 600px;
+        width: 90%;
+        text-align: center;
+    }
+    .eco-finds-heading {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #2c5f2d;
+        margin-bottom: 20px;
+    }
+    .points-box, .value-box {
+        background: #e8f5e9;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .points-box p, .value-box p {
+        font-size: 1.2rem;
+        color: #2c5f2d;
+        margin: 0;
+    }
+    .points-box .points, .value-box .value {
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: #1b5e20;
+    }
+    .about-button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .about-button:hover {
+        background-color: #388e3c;
+        transform: translateY(-3px);
+    }
+    .about-details {
+        background: #f1f8e9;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    .about-details p {
+        font-size: 1rem;
+        color: #2c5f2d;
+        margin: 0;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
 {% endblock %}
 
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const aboutButton = document.getElementById('about-eco-finds-btn');
+        const aboutDetails = document.getElementById('about-eco-finds-details');
+
+        aboutButton.addEventListener('click', () => {
+            if (aboutDetails.style.display === 'none' || aboutDetails.style.display === '') {
+                aboutDetails.style.display = 'block';
+            } else {
+                aboutDetails.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
+</main>
+{% endblock %}

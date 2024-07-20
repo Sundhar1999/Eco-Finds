@@ -33,10 +33,11 @@
 
 
 from django.contrib import admin
-from .models import Product, UserHistory, Review, CartItem, Order, Checkout
+from .models import Product, UserHistory, Review, CartItem, Order, Checkout, Cart
 from .models import CardDetails, UserRegistration, Reward, Category
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+
 
 # Register your models here.
 admin.site.register(Category)
@@ -44,21 +45,14 @@ admin.site.register(Product)
 admin.site.register(UserHistory)
 admin.site.register(Review)
 admin.site.register(CartItem)
-admin.site.register(Checkout)
-admin.site.register(CardDetails)
-
-class CartItemInline(admin.TabularInline):
-    model = Order.items.through
-    extra = 1
+admin.site.register(Cart)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'ordered_at')
+    list_display = ('user', 'get_total_price', 'ordered_at')
 
-    def get_total_price(self, obj):
-        return obj.get_total_price
-    get_total_price.short_description = 'Total Price'
-
+admin.site.register(Checkout)
+admin.site.register(CardDetails)
 
 class UserRegistrationInline(admin.StackedInline):
     model = UserRegistration

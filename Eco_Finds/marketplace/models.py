@@ -79,19 +79,16 @@ class Cart(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(CartItem)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     ordered_at = models.DateTimeField(auto_now_add=True)
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
-    # product_name = models.CharField(max_length=255, default='default_product_name')
-
-    def total_price(self):
-        return sum(item.total_price for item in self.items.all())
-
+    product_name = models.CharField(max_length=255, default='default_product_name')
 
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
-    
+
+    def get_total_price(self):
+        return sum(item.total_price for item in self.items.all())
 
 class Checkout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
