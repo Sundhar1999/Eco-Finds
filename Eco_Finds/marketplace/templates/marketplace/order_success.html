@@ -1,7 +1,7 @@
-{% extends "marketplace/base.html" %}
+{% extends "marketplace/header.html" %}
 
-{% block title %}Order Success - Eco-Friendly Products Marketplace{% endblock %}
 {% block content %}
+<main>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -10,10 +10,14 @@
                     <h2 class="card-title">Thank you for your order!</h2>
                     <p class="card-text">Your order has been placed successfully. You will receive a confirmation email shortly.</p>
                     <p class="card-text">Total Price: ${{ order.get_total_price }}</p>
+                    <p class="card-text">You have earned <strong>{{ total_reward_points }}</strong> reward points.</p>
+                    <p class="card-text">Billing Address: {{ order.billing_address }}</p>
+                    <p class="card-text">Shipping Address: {{ order.shipping_address }}</p>
                     <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</main>
 {% endblock %}

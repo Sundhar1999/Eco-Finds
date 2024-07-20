@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="{% static 'prodstyles.css' %}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -48,7 +47,6 @@
                         {% endif %}
                         <a href="#" onclick="openWishlist()">Wishlist</a>
                         <a href="{% url 'view_cart' %}">Cart</a>
-
                     </div>
                 </div>
                 {% if user.is_authenticated %}
@@ -76,7 +74,7 @@
 </header>
 
 
-   <main>
+<main>
 <div class="RRfilter-section">
     <select id="RRcategorySelect" onchange="RRfilterProducts()">
         <option value="all"> Categories </option>
@@ -100,10 +98,15 @@
                         <span class="quantity-info">QTY: {{ product.quantity|default:"N/A" }}</span>
                     </div>
                     {% if product.quantity > 0 %}
-                    <form action="{% url 'add_to_cart' product.id %}" method="post" class="add-to-cart-form">
-                        {% csrf_token %}
-                        <button type="submit">Add to Cart</button>
-                    </form>
+                    <div class="action-buttons">
+                        <form action="{% url 'add_to_cart' product.id %}" method="post" class="add-to-cart-form">
+                            {% csrf_token %}
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                        <a href="#" class="wishlist-btn" data-url="{% url 'add_to_wishlist' product.id %}">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                    </div>
                     {% else %}
                     <p class="out-of-stock">Out of Stock</p>
                     {% endif %}
@@ -115,14 +118,14 @@
 
 </main>
 
-    <div id="wishlistModal" class="modal-wishlist">
+<div id="wishlistModal" class="modal-wishlist">
     <div class="modal-content-wishlist">
         <span class="close-wishlist" onclick="closeWishlist()">&times;</span>
         <div class="wishlist-container" id="wishlist-container">
             <!-- Wishlist items will be dynamically inserted here -->
         </div>
     </div>
-    </div>
+</div>
 
 <footer>
   <div class="fo-container">
@@ -223,110 +226,96 @@
   </div>
 </footer>
 
+<script>
+    const aboutusUrl = "{% url 'view_cart' %}";
+</script>
+<script src="{% static 'prod.js' %}"></script>
 
-
-    <script>
-        const aboutusUrl = "{% url 'view_cart' %}";
-    </script>
-    <script src="{% static 'prod.js' %}"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function openWishlist() {
-                fetch("{% url 'wishlist' %}")
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById("wishlist-container").innerHTML = data;
-                        document.getElementById("wishlistModal").style.display = "block";
-                        document.body.style.overflow = 'hidden';
-                    });
-            }
-
-            function closeWishlist() {
-                document.getElementById("wishlistModal").style.display = "none";
-                document.body.style.overflow = 'auto';
-            }
-
-            window.onclick = function (event) {
-                if (event.target == document.getElementById("wishlistModal")) {
-                    closeWishlist();
-                }
-            }
-
-            window.openWishlist = openWishlist;
-            window.closeWishlist = closeWishlist;
-
-            const stats = document.querySelectorAll(".stat-item");
-            stats.forEach(stat => {
-                const percentage = stat.querySelector(".percentage");
-                const target = +stat.getAttribute("data-stat");
-                let count = 0;
-                const updateCount = () => {
-                    percentage.innerText = `${count}%`;
-                    if (count < target) {
-                        count++;
-                        setTimeout(updateCount, 20);
-                    } else {
-                        percentage.innerText = `${target}%`;
-                    }
-                };
-                updateCount();
-            });
-
-            const searchButton = document.getElementById('searchQuerySubmit');
-            searchButton.addEventListener('click', function (event) {
-                event.preventDefault();
-                const query = document.getElementById('searchQueryInput').value.toLowerCase();
-                if (query) {
-                    const elements = document.querySelectorAll('section, footer, nav, header, main');
-                    let found = false;
-                    elements.forEach(element => {
-                        if (element.innerText.toLowerCase().includes(query)) {
-                            element.scrollIntoView({behavior: 'smooth'});
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        alert('No matching sections found');
-                    }
-                }
-            });
-
-
-            const wishlistButtons = document.querySelectorAll('.wishlist-button');
-            wishlistButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    const productId = button.getAttribute('data-product-id');
-                    addToWishlist(productId);
-                });
-            });
-
-
-            function addToWishlist(productId) {
-            fetch(`/add-to-wishlist/${productId}/`)
-                .then(response => response.json())
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        function openWishlist() {
+            fetch("{% url 'wishlist' %}")
+                .then(response => response.text())
                 .then(data => {
-                    if (data.success) {
-                        alert('Product added to wishlist!');
-                    } else {
-                        alert('Failed to add product to wishlist.');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+                    document.getElementById("wishlist-container").innerHTML = data;
+                    document.getElementById("wishlistModal").style.display = "block";
+                    document.body.style.overflow = 'hidden';
+                });
         }
 
-                window.addToWishlist = addToWishlist;
+        function closeWishlist() {
+            document.getElementById("wishlistModal").style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
 
+        window.onclick = function (event) {
+            if (event.target == document.getElementById("wishlistModal")) {
+                closeWishlist();
+            }
+        }
+
+        window.openWishlist = openWishlist;
+        window.closeWishlist = closeWishlist;
+
+        const stats = document.querySelectorAll(".stat-item");
+        stats.forEach(stat => {
+            const percentage = stat.querySelector(".percentage");
+            const target = +stat.getAttribute("data-stat");
+            let count = 0;
+            const updateCount = () => {
+                percentage.innerText = `${count}%`;
+                if (count < target) {
+                    count++;
+                    setTimeout(updateCount, 20);
+                } else {
+                    percentage.innerText = `${target}%`;
+                }
+            };
+            updateCount();
+        });
+
+        const searchButton = document.getElementById('searchQuerySubmit');
+        searchButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            const query = document.getElementById('searchQueryInput').value.toLowerCase();
+            if (query) {
+                const elements = document.querySelectorAll('section, footer, nav, header, main');
+                let found = false;
+                elements.forEach(element => {
+                    if (element.innerText.toLowerCase().includes(query)) {
+                        element.scrollIntoView({behavior: 'smooth'});
+                        found = true;
+                    }
+                });
+                if (!found) {
+                    alert('No matching sections found');
+                }
+            }
+        });
+
+        const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+        wishlistButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const url = this.getAttribute('data-url');
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Product added to wishlist!');
+                        } else {
+                            alert('Failed to add product to wishlist.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             });
-    </script>
-
-
+        });
+    });
+</script>
 
 </body>
-
 </html>

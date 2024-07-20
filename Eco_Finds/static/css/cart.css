@@ -7,9 +7,10 @@ body {
 }
 
 main {
-
-    min-height: 100vh;
+    min-height: 150vh;
     padding: 20px 0;
+    display: flex;
+    justify-content: center;
 }
 
 .shopping-cart {
@@ -33,6 +34,7 @@ main {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 30px;
+    overflow-x: auto; /* Ensure table scrolls horizontally if needed */
 }
 
 .cart-table th, .cart-table td {
@@ -147,6 +149,7 @@ main {
     border-radius: 10px;
     padding: 20px;
     background-color: #fafafa;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .total h2 {
@@ -172,11 +175,14 @@ main {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .total button:hover {
     background-color: #43a047;
+    transform: translateY(-2px);
 }
 
 .wishlist-btn {
@@ -188,4 +194,20 @@ main {
 .wishlist-btn img {
     width: 30px;
     height: 30px;
+}
+
+#reward_points {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+label[for="reward_points"] {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
 }

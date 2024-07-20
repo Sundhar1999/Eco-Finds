@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import card_details_view
-from .views import forget_password, set_new_password
+from .views import forget_password, set_new_password, order_history
 from .views import wishlist, add_to_wishlist, remove_from_wishlist, add_to_cart_from_wishlist
 
 urlpatterns = [
@@ -31,11 +31,12 @@ urlpatterns = [
     path('forget_password/', forget_password, name='forget_password'),
     path('security_questions/', views.security_questions, name='security_questions'),
     path('set_new_password/', set_new_password, name='set_new_password'),
-
+    path('apply_reward_points/', views.apply_reward_points, name='apply_reward_points'),
     path('wishlist/', wishlist, name='wishlist'),
     path('add-to-wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('wishlist/add_to_cart/<int:product_id>/', add_to_cart_from_wishlist, name='add_to_cart_from_wishlist'),
     path('remove-from-wishlist/<int:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    path('order_history/', order_history, name='order_history'),
 
 ]
 

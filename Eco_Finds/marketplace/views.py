@@ -19,6 +19,7 @@ from .models import UserProfile
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 import json
+from decimal import Decimal
 
 def home(request):
     products = Product.objects.all()
@@ -134,13 +135,21 @@ def products(request):
     })
 
 
-
 @login_required
 def view_cart(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_items = cart.cartitem_set.all()
+    cart_items = CartItem.objects.filter(user=request.user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
-    return render(request, 'marketplace/cart.html', {'cart_items': cart_items, 'total_price': total_price})
+    total_reward_points = sum(item.product.reward_points * item.quantity for item in cart_items)
+
+    # Pre-calculate reward points for each cart item
+    for item in cart_items:
+        item.reward_points = item.product.reward_points * item.quantity
+
+    return render(request, 'marketplace/cart.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'total_reward_points': total_reward_points,
+    })
 
 
 @login_required
@@ -207,11 +216,15 @@ def checkout(request):
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
+            checkout = form.save(commit=False)
+            checkout.user = request.user
+            checkout.save()
             cart_items = CartItem.objects.filter(user=request.user)
             cart_data = [{'product_id': item.product.id, 'name': item.product.name, 'quantity': item.quantity} for item in cart_items]
-            response = redirect('card_details', card_type=form.cleaned_data['payment_method'])
             expiration_date = (datetime.now() + timedelta(days=1)).strftime("%a, %d-%b-%Y %H:%M:%S GMT")
+            response = redirect('card_details', card_type=checkout.payment_method)
             response.set_cookie('cart_data', json.dumps(cart_data), expires=expiration_date)
+            response.set_cookie('checkout_id', checkout.id, expires=expiration_date)
             return response
     else:
         form = CheckoutForm()
@@ -317,14 +330,29 @@ def submit_payment(request):
         user = request.user
         cart_items = CartItem.objects.filter(user=user)
 
-        # Save order
+        # Get checkout details from the cookie
+        checkout_id = request.COOKIES.get('checkout_id')
+        if not checkout_id:
+            return redirect('checkout')  # Redirect to checkout if no details found
+
+        checkout = Checkout.objects.get(id=checkout_id)
+
+        # Save order with checkout details
         order = Order.objects.create(
             user=user,
-            billing_address=request.POST.get('billing_address', 'default billing address'),
-            shipping_address=request.POST.get('shipping_address', 'default shipping address')
+            billing_address=f"{checkout.billing_unit_no}, {checkout.billing_street}, {checkout.billing_city}, {checkout.billing_pin}",
+            shipping_address=f"{checkout.shipping_unit_no}, {checkout.shipping_street}, {checkout.shipping_city}, {checkout.shipping_pin}"
         )
-        order.items.set(cart_items)
+        order.items.set(cart_items)  # ensure this is set correctly
         order.save()
+
+        # Calculate total reward points
+        total_reward_points = float(sum(item.reward_points for item in cart_items))
+
+        # Update user's reward points
+        user_registration = UserRegistration.objects.get(user=user)
+        user_registration.reward_points += Decimal(total_reward_points)
+        user_registration.save()
 
         # Reduce product quantities
         for item in cart_items:
@@ -337,14 +365,25 @@ def submit_payment(request):
         # Clear the cookies
         response = redirect('order_success')
         response.delete_cookie('cart_items')
+        response.delete_cookie('checkout_id')
+
+        # Pass the total reward points to the order success view
+        request.session['total_reward_points'] = total_reward_points
 
         return response
 
     return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
+
+
+
 @login_required
 def order_success(request):
-    return render(request, 'marketplace/order_success.html', {'username': request.session.get('username')})
+    total_reward_points = request.session.pop('total_reward_points', 0)
+    return render(request, 'marketplace/order_success.html', {
+        'username': request.session.get('username'),
+        'total_reward_points': total_reward_points
+    })
 
 def aboutus(request):  
     return render(request, 'marketplace/aboutus.html')
@@ -354,15 +393,10 @@ def aboutus(request):
 
 @login_required
 def rewards(request):
-    # Calculate the total amount spent by the user
-    user_orders = Order.objects.filter(user=request.user)
-    total_spent = sum(sum(item.product.price * item.quantity for item in order.items.all()) for order in user_orders)
-
-    # Calculate the total reward points (0.5 points per dollar spent)
-    total_points = total_spent * 0.5
+    user_registration = UserRegistration.objects.get(user=request.user)
+    total_points = user_registration.reward_points
     points_value = total_points * 2
 
-    # Get all rewards
     rewards = Reward.objects.all()
 
     return render(request, 'marketplace/rewards.html', {
@@ -370,6 +404,7 @@ def rewards(request):
         'total_points': total_points,
         'points_value': points_value,
     })
+
 
 
 @login_required
@@ -383,17 +418,45 @@ def wishlist(request):
 @login_required
 def view_cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
-    return render(request, 'marketplace/cart.html', {'cart_items': cart_items})
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    total_reward_points = sum(item.product.reward_points * item.quantity for item in cart_items)
+    tax = total_price * Decimal(0.08)  # Assuming 8% tax rate
+    total_amount = total_price + tax
 
-# @login_required
-# def add_to_cart(request, product_id):
-#     product = get_object_or_404(Product, id=product_id)
-#     cart, created = Cart.objects.get_or_create(user=request.user)
-#     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-#     if not created:
-#         cart_item.quantity += 1
-#         cart_item.save()
-#     return redirect('view_cart')
+    user_registration = UserRegistration.objects.get(user=request.user)
+    available_reward_points = user_registration.reward_points
+
+    reward_points_applied = 0
+    if request.method == 'POST' and 'redeem_points' in request.POST:
+        reward_points_to_redeem = Decimal(request.POST.get('reward_points', 0))
+        if reward_points_to_redeem <= available_reward_points:
+            discount = (reward_points_to_redeem // 10) * Decimal(1.5)
+            total_amount -= discount
+            reward_points_applied = reward_points_to_redeem
+            # Update user's reward points
+            user_registration.reward_points -= reward_points_to_redeem
+            user_registration.save()
+        else:
+            messages.error(request, "You do not have enough reward points to redeem that amount.")
+
+    total_amount = round(total_amount, 2)  # Round off total amount to 2 decimal points
+
+    # Pre-compute reward points for each cart item
+    for item in cart_items:
+        item.computed_reward_points = item.product.reward_points * item.quantity
+
+    return render(request, 'marketplace/cart.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'total_reward_points': total_reward_points,
+        'tax': tax,
+        'total_amount': total_amount,
+        'available_reward_points': available_reward_points,
+        'reward_points_applied': reward_points_applied,
+    })
+
+
+
 
 @login_required
 def add_to_cart(request, product_id):
@@ -442,6 +505,25 @@ def update_quantity(request, product_id, action):
     return redirect('view_cart')
 
 
+
+@login_required
+def apply_reward_points(request):
+    if request.method == 'POST':
+        points_to_redeem = int(request.POST.get('reward_points', 0))
+        user_registration = request.user.userregistration
+
+        if points_to_redeem <= user_registration.reward_points:
+            user_registration.reward_points -= points_to_redeem
+            user_registration.save()
+            return JsonResponse({'success': True, 'available_reward_points': user_registration.reward_points})
+        else:
+            return JsonResponse({'success': False, 'error': 'Insufficient reward points'})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+
+
 @login_required
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -459,11 +541,20 @@ def remove_from_wishlist(request, product_id):
 @login_required
 def add_to_cart_from_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+    else:
+        cart_item.save()
+
+    # Optionally, you can remove the product from the wishlist after adding it to the cart
     user_registration = request.user.userregistration
-    # Add product to cart logic here
     user_registration.wishlist.remove(product)
-    return JsonResponse({'success': True})
-    # return redirect('cart')
+
+    return redirect('view_cart')  # Redirect to the cart page after adding the product
+
+
 
 #View to fetch cart items and pass them to the template >>>
 def cart_view(request):
@@ -534,3 +625,13 @@ def product_showcase(request):
         'categories': categories,
         'products': products
     })
+
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).prefetch_related('items__product')
+    for order in orders:
+        for item in order.items.all():
+            print(f"Order: {order.id}, Item: {item.product.name}, Quantity: {item.quantity}, Price: {item.product.price}, Image URL: {item.product.image.url}")  # Detailed debug statement
+    return render(request, 'marketplace/order_history.html', {'orders': orders})
+

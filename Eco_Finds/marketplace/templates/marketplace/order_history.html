@@ -1,0 +1,43 @@
+<!-- order_history.html -->
+
+{% extends 'marketplace/header.html' %}
+{% load custom_filters %}
+
+{% block title %}Order History{% endblock %}
+
+{% block content %}
+<main>
+<div class="container mt-5">
+    <h2>Your Order History</h2>
+    {% if orders %}
+        <div class="order-list">
+            {% for order in orders %}
+                <div class="order-card mb-4 p-3" style="border: 1px solid #ddd; border-radius: 10px; background-color: #fff;">
+                    <h5>Order ID: {{ order.id }} - Placed on {{ order.ordered_at|date:"F j, Y" }}</h5>
+                    <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
+                    <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+                    <p><strong>Total Price:</strong> ${{ order.get_total_price }}</p>
+                    <h6>Items:</h6>
+                    <ul class="list-unstyled">
+                        {% for item in order.items.all %}
+                            <li class="media mb-3">
+                                <img src="{{ item.product.image.url }}" class="mr-3" alt="{{ item.product.name }}" style="width: 100px; height: 100px; object-fit: cover;">
+                                <div class="media-body">
+                                    <h5 class="mt-0 mb-1">{{ item.product.name }}</h5>
+                                    <p>{{ item.product.description }}</p>
+                                    <p><strong>Price:</strong> ${{ item.product.price }}</p>
+                                    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                                    <p><strong>Subtotal:</strong> ${{ item.total_price }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have no past orders.</p>
+    {% endif %}
+</div>
+    </main>
+{% endblock %}

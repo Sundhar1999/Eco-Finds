@@ -7,22 +7,27 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.6;
 }
 
 header {
     background: linear-gradient(to right, #333, #444);
     color: white;
-    padding: 20px 20px;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .RRlogo {
     font-size: 24px;
     color: #8BC34A;
     font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .RRbuy-now-button {
@@ -33,12 +38,10 @@ header {
     background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 10px 0;
+    padding: 10px 20px;
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
-    width: 10%;
-    min-width: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,7 +52,6 @@ header {
 .RRbuy-now-button:hover {
     background-color: #367c2b;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    transform: translateY(-50%);
 }
 
 .RRfilter-section,
@@ -96,7 +98,7 @@ header {
 
 .RRcontainer {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
 }
@@ -107,11 +109,12 @@ header {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .RRcard:hover {
     transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .RRcard img {
@@ -120,38 +123,34 @@ header {
     object-fit: cover;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.RRcard:hover img {
+    opacity: 0.9;
 }
 
 .info {
     padding: 15px;
     text-align: center;
+    border-top: 1px solid #e0e0e0;
 }
 
-.name,
-.price,
-.rating,
-button {
-    margin-top: 5px;
+.name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #4CAF50;
 }
 
-button {
-    color: #2d572c;
-    background-color: #e8f5e9;
-    border: none;
-    padding: 10px 20px;
-    width: 100%;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #c8e6c9;
+.price {
+    font-size: 1.1em;
+    color: #777;
 }
 
 .additional-info {
-    font-size: 0.8em;
+    font-size: 0.9em;
     color: #666;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .carbon-emission {
@@ -189,7 +188,7 @@ button:hover {
     display: none;
 }
 
-.environmental-impact:hover+.impact-info {
+.environmental-impact:hover + .impact-info {
     display: block;
 }
 
@@ -197,30 +196,53 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 15px;
+    padding: 0 15px 15px;
 }
 
-.add-to-cart {
+.action-buttons button,
+.action-buttons .wishlist-btn {
     flex-grow: 1;
-    margin-right: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.wishlist {
+.action-buttons button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    margin-right: 10px;
+    width: calc(100% - 34px); /* Adjusted width to accommodate the heart icon */
+}
+
+.action-buttons button:hover {
+    background-color: #367c2b;
+}
+
+.wishlist-btn {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
     color: red;
-    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
 }
 
-.wishlist svg {
+.wishlist-btn svg {
     width: 24px;
     height: 24px;
     fill: red;
+    transition: fill 0.3s ease;
 }
 
-.wishlist:hover {
-    color: darkred;
+.wishlist-btn:hover svg {
+    fill: darkred;
+}
 
+.out-of-stock {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
 }

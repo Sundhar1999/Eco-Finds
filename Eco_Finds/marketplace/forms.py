@@ -162,7 +162,7 @@ class CheckoutForm(forms.ModelForm):
         model = Checkout
         fields = [
             'shipping_unit_no', 'shipping_street', 'shipping_city', 'shipping_pin',
-            'phone', 'payment_method'
+            'phone', 'billing_unit_no', 'billing_street', 'billing_city', 'billing_pin', 'payment_method'
         ]
 
 #card details form

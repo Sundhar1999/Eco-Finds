@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
+from decimal import Decimal
 
 
 import os
@@ -30,6 +31,10 @@ class Product(models.Model):
     environmental_impact = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(default=1)
+
+    @property
+    def reward_points(self):
+        return self.price * Decimal(0.5)  # Convert 0.5 to Decimal
 
     def __str__(self):
         return self.name
@@ -63,8 +68,9 @@ class CartItem(models.Model):
     def total_price(self):
         return self.product.price * self.quantity
 
-    # def __str__(self):
-    #     return self.product.price * self.quantity
+    @property
+    def reward_points(self):
+        return self.product.reward_points * Decimal(self.quantity)
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -74,7 +80,7 @@ class Cart(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    items = models.ManyToManyField(CartItem)
+    items = models.ManyToManyField(CartItem, related_name='orders')  # added related_name for better reverse access
     ordered_at = models.DateTimeField(auto_now_add=True)
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
@@ -85,6 +91,9 @@ class Order(models.Model):
 
     def get_total_price(self):
         return sum(item.total_price for item in self.items.all())
+
+    def get_total_reward_points(self):
+        return sum(item.reward_points for item in self.items.all())
 
 class Checkout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -123,6 +132,7 @@ class UserRegistration(models.Model):
     wishlist = models.ManyToManyField('Product', blank=True, related_name='wishlisted_by')
     visit_count = models.IntegerField(default=0)
     last_visit = models.DateTimeField(null=True, blank=True)
+    reward_points = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     def __str__(self):
         return self.user.username
 

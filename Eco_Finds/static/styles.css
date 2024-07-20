@@ -914,8 +914,6 @@ nav {
 
 
 
-
-
 /* wishlist.css */
 /* wishlist.css */
 .modal-wishlist {
@@ -927,9 +925,9 @@ nav {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px); /* Blurs the background */
-    animation: fadeIn 0.3s ease-in-out; /* Fade-in animation */
+    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay for better visibility */
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    animation: fadeIn 0.4s ease-in-out; /* Longer fade-in animation */
 }
 
 @keyframes fadeIn {
@@ -938,35 +936,37 @@ nav {
 }
 
 .modal-content-wishlist {
-    background-color: #ffffff;
-    margin: 5% auto; /* Reduced margin for better centering */
+    background-color: olivedrab; /* Dark green background matching the theme */
+    margin: 5% auto;
     border: none;
-    width: 80%;
-    max-width: 900px; /* Increased max-width for better layout */
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease-in-out; /* Slide-in animation */
-    position: relative; /* Ensure close button is positioned correctly */
-    padding-top: 0px; /* Reduce padding to minimize white space */
+    width: 70%;
+    max-width: 900px;
+    border-radius: 15px; /* Increased border-radius for a rounder look */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow for better effect */
+    animation: slideIn 0.4s ease-in-out; /* Longer slide-in animation */
+    position: relative;
+    padding: 20px; /* Padding around the content */
+    color: white; /* White text color */
 }
 
 @keyframes slideIn {
-    from { transform: translateY(-50px); opacity: 0; }
+    from { transform: translateY(-60px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
 .close-wishlist {
-    color: #bbb;
+    color: #ddd; /* Lighter color for the close button */
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: 15px; /* Adjusted positioning */
+    right: 25px;
     font-size: 28px;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 .close-wishlist:hover,
 .close-wishlist:focus {
-    color: #333;
+    color: #fff; /* White on hover */
     text-decoration: none;
     cursor: pointer;
 }
@@ -974,22 +974,23 @@ nav {
 .wishlist-header {
     text-align: center;
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    margin-bottom: 10px; /* Reduce margin to minimize white space */
-    margin-top: 0; /* Remove any default top margin */
+    font-weight: 700;
+    margin-bottom: 20px; /* Increased margin for spacing */
+    margin-top: 0;
+    font-size: 24px; /* Increased font size */
 }
 
 .wishlist-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* Adjust gap for better spacing */
+    gap: 20px; /* Increased gap for better spacing */
     justify-content: center;
 }
 
 .wishlist-item {
     width: 100%;
-    max-width: 250px; /* Reduced max-width for better layout */
-    flex: 1 1 250px;
+    max-width: 280px; /* Adjusted max-width for better layout */
+    flex: 1 1 280px;
     display: flex;
     flex-direction: column;
 }
@@ -999,75 +1000,77 @@ nav {
     flex-direction: column;
     flex: 1;
     border: none;
-    border-radius: 10px;
+    border-radius: 15px; /* Increased border-radius */
     overflow: hidden;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Softer shadow */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%; /* Ensure cards are the same height */
+    height: 100%;
+    background-color: #388e3c; /* Darker green for cards */
 }
 
 .card-wishlist:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px); /* Increased hover effect */
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
 }
 
 .card-wishlist img {
     width: 100%;
-    height: 200px; /* Set a fixed height for images */
-    object-fit: cover; /* Ensures the image covers the area */
+    height: 180px; /* Adjusted height for images */
+    object-fit: cover;
 }
 
 .card-body-wishlist {
-    padding: 15px;
-    text-align: center; /* Centered text */
+    padding: 20px; /* Increased padding */
+    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex: 1; /* Ensures the card body takes up the remaining space */
+    flex: 1;
+    color: #fff; /* White text color */
 }
 
 .card-body-wishlist h5 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    font-weight: 600; /* Slightly bolder text */
-    color: #333;
+    margin: 0 0 15px 0; /* Adjusted margin */
+    font-size: 20px; /* Increased font size */
+    font-weight: 600;
+    color: #fff; /* White text color */
 }
 
 .card-body-wishlist p {
-    margin: 0 0 10px 0;
-    color: #777;
-    font-size: 14px;
-    flex-grow: 1; /* Ensures the paragraph takes up available space */
+    margin: 0 0 15px 0; /* Adjusted margin */
+    color: #ddd; /* Lighter color for description */
+    font-size: 16px; /* Increased font size */
+    flex-grow: 1;
 }
 
 .card-body-wishlist .btn {
     width: 100%;
-    padding: 10px 15px;
-    font-size: 14px;
+    padding: 12px 18px; /* Increased padding */
+    font-size: 16px; /* Increased font size */
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 8px; /* Increased border-radius */
     transition: background-color 0.3s ease, color 0.3s ease;
-    margin-top: 10px; /* Adds some space above the buttons */
+    margin-top: 15px; /* Increased margin */
 }
 
-.card-body-wishlist .btn-primary {
-    background-color: #28a745;
+.card-body-wishlist .btn-success {
+    background-color: #66bb6a; /* Matching green for add to cart button */
     border: none;
     color: white;
 }
 
-.card-body-wishlist .btn-primary:hover {
-    background-color: #218838;
+.card-body-wishlist .btn-success:hover {
+    background-color: #4caf50; /* Darker green on hover */
 }
 
 .card-body-wishlist .btn-danger {
-    background-color: #dc3545;
+    background-color: #e57373; /* Matching red for remove button */
     border: none;
     color: white;
 }
 
 .card-body-wishlist .btn-danger:hover {
-    background-color: #c82333;
+    background-color: #ef5350; /* Darker red on hover */
 }
 
 
