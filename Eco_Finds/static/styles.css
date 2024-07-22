@@ -3,7 +3,16 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: lavenderblush /* Greenish white background */
+    background-color: lavenderblush; /* Greenish white background */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+main{
+    flex: 1; /* Allow main to grow and take up space */
+    padding: 20px; /* Adjust padding as needed */
 }
 
 /* Header styling */
@@ -384,80 +393,80 @@ nav {
 
 
 
-/* Footer styles */
-.footer {
-    background-color: #f8f9fa;
-    color: #2c5f2d; /* Dark green color */
-    padding: 20px 0;
-}
+/*!* Footer styles *!*/
+/*.footer {*/
+/*    background-color: #f8f9fa;*/
+/*    color: #2c5f2d; !* Dark green color *!*/
+/*    padding: 20px 0;*/
+/*}*/
 
-.footer h5 {
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
+/*.footer h5 {*/
+/*    text-transform: uppercase;*/
+/*    font-weight: bold;*/
+/*    margin-bottom: 20px;*/
+/*}*/
 
-.footer ul {
-    list-style: none;
-    padding: 0;
-}
+/*.footer ul {*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*}*/
 
-.footer ul li {
-    margin-bottom: 10px;
-}
+/*.footer ul li {*/
+/*    margin-bottom: 10px;*/
+/*}*/
 
-.footer ul li a {
-    color: #2c5f2d; /* Dark green color */
-    text-decoration: none;
-}
+/*.footer ul li a {*/
+/*    color: #2c5f2d; !* Dark green color *!*/
+/*    text-decoration: none;*/
+/*}*/
 
-.footer ul li a:hover {
-    text-decoration: underline;
-}
+/*.footer ul li a:hover {*/
+/*    text-decoration: underline;*/
+/*}*/
 
-.footer .list-inline-item img {
-    width: 50px; /* Adjust the size of the payment images */
-    height: 50px;
-}
+/*.footer .list-inline-item img {*/
+/*    width: 50px; !* Adjust the size of the payment images *!*/
+/*    height: 50px;*/
+/*}*/
 
-.footer .list-inline {
-    text-align: center;
-    margin: 20px 0;
-}
+/*.footer .list-inline {*/
+/*    text-align: center;*/
+/*    margin: 20px 0;*/
+/*}*/
 
-.footer .list-inline-item {
-    margin: 0 10px;
-}
+/*.footer .list-inline-item {*/
+/*    margin: 0 10px;*/
+/*}*/
 
-.footer .text-center {
-    background-color: olivedrab;; /* Dark green background */
-    color: black;
-    font-weight: bold;
-    padding: 10px 0;
-}
+/*.footer .text-center {*/
+/*    background-color: olivedrab;; !* Dark green background *!*/
+/*    color: black;*/
+/*    font-weight: bold;*/
+/*    padding: 10px 0;*/
+/*}*/
 
-/* Additional styles for responsiveness */
-@media (max-width: 992px) {
-    .navbar-brand .brand-logo {
-        height: 40px; /* Adjust logo size for smaller screens */
-    }
+/*!* Additional styles for responsiveness *!*/
+/*@media (max-width: 992px) {*/
+/*    .navbar-brand .brand-logo {*/
+/*        height: 40px; !* Adjust logo size for smaller screens *!*/
+/*    }*/
 
-    .nav-item .nav-link {
-        font-size: 1rem;
-    }
+/*    .nav-item .nav-link {*/
+/*        font-size: 1rem;*/
+/*    }*/
 
-    .search-form {
-        max-width: 100%; /* Make search bar full width on smaller screens */
-    }
+/*    .search-form {*/
+/*        max-width: 100%; !* Make search bar full width on smaller screens *!*/
+/*    }*/
 
-    .search-input {
-        font-size: 0.9rem; /* Adjust font size for smaller screens */
-    }
+/*    .search-input {*/
+/*        font-size: 0.9rem; !* Adjust font size for smaller screens *!*/
+/*    }*/
 
-    .search-form .btn-success {
-        font-size: 0.9rem; /* Adjust font size for smaller screens */
-    }
-}
+/*    .search-form .btn-success {*/
+/*        font-size: 0.9rem; !* Adjust font size for smaller screens *!*/
+/*    }*/
+/*}*/
 
 .container {
     width: 100%; /* Ensure full width */
@@ -927,9 +936,9 @@ nav {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px); /* Blurs the background */
-    animation: fadeIn 0.3s ease-in-out; /* Fade-in animation */
+    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay for better visibility */
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    animation: fadeIn 0.4s ease-in-out; /* Longer fade-in animation */
 }
 
 @keyframes fadeIn {
@@ -938,35 +947,37 @@ nav {
 }
 
 .modal-content-wishlist {
-    background-color: #ffffff;
-    margin: 5% auto; /* Reduced margin for better centering */
+    background-color: olivedrab; /* Dark green background matching the theme */
+    margin: 5% auto;
     border: none;
-    width: 80%;
-    max-width: 900px; /* Increased max-width for better layout */
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease-in-out; /* Slide-in animation */
-    position: relative; /* Ensure close button is positioned correctly */
-    padding-top: 0px; /* Reduce padding to minimize white space */
+    width: 70%;
+    max-width: 900px;
+    border-radius: 15px; /* Increased border-radius for a rounder look */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow for better effect */
+    animation: slideIn 0.4s ease-in-out; /* Longer slide-in animation */
+    position: relative;
+    padding: 20px; /* Padding around the content */
+    color: white; /* White text color */
 }
 
 @keyframes slideIn {
-    from { transform: translateY(-50px); opacity: 0; }
+    from { transform: translateY(-60px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
 .close-wishlist {
-    color: #bbb;
+    color: #ddd; /* Lighter color for the close button */
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: 15px; /* Adjusted positioning */
+    right: 25px;
     font-size: 28px;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 .close-wishlist:hover,
 .close-wishlist:focus {
-    color: #333;
+    color: #fff; /* White on hover */
     text-decoration: none;
     cursor: pointer;
 }
@@ -974,22 +985,23 @@ nav {
 .wishlist-header {
     text-align: center;
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    margin-bottom: 10px; /* Reduce margin to minimize white space */
-    margin-top: 0; /* Remove any default top margin */
+    font-weight: 700;
+    margin-bottom: 20px; /* Increased margin for spacing */
+    margin-top: 0;
+    font-size: 24px; /* Increased font size */
 }
 
 .wishlist-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* Adjust gap for better spacing */
+    gap: 20px; /* Increased gap for better spacing */
     justify-content: center;
 }
 
 .wishlist-item {
     width: 100%;
-    max-width: 250px; /* Reduced max-width for better layout */
-    flex: 1 1 250px;
+    max-width: 280px; /* Adjusted max-width for better layout */
+    flex: 1 1 280px;
     display: flex;
     flex-direction: column;
 }
@@ -999,143 +1011,164 @@ nav {
     flex-direction: column;
     flex: 1;
     border: none;
-    border-radius: 10px;
+    border-radius: 15px; /* Increased border-radius */
     overflow: hidden;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Softer shadow */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%; /* Ensure cards are the same height */
+    height: 100%;
+    background-color: #388e3c; /* Darker green for cards */
 }
 
 .card-wishlist:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px); /* Increased hover effect */
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
 }
 
 .card-wishlist img {
     width: 100%;
-    height: 200px; /* Set a fixed height for images */
-    object-fit: cover; /* Ensures the image covers the area */
+    height: 180px; /* Adjusted height for images */
+    object-fit: cover;
 }
 
 .card-body-wishlist {
-    padding: 15px;
-    text-align: center; /* Centered text */
+    padding: 20px; /* Increased padding */
+    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    flex: 1; /* Ensures the card body takes up the remaining space */
+    flex: 1;
+    color: #fff; /* White text color */
 }
 
 .card-body-wishlist h5 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    font-weight: 600; /* Slightly bolder text */
-    color: #333;
+    margin: 0 0 15px 0; /* Adjusted margin */
+    font-size: 20px; /* Increased font size */
+    font-weight: 600;
+    color: #fff; /* White text color */
 }
 
 .card-body-wishlist p {
-    margin: 0 0 10px 0;
-    color: #777;
-    font-size: 14px;
-    flex-grow: 1; /* Ensures the paragraph takes up available space */
+    margin: 0 0 15px 0; /* Adjusted margin */
+    color: #ddd; /* Lighter color for description */
+    font-size: 16px; /* Increased font size */
+    flex-grow: 1;
 }
 
 .card-body-wishlist .btn {
     width: 100%;
-    padding: 10px 15px;
-    font-size: 14px;
+    padding: 12px 18px; /* Increased padding */
+    font-size: 16px; /* Increased font size */
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 8px; /* Increased border-radius */
     transition: background-color 0.3s ease, color 0.3s ease;
-    margin-top: 10px; /* Adds some space above the buttons */
+    margin-top: 15px; /* Increased margin */
 }
 
-.card-body-wishlist .btn-primary {
-    background-color: #28a745;
+.card-body-wishlist .btn-success {
+    background-color: #66bb6a; /* Matching green for add to cart button */
     border: none;
     color: white;
 }
 
-.card-body-wishlist .btn-primary:hover {
-    background-color: #218838;
+.card-body-wishlist .btn-success:hover {
+    background-color: #4caf50; /* Darker green on hover */
 }
 
 .card-body-wishlist .btn-danger {
-    background-color: #dc3545;
+    background-color: #e57373; /* Matching red for remove button */
     border: none;
     color: white;
 }
 
 .card-body-wishlist .btn-danger:hover {
-    background-color: #c82333;
+    background-color: #ef5350; /* Darker red on hover */
 }
 
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Montserrat:wght@600&display=swap");
 
-
-/* Center the checkout container */
-.checkout-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-}
-
-/* Style the form fields */
-.checkout-container form {
-  display: flex;
-  flex-direction: column;
-}
-
-.checkout-container form .form-group {
-  margin-bottom: 15px;
-}
-
-.checkout-container form label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: inline-block;
-}
-
-.checkout-container form input,
-.checkout-container form select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-/* Style the radio buttons */
-.checkout-container form .form-check {
+.credit-card-form {
+  margin-top: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+
+  padding: 1em;
+  border-radius: 10px;
+  box-shadow: 0px 6px 10px rgba(255, 255, 255, 0.1);
+  font-family: "Montserrat", sans-serif;
+  background-color: #c7e8ca;
+  text-align: center;
+  color: #424242;
+}
+
+.credit-card-form h2 {
+  margin-bottom: 10%;
+  font-size: 24px;
+}
+
+.credit-card-form .form-group {
+  margin-bottom: 15px;
+}
+
+.credit-card-form .form-row {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px;
 }
 
-.checkout-container form .form-check label {
-  margin-left: 5px;
+.credit-card-form label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  color: #777;
 }
 
-.checkout-container form .form-check-input {
-  margin-right: 10px;
-}
-
-/* Style the submit button */
-.checkout-container form .btn {
-  padding: 10px;
+.credit-card-form input[type="text"],
+.credit-card-form select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
   font-size: 16px;
-  border-radius: 5px;
-  background-color: #28a745;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
 }
 
-.checkout-container form .btn:hover {
-  background-color: #218838;
+.credit-card-form button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background-color: #585858;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  font-family: "Montserrat", sans-serif;
+}
+
+.credit-card-form button[type="submit"]:hover {
+  background-color: #808080;
+  color: #424242;
+  box-shadow: 0px 6px 10px rgba(255, 255, 255, 0.1);
+}
+
+.credit-card-form button[type="submit"]:focus {
+  outline: none;
+}
+
+.Image1 {
+  margin-top: 0;
+  width: 220px;
+}
+
+.h2 {
+  margin: 0px;
 }
 
 .eco-finds-container {
@@ -1211,18 +1244,20 @@ nav {
 }
 
 
-footer{
-    margin-top: 100px;
+footer {
+    margin-top: 450px; /* Adjust this value if needed */
+    width: 100%;
+    padding: 5px 20px; /* Adjusted padding to reduce height */
+    background-color: #333;
+    color: #fff;
+    position: relative;
 }
 
 .fo-container {
     width: 100%;
-    padding: 10px 20px; /* Adjusted padding to reduce height */
+    padding: 10px 20px;
     background-color: #333;
     color: #fff;
-    position: relative;
-    bottom: 0;
-    left: 0;
 }
 
 .fo-row {
@@ -1328,4 +1363,3 @@ footer{
 .fo-social-buttons a:hover {
     color: #aaa;
 }
-

@@ -145,7 +145,6 @@ class OrderForm(forms.ModelForm):
         fields = ['shipping_address', 'billing_address']
 
 
-#checkout form
 class CheckoutForm(forms.ModelForm):
     PAYMENT_METHOD_CHOICES = [
         ('Debit Card', 'Debit Card'),
@@ -165,14 +164,59 @@ class CheckoutForm(forms.ModelForm):
             'phone', 'payment_method'
         ]
 
-#card details form
+        widgets = {
+            'shipping_unit_no': forms.TextInput(attrs={'placeholder': 'Shipping Unit No'}),
+            'shipping_street': forms.TextInput(attrs={'placeholder': 'Shipping Street Address'}),
+            'shipping_city': forms.TextInput(attrs={'placeholder': 'Shipping City'}),
+            'shipping_pin': forms.TextInput(attrs={'placeholder': 'A1B2C3'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'Phone Number'}),
+        }
+        help_texts = {
+            'shipping_pin': 'Enter the PIN in the format A1B2C3.',
+            'phone': 'Enter a 10-digit phone number.',
+        }
+
+    def clean_shipping_pin(self):
+        shipping_pin = self.cleaned_data.get('shipping_pin')
+        if not re.match(r'^[A-Za-z]{1}\d{1}[A-Za-z]{1}\d{1}[A-Za-z]{1}\d{1}$', shipping_pin):
+            raise forms.ValidationError("Invalid PIN code. It should be in the format A1B2C3.")
+        return shipping_pin
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if not re.match(r'^\d{10}$', phone):
+            raise forms.ValidationError("Invalid phone number. It should be 10 digits.")
+        return phone
+
 class CardDetailsForm(forms.ModelForm):
     class Meta:
         model = CardDetails
         fields = ['card_type', 'card_number', 'expiry_date', 'cardholder_name', 'cvv']
         widgets = {
-            'card_type': forms.TextInput(attrs={'readonly': 'readonly'})
+            'card_type': forms.TextInput(attrs={'readonly': 'readonly', 'placeholder': 'Card Type'}),
+            'card_number': forms.TextInput(attrs={'placeholder': 'Card Number'}),
+            'expiry_date': forms.TextInput(attrs={'placeholder': 'MM/YY'}),
+            'cardholder_name': forms.TextInput(attrs={'placeholder': 'Cardholder Name'}),
+            'cvv': forms.TextInput(attrs={'placeholder': 'CVV'}),
         }
+
+    def clean_card_number(self):
+        card_number = self.cleaned_data.get('card_number')
+        if not re.match(r'^\d{16}$', card_number):
+            raise forms.ValidationError("Invalid card number. It should be 16 digits.")
+        return card_number
+
+    def clean_expiry_date(self):
+        expiry_date = self.cleaned_data.get('expiry_date')
+        if not re.match(r'^\d{2}/\d{2}$', expiry_date):
+            raise forms.ValidationError("Invalid expiry date format. Use MM/YY.")
+        return expiry_date
+
+    def clean_cvv(self):
+        cvv = self.cleaned_data.get('cvv')
+        if not re.match(r'^\d{3}$', cvv):
+            raise forms.ValidationError("Invalid CVV. It should be 3 digits.")
+        return cvv
 
 #rewards
 class RewardForm(forms.ModelForm):

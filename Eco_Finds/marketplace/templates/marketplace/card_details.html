@@ -1,14 +1,48 @@
-{% extends "marketplace/base.html" %}
-
-{% block title %}Card Details - Eco-Friendly Products Marketplace{% endblock %}
-
-{% block content %}
-<div class="checkout-container">
-    <h2>Enter Your Card Details</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">SUBMIT</button>
-    </form>
+{% extends "marketplace/header.html" %} {% block title %}Card Details -
+Eco-Friendly Products Marketplace{% endblock %} {% block content %}
+<main>
+<div class="credit-card-form">
+  <h2>PAYMENT PORTAL</h2>
+  <img class="Image1" src="https://i.ibb.co/hgJ7z3J/6375aad33dbabc9c424b5713-card-mockup-01.png" alt="6375aad33dbabc9c424b5713-card-mockup-01" border="0"></a>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="card_type">Card Type:</label>
+      {{ form.card_type }}
+    </div>
+    <div class="form-group">
+      <label for="card_number">Card Number:</label>
+      {{ form.card_number }}
+    </div>
+    <div class="form-group">
+      <label for="cardholder_name">Cardholder Name:</label>
+      {{ form.cardholder_name }}
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex: 1; margin-right: 10px">
+        <label for="expiry_date">Expiry Date:</label>
+        {{ form.expiry_date }}
+      </div>
+      <div class="form-group" style="flex: 1">
+        <label for="cvv">CVV:</label>
+        {{ form.cvv }}
+      </div>
+    </div>
+    <button type="submit">SUBMIT</button>
+  </form>
 </div>
+
+    {% block styles %}
+<style>
+
+    main{
+    min-height: 100vh;
+  }
+
+
+  </style>
+{% endblock %}
+
+
+</main>
 {% endblock %}

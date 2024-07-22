@@ -11,6 +11,7 @@
                 <tr>
                     <th>Product</th>
                     <th>Price</th>
+                    <th>Reward Points</th>
                     <th>Quantity</th>
                     <th>Subtotal</th>
                     <th>Wishlist</th>
@@ -28,6 +29,7 @@
                         </div>
                     </td>
                     <td class="price">${{ item.product.price }}</td>
+                    <td class="reward-points">{{ item.computed_reward_points }} points</td>
                     <td>
                         <div class="quantity">
                             <button class="minus-btn" data-url="{% url 'update_quantity' item.product.id 'decrease' %}" type="button" name="button">
@@ -53,7 +55,14 @@
             <div class="total">
                 <h2>Cart totals</h2>
                 <p>Subtotal: $<span class="cart-total">{{ total_price }}</span></p>
-                <p>Tax: $<span class="cart-tax">0.00</span></p>
+                <p>Tax: $<span class="cart-tax">{{ tax }}</span></p>
+                <p>Total Amount: $<span class="cart-total-amount">{{ total_amount }}</span></p>
+                <form id="redeem-points-form" method="post">
+                    {% csrf_token %}
+                    <label for="reward_points">Available Reward Points: {{ available_reward_points }}</label>
+                    <input type="number" id="reward_points" name="reward_points" min="0" max="{{ available_reward_points }}" step="10">
+                    <button type="button" id="apply-points-btn">Apply Points</button>
+                </form>
                 <a href="{% url 'checkout' %}"><button>Proceed To Checkout</button></a>
             </div>
         </div>
@@ -64,6 +73,72 @@
 
 {% block scripts %}
 <script src="{% static 'js/cart.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateTotalAmount() {
+            var subtotal = parseFloat(document.querySelector('.cart-total').textContent);
+            var tax = parseFloat(document.querySelector('.cart-tax').textContent);
+            var totalAmount = subtotal + tax;
+
+            var rewardPoints = document.getElementById('reward_points').value;
+            if (rewardPoints) {
+                var discount = Math.floor(rewardPoints / 10) * 1.5;
+                totalAmount -= discount;
+            }
+
+            document.querySelector('.cart-total-amount').textContent = totalAmount.toFixed(2);
+        }
+
+        function updateCartItem(element, url) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    element.querySelector('input[name="name"]').value = data.new_quantity;
+                    element.querySelector('.total-price').textContent = `$${data.new_total_price.toFixed(2)}`;
+                    element.querySelector('.reward-points').textContent = `${data.new_reward_points.toFixed(2)} points`;
+                    document.querySelector('.cart-total').textContent = data.new_cart_total.toFixed(2);
+                    document.querySelector('.cart-tax').textContent = data.new_tax.toFixed(2);
+                    document.querySelector('.cart-total-amount').textContent = data.new_total_amount.toFixed(2);
+                    updateTotalAmount();
+                }
+            });
+        }
+
+        document.querySelectorAll('.plus-btn, .minus-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                var element = this.closest('.item');
+                var url = this.getAttribute('data-url');
+                updateCartItem(element, url);
+            });
+        });
+
+        document.getElementById('apply-points-btn').addEventListener('click', function() {
+            updateTotalAmount();
+            var form = document.getElementById('redeem-points-form');
+            var formData = new FormData(form);
+            fetch("{% url 'apply_reward_points' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    // Update available reward points in the UI
+                    document.getElementById('reward_points').max = data.available_reward_points;
+                    document.querySelector('label[for="reward_points"]').textContent = `Available Reward Points: (${data.available_reward_points})`;
+                }
+            });
+        });
+
+        // Update total amount immediately when the page loads
+        updateTotalAmount();
+    });
+</script>
 {% endblock %}
 </main>
 {% endblock %}

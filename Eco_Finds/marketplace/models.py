@@ -1,12 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
 from django.utils import timezone
+
 
 import os
 
 def get_upload_path(instance, filename):
+    # Get the category name, replace spaces with underscores and convert to lowercase
     category_name = instance.category.name.replace(" ", "_").lower()
+    # Build the upload path
     return os.path.join('products', category_name, filename)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -25,7 +30,7 @@ class Product(models.Model):
     environmental_impact = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(default=1)
-
+    reward_points = models.DecimalField(max_digits=2, decimal_places=2, default=0)
     def __str__(self):
         return self.name
 
@@ -53,32 +58,35 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
     is_favorite = models.BooleanField(default=False)
+    computed_reward_points = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
     @property
     def total_price(self):
         return self.product.price * self.quantity
 
+    # def __str__(self):
+    #     return self.product.price * self.quantity
+
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
-
     def __str__(self):
         return f'Cart ({self.user.username})'
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(CartItem)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     ordered_at = models.DateTimeField(auto_now_add=True)
     billing_address = models.CharField(max_length=255)
     shipping_address = models.CharField(max_length=255)
     product_name = models.CharField(max_length=255, default='default_product_name')
 
-    def total_price(self):
-        return self.product.price * self.quantity
-
     def __str__(self):
         return f'Order #{self.id} by {self.user.username}'
+
+    def get_total_price(self):
+        return sum(item.total_price for item in self.items.all())
+
 
 class Checkout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -117,9 +125,10 @@ class UserRegistration(models.Model):
     wishlist = models.ManyToManyField('Product', blank=True, related_name='wishlisted_by')
     visit_count = models.IntegerField(default=0)
     last_visit = models.DateTimeField(null=True, blank=True)
-
+    reward_points = models.IntegerField(default=0)
     def __str__(self):
         return self.user.username
+
 
 class Reward(models.Model):
     name = models.CharField(max_length=100)
@@ -129,6 +138,10 @@ class Reward(models.Model):
 
     def __str__(self):
         return self.name
+
+# uname - sundhar
+# pswd - sundhar@123
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
