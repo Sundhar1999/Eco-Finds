@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Product, UserHistory, Review, CartItem, Order, Checkout, Cart
-from .models import CardDetails, UserRegistration, Reward, Category
+from .models import CardDetails, UserRegistration, Reward, Category, UserProfile
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
