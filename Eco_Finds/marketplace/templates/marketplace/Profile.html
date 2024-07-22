@@ -1,44 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Eco-Friendly Products Marketplace</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>User Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'usr.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="{% static 'scripts.js' %}"></script>
 </head>
 <body>
-<div class="profile-container">
-    <h1>User Profile</h1>
-    <div class="profile-details">
-        <h2>Profile</h2>
-        <p>Name: {{ user.username }}</p>
-        <p>Email: {{ user.email }}</p>
-        {% if user_registration.profile_picture %}
-            <p><img src="{{ user_registration.profile_picture.url }}" alt="Profile Picture" style="width:150px;height:150px;"></p>
-        {% endif %}
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-info">
+                <h1>My Account</h1>
+                <h2>Hello, <span id="username">{{ user.username }}</span>!</h2>
+                <p id="last-visit">Last visit: {{ profile.last_visit|date:"F j, Y, g:i a" }}</p>
+            </div>
+            <div class="profile-picture">
+                <img src="{% if user_registration.profile_picture %}{{ user_registration.profile_picture.url }}{% else %}{% static 'default_profile_picture.jpg' %}{% endif %}" alt="Profile Picture" id="profile-picture">
+            </div>
+        </div>
+        <div class="profile-nav">
+            <button class="nav-button" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+            <button class="nav-button" onclick="showSection('orders')"><i class="fas fa-box"></i> Orders</button>
+            <button class="nav-button" onclick="showSection('address')"><i class="fas fa-map-marker-alt"></i> Address</button>
+            <button class="nav-button" onclick="showSection('wishlist')"><i class="fas fa-heart"></i> Wishlist</button>
+            <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
+                {% csrf_token %}
+            </form>
+            <button class="nav-button" onclick="document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+        <div class="profile-content">
+            <div id="dashboard" class="content-section active">
+                <h3>Dashboard</h3>
+                <div class="account-details">
+                    <p><strong>Name:</strong> <span>{{ user.username }}</span></p>
+                    <p><strong>Email:</strong> <span>{{ user.email }}</span></p>
+                    <p><strong>Bio:</strong> <span>{{ user_registration.bio }}</span></p>
+                    <p><strong>Phone:</strong> <span>{{ user_registration.phone }}</span></p>
+                    <p><strong>Rewards Points Earned:</strong> <span>{{ total_points }}</span></p>
+                    <p><strong>Total Visit Counts:</strong> <span id="visit-count">{{ profile.visit_count }}</span></p>
+                </div>
+            </div>
+            <div id="orders" class="content-section">
+                <h3>Your Orders</h3>
+                {% for order in orders %}
+                <div class="order-item">
+                    <h5>Order ID: {{ order.id }}</h5>
+                    <p>Ordered At: {{ order.ordered_at }}</p>
+                    <p>Total Price: ${{ order.total_price }}</p>
+                    <p>Items:</p>
+                    <ul>
+                        {% for item in order.items.all %}
+                        <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="address" class="content-section">
+                <h3>Your Addresses</h3>
+                <div class="address-list">
+                    <p>{{ shipping_address }}</p>
+                </div>
+            </div>
+            <div id="wishlist" class="content-section">
+                <h3>Your Wishlist</h3>
+                <div class="wishlist-items">
+                    {% for product in user_registration.wishlist.all %}
+                    <div class="wishlist-item">
+                        <p>{{ product.name }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="order-history">
-        <h2>Order History</h2>
-        <ul>
-            {% for order in orders %}
-                <li>Order ID: {{ order.id }}, Product: {{ order.product_name }}, Total Price: ${{ order.total_price }}, Date: {{ order.ordered_at }}</li>
-            {% empty %}
-                <li>No orders yet.</li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="visit-info">
-        <h2>Number of Visits:</h2>
-        <p>{{ user_registration.visit_count }}</p>
-        <h2>Last Visit:</h2>
-        {% if user_registration.last_visit %}
-            <p>{{ user_registration.last_visit }}</p>
-        {% else %}
-            <p>No visit recorded yet.</p>
-        {% endif %}
-    </div>
-</div>
-<script src="{% static 'script.js' %}"></script>
 </body>
 </html>
