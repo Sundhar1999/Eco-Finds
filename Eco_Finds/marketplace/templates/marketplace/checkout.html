@@ -1,20 +1,113 @@
 {% extends "marketplace/header.html" %}
 
-{% block title %}Checkout - Eco-Friendly Products Marketplace{% endblock %}
-
 {% block content %}
-<div class="checkout-container">
-    <h2>Checkout</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" id="selected_card_type" name="selected_card_type" value="">
-        <button type="submit" class="btn btn-success">NEXT</button>
-    </form>
-</div>
+<main id="checkout-main">
+    <div class="checkout-container-custom">
+        <h2>Checkout</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" id="selected_card_type" name="selected_card_type" value="">
+            <button type="submit" class="btn btn-success">NEXT</button>
+        </form>
+    </div>
+</main>
+
+{% block styles %}
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Montserrat:wght@600&display=swap");
+
+    *,
+    *::before,
+    *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    main{
+        min-height: 100vh;
+    }
+    main#checkout-main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        width: 80%;
+        padding: 40px;
+        background-color: #f7f9fc;
+    }
+
+    .checkout-container-custom {
+        margin-top: 10%;
+        max-width: 600px;
+        width: 100%;
+        padding: 2em;
+        border-radius: 10px;
+        box-shadow: 0px 6px 10px rgba(255, 255, 255, 0.1);
+        font-family: "Montserrat", sans-serif;
+        background-color: #c7e8ca;
+        text-align: center;
+        color: #424242;
+    }
+
+    .checkout-container-custom h2 {
+        margin-bottom: 10%;
+        font-size: 24px;
+    }
+
+    .checkout-container-custom .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .checkout-container-custom label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #777;
+    }
+
+    .checkout-container-custom input[type="text"],
+    .checkout-container-custom select {
+        width: 80%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 1rem;
+        font-size: 16px;
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .checkout-container-custom button[type="submit"] {
+        width: 100%;
+        padding: 14px;
+        background-color: #585858;
+        color: #fff;
+        border: none;
+        border-radius: 1rem;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .checkout-container-custom button[type="submit"]:hover {
+        background-color: #808080;
+        color: #424242;
+        box-shadow: 0px 6px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .checkout-container-custom button[type="submit"]:focus {
+        outline: none;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
 <script>
     document.querySelector('select[name="payment_method"]').addEventListener('change', function() {
         document.getElementById('selected_card_type').value = this.value;
     });
 </script>
+{% endblock %}
 {% endblock %}

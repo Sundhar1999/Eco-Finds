@@ -1,3 +1,4 @@
+from django.contrib.admin.templatetags.admin_modify import submit_row
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Product, Review, CartItem, Reward, Category, Cart
@@ -19,7 +20,16 @@ from .models import UserProfile
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 import json
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 from decimal import Decimal
+from django.http import HttpResponse
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Image, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+from django.db import transaction
+from decimal import InvalidOperation
 
 def home(request):
     products = Product.objects.all()
@@ -136,75 +146,75 @@ def products(request):
 
 
 
-@login_required
-def view_cart(request):
-    cart_items = CartItem.objects.filter(user=request.user)
-    total_price = sum(item.product.price * item.quantity for item in cart_items)
-    total_reward_points = sum(item.product.reward_points * item.quantity for item in cart_items)
-
-    # Pre-calculate reward points for each cart item
-    for item in cart_items:
-        item.reward_points = item.product.reward_points * item.quantity
-
-    return render(request, 'marketplace/cart.html', {
-        'cart_items': cart_items,
-        'total_price': total_price,
-        'total_reward_points': total_reward_points,
-    })
-
-
-@login_required
-def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-
-    if product.quantity > 0:
-        cart, created = Cart.objects.get_or_create(user=request.user)
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-        if not created:
-            cart_item.quantity += 1
-        else:
-            cart_item.quantity = 1
-        cart_item.save()
-
-        # Decrease product quantity
-        product.quantity -= 1
-        product.save()
-
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({'new_quantity': product.quantity, 'success': True})
-
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'new_quantity': product.quantity, 'success': False, 'message': 'Out of Stock'})
-
-    return redirect('view_cart')
-
-@login_required
-def remove_from_cart(request, product_id):
-    cart = get_object_or_404(Cart, user=request.user)
-    cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
-    cart_item.delete()
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'success': True})
-    return redirect('view_cart')
-
-@login_required
-def toggle_favorite(request, product_id):
-    cart = get_object_or_404(Cart, user=request.user)
-    cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
-    cart_item.is_favorite = not cart_item.is_favorite
-    cart_item.save()
-    return redirect('view_cart')
-
-@login_required
-def update_quantity(request, product_id, action):
-    cart = get_object_or_404(Cart, user=request.user)
-    cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
-    if action == 'increase':
-        cart_item.quantity += 1
-    elif action == 'decrease' and cart_item.quantity > 0:
-        cart_item.quantity -= 1
-    cart_item.save()
-    return redirect('view_cart')
+# @login_required
+# def view_cart(request):
+#     cart_items = CartItem.objects.filter(user=request.user)
+#     total_price = sum(item.product.price * item.quantity for item in cart_items)
+#     total_reward_points = sum(item.product.reward_points * item.quantity for item in cart_items)
+#
+#     # Pre-calculate reward points for each cart item
+#     for item in cart_items:
+#         item.reward_points = item.product.reward_points * item.quantity
+#
+#     return render(request, 'marketplace/cart.html', {
+#         'cart_items': cart_items,
+#         'total_price': total_price,
+#         'total_reward_points': total_reward_points,
+#     })
+#
+#
+# @login_required
+# def add_to_cart(request, product_id):
+#     product = get_object_or_404(Product, id=product_id)
+#
+#     if product.quantity > 0:
+#         cart, created = Cart.objects.get_or_create(user=request.user)
+#         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+#         if not created:
+#             cart_item.quantity += 1
+#         else:
+#             cart_item.quantity = 1
+#         cart_item.save()
+#
+#         # Decrease product quantity
+#         product.quantity -= 1
+#         product.save()
+#
+#         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#             return JsonResponse({'new_quantity': product.quantity, 'success': True})
+#
+#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#         return JsonResponse({'new_quantity': product.quantity, 'success': False, 'message': 'Out of Stock'})
+#
+#     return redirect('view_cart')
+#
+# @login_required
+# def remove_from_cart(request, product_id):
+#     cart = get_object_or_404(Cart, user=request.user)
+#     cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
+#     # cart_item.delete()
+#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#         return JsonResponse({'success': True})
+#     return redirect('view_cart')
+#
+# @login_required
+# def toggle_favorite(request, product_id):
+#     cart = get_object_or_404(Cart, user=request.user)
+#     cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
+#     cart_item.is_favorite = not cart_item.is_favorite
+#     cart_item.save()
+#     return redirect('view_cart')
+#
+# @login_required
+# def update_quantity(request, product_id, action):
+#     cart = get_object_or_404(Cart, user=request.user)
+#     cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
+#     if action == 'increase':
+#         cart_item.quantity += 1
+#     elif action == 'decrease' and cart_item.quantity > 0:
+#         cart_item.quantity -= 1
+#     cart_item.save()
+#     return redirect('view_cart')
 
 # @login_required
 # def cart(request):
@@ -313,7 +323,8 @@ def card_details_view(request, card_type):
             card_details = form.save(commit=False)
             card_details.checkout = Checkout.objects.create(user=request.user, payment_method=card_type)
             card_details.save()
-            return redirect('submit_payment')
+            submit_payment(request)
+            return redirect('order_success')
     else:
         form = CardDetailsForm(initial={'card_type': card_type})
     return render(request, 'marketplace/card_details.html', {'form': form})
@@ -324,34 +335,40 @@ def card_details(request):
     return render(request, 'marketplace/card_details.html', {'payment_type': payment_type, 'username': request.session.get('username')})
 
 
-# views.py
+
 @login_required
 def submit_payment(request):
+    print("inside submit")
     if request.method == 'POST':
         user = request.user
         cart_items = CartItem.objects.filter(user=user)
-
+        print(cart_items)
         # Get checkout details from the cookie
         checkout_id = request.COOKIES.get('checkout_id')
         if not checkout_id:
             return redirect('checkout')  # Redirect to checkout if no details found
 
         checkout = Checkout.objects.get(id=checkout_id)
+        print(checkout.id)
 
         # Save order with checkout details
         order = Order.objects.create(
             user=user,
-            billing_address=f"{checkout.billing_unit_no}, {checkout.billing_street}, {checkout.billing_city}, {checkout.billing_pin}",
-            shipping_address=f"{checkout.shipping_unit_no}, {checkout.shipping_street}, {checkout.shipping_city}, {checkout.shipping_pin}"
+            shipping_address=f"{checkout.shipping_unit_no}, {checkout.shipping_street}, {checkout.shipping_city}, {checkout.shipping_pin}",
+            billing_address= "418 Askin",
+            product_name="default name",
         )
         order.items.set(cart_items)  # ensure this is set correctly
         order.save()
 
         # Calculate total reward points
-        total_reward_points = float(sum(item.reward_points for item in cart_items))
-
+        total_reward_points = float(sum(item.computed_reward_points for item in cart_items))
+        for item in cart_items:
+            print(item.computed_reward_points)
+        print(total_reward_points)
         # Update user's reward points
         user_registration = UserRegistration.objects.get(user=user)
+        print(user_registration.reward_points)
         user_registration.reward_points += Decimal(total_reward_points)
         user_registration.save()
 
@@ -361,7 +378,7 @@ def submit_payment(request):
             item.product.save()
 
         # Clear cart
-        cart_items.delete()
+      #  cart_items.delete()
 
         # Clear the cookies
         response = redirect('order_success')
@@ -370,10 +387,6 @@ def submit_payment(request):
 
         # Pass the total reward points to the order success view
         request.session['total_reward_points'] = total_reward_points
-
-        return response
-
-    return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
 
 
 
@@ -420,8 +433,8 @@ def wishlist(request):
 def view_cart(request):
     cart_items = CartItem.objects.filter(user=request.user)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
-    total_reward_points = sum(item.product.reward_points * item.quantity for item in cart_items)
-    tax = total_price * Decimal(0.08)  # Assuming 8% tax rate
+    total_reward_points = Decimal('0.00')
+    tax = total_price * Decimal('0.08')  # Assuming 8% tax rate
     total_amount = total_price + tax
 
     user_registration = UserRegistration.objects.get(user=request.user)
@@ -429,9 +442,9 @@ def view_cart(request):
 
     reward_points_applied = 0
     if request.method == 'POST' and 'redeem_points' in request.POST:
-        reward_points_to_redeem = Decimal(request.POST.get('reward_points', 0))
+        reward_points_to_redeem = Decimal(request.POST.get('reward_points', '0'))
         if reward_points_to_redeem <= available_reward_points:
-            discount = (reward_points_to_redeem // 10) * Decimal(1.5)
+            discount = (reward_points_to_redeem // 10) * Decimal('1.5')
             total_amount -= discount
             reward_points_applied = reward_points_to_redeem
             # Update user's reward points
@@ -443,8 +456,21 @@ def view_cart(request):
     total_amount = round(total_amount, 2)  # Round off total amount to 2 decimal points
 
     # Pre-compute reward points for each cart item
+    cart_items = list(cart_items)  # Convert QuerySet to a list to modify the items
     for item in cart_items:
-        item.computed_reward_points = item.product.reward_points * item.quantity
+        try:
+            product_price = Decimal(item.product.price)
+            item_quantity = Decimal(item.quantity)
+            item_reward_points = product_price * Decimal('0.7') * item_quantity  # Example calculation: 10% of product price
+            total_reward_points += item_reward_points
+            item.computed_reward_points = item_reward_points.quantize(Decimal('0.00'))
+            print(item.computed_reward_points)
+            item.save()
+            # Save the reward points back to the product or cart item as needed
+        except (InvalidOperation, ValueError) as e:
+            print(f"Error calculating reward points for product {item.product.name}: {e}")
+            item.computed_reward_points = Decimal('0.00')
+            item.save()
 
     return render(request, 'marketplace/cart.html', {
         'cart_items': cart_items,
@@ -455,7 +481,6 @@ def view_cart(request):
         'available_reward_points': available_reward_points,
         'reward_points_applied': reward_points_applied,
     })
-
 
 
 
@@ -477,7 +502,7 @@ def add_to_cart(request, product_id):
 def remove_from_cart(request, product_id):
     try:
         cart_item = CartItem.objects.get(product_id=product_id, user=request.user)
-        cart_item.delete()
+       # cart_item.delete()
     except CartItem.DoesNotExist:
         pass  # Optionally, you can handle the case where the item does not exist
 
@@ -631,9 +656,85 @@ def product_showcase(request):
 
 @login_required
 def order_history(request):
-    orders = Order.objects.filter(user=request.user).prefetch_related('items__product')
+    #orders = Order.objects.filter(user=request.user).prefetch_related('items__product')
+    orders = Order.objects.filter(user=request.user).order_by('-id')
+    print("hello")
     for order in orders:
+        print(order.items)
         for item in order.items.all():
+            print(item.id)
             print(f"Order: {order.id}, Item: {item.product.name}, Quantity: {item.quantity}, Price: {item.product.price}, Image URL: {item.product.image.url}")  # Detailed debug statement
     return render(request, 'marketplace/order_history.html', {'orders': orders})
 
+
+
+@login_required
+def item_details(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id)  # Ensure this is the correct model
+    data = {
+        'name': item.product.name,
+        'description': item.product.description,
+        'price': float(item.product.price),
+        'quantity': item.quantity,
+        'total_price': float(item.product.price * item.quantity),
+        'image_url': item.product.image.url,
+    }
+    return JsonResponse(data)
+
+
+@login_required
+def generate_invoice(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename=order_{order_id}_invoice.pdf'
+
+    # Create the PDF object, using the response object as its "file."
+    doc = SimpleDocTemplate(response, pagesize=letter)
+    elements = []
+
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='RightAlign', alignment=2))
+    styles.add(ParagraphStyle(name='CenterAlign', alignment=1, fontSize=16, spaceAfter=20))
+
+    # Header
+    elements.append(Paragraph(f"Invoice #{order.id}", styles['Title']))
+    elements.append(Paragraph(f"Order Date: {order.ordered_at.strftime('%B %d, %Y')}", styles['Normal']))
+    elements.append(Paragraph(f"Ship to: {order.shipping_address}", styles['Normal']))
+    elements.append(Spacer(1, 0.2 * inch))
+
+    # Items
+    elements.append(Paragraph("Items:", styles['Heading2']))
+
+    data = [["Product", "Description", "Quantity", "Price", "Subtotal"]]
+    for item in order.items.all():
+        product_image_path = item.product.image.path
+        img = Image(product_image_path, width=1 * inch, height=1 * inch)
+        data.append([
+            img,
+            Paragraph(item.product.name, styles['Normal']),
+            item.quantity,
+            f"${item.product.price:.2f}",
+            f"${item.total_price:.2f}"
+        ])
+
+    table = Table(data, colWidths=[1.5 * inch, 2.5 * inch, 1 * inch, 1 * inch, 1 * inch])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ]))
+    elements.append(table)
+
+    # Total
+    elements.append(Spacer(1, 0.2 * inch))
+    elements.append(Paragraph(f"Total: ${order.get_total_price():.2f}", styles['RightAlign']))
+
+    # Build PDF
+    doc.build(elements)
+    return response

@@ -3,7 +3,16 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: lavenderblush /* Greenish white background */
+    background-color: lavenderblush; /* Greenish white background */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+main{
+    flex: 1; /* Allow main to grow and take up space */
+    padding: 20px; /* Adjust padding as needed */
 }
 
 /* Header styling */
@@ -384,80 +393,80 @@ nav {
 
 
 
-/* Footer styles */
-.footer {
-    background-color: #f8f9fa;
-    color: #2c5f2d; /* Dark green color */
-    padding: 20px 0;
-}
+/*!* Footer styles *!*/
+/*.footer {*/
+/*    background-color: #f8f9fa;*/
+/*    color: #2c5f2d; !* Dark green color *!*/
+/*    padding: 20px 0;*/
+/*}*/
 
-.footer h5 {
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
+/*.footer h5 {*/
+/*    text-transform: uppercase;*/
+/*    font-weight: bold;*/
+/*    margin-bottom: 20px;*/
+/*}*/
 
-.footer ul {
-    list-style: none;
-    padding: 0;
-}
+/*.footer ul {*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*}*/
 
-.footer ul li {
-    margin-bottom: 10px;
-}
+/*.footer ul li {*/
+/*    margin-bottom: 10px;*/
+/*}*/
 
-.footer ul li a {
-    color: #2c5f2d; /* Dark green color */
-    text-decoration: none;
-}
+/*.footer ul li a {*/
+/*    color: #2c5f2d; !* Dark green color *!*/
+/*    text-decoration: none;*/
+/*}*/
 
-.footer ul li a:hover {
-    text-decoration: underline;
-}
+/*.footer ul li a:hover {*/
+/*    text-decoration: underline;*/
+/*}*/
 
-.footer .list-inline-item img {
-    width: 50px; /* Adjust the size of the payment images */
-    height: 50px;
-}
+/*.footer .list-inline-item img {*/
+/*    width: 50px; !* Adjust the size of the payment images *!*/
+/*    height: 50px;*/
+/*}*/
 
-.footer .list-inline {
-    text-align: center;
-    margin: 20px 0;
-}
+/*.footer .list-inline {*/
+/*    text-align: center;*/
+/*    margin: 20px 0;*/
+/*}*/
 
-.footer .list-inline-item {
-    margin: 0 10px;
-}
+/*.footer .list-inline-item {*/
+/*    margin: 0 10px;*/
+/*}*/
 
-.footer .text-center {
-    background-color: olivedrab;; /* Dark green background */
-    color: black;
-    font-weight: bold;
-    padding: 10px 0;
-}
+/*.footer .text-center {*/
+/*    background-color: olivedrab;; !* Dark green background *!*/
+/*    color: black;*/
+/*    font-weight: bold;*/
+/*    padding: 10px 0;*/
+/*}*/
 
-/* Additional styles for responsiveness */
-@media (max-width: 992px) {
-    .navbar-brand .brand-logo {
-        height: 40px; /* Adjust logo size for smaller screens */
-    }
+/*!* Additional styles for responsiveness *!*/
+/*@media (max-width: 992px) {*/
+/*    .navbar-brand .brand-logo {*/
+/*        height: 40px; !* Adjust logo size for smaller screens *!*/
+/*    }*/
 
-    .nav-item .nav-link {
-        font-size: 1rem;
-    }
+/*    .nav-item .nav-link {*/
+/*        font-size: 1rem;*/
+/*    }*/
 
-    .search-form {
-        max-width: 100%; /* Make search bar full width on smaller screens */
-    }
+/*    .search-form {*/
+/*        max-width: 100%; !* Make search bar full width on smaller screens *!*/
+/*    }*/
 
-    .search-input {
-        font-size: 0.9rem; /* Adjust font size for smaller screens */
-    }
+/*    .search-input {*/
+/*        font-size: 0.9rem; !* Adjust font size for smaller screens *!*/
+/*    }*/
 
-    .search-form .btn-success {
-        font-size: 0.9rem; /* Adjust font size for smaller screens */
-    }
-}
+/*    .search-form .btn-success {*/
+/*        font-size: 0.9rem; !* Adjust font size for smaller screens *!*/
+/*    }*/
+/*}*/
 
 .container {
     width: 100%; /* Ensure full width */
@@ -1095,7 +1104,7 @@ nav {
   border-radius: 10px;
   box-shadow: 0px 6px 10px rgba(255, 255, 255, 0.1);
   font-family: "Montserrat", sans-serif;
-  background-color: #dbdbdb;
+  background-color: #c7e8ca;
   text-align: center;
   color: #424242;
 }
@@ -1235,18 +1244,20 @@ nav {
 }
 
 
-footer{
-    margin-top: 100px;
+footer {
+    margin-top: 450px; /* Adjust this value if needed */
+    width: 100%;
+    padding: 5px 20px; /* Adjusted padding to reduce height */
+    background-color: #333;
+    color: #fff;
+    position: relative;
 }
 
 .fo-container {
     width: 100%;
-    padding: 10px 20px; /* Adjusted padding to reduce height */
+    padding: 10px 20px;
     background-color: #333;
     color: #fff;
-    position: relative;
-    bottom: 0;
-    left: 0;
 }
 
 .fo-row {
@@ -1352,4 +1363,3 @@ footer{
 .fo-social-buttons a:hover {
     color: #aaa;
 }
-

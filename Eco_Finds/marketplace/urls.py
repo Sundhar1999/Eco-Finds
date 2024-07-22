@@ -3,7 +3,8 @@ from . import views
 from django.contrib.auth import views as auth_views
 from .views import card_details_view
 from .views import forget_password, set_new_password, order_history
-from .views import wishlist, add_to_wishlist, remove_from_wishlist, add_to_cart_from_wishlist
+from .views import wishlist, add_to_wishlist, remove_from_wishlist, add_to_cart_from_wishlist, item_details
+from .views import generate_invoice
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -37,6 +38,8 @@ urlpatterns = [
     path('wishlist/add_to_cart/<int:product_id>/', add_to_cart_from_wishlist, name='add_to_cart_from_wishlist'),
     path('remove-from-wishlist/<int:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('order_history/', order_history, name='order_history'),
+    path('order/item-details/<int:item_id>/', item_details, name='item_details'),
+    path('order/invoice/<int:order_id>/', generate_invoice, name='generate_invoice'),
 
     #  path('order-history/', views.order_history, name='order_history'),
     #  path('create-order/', views.create_order, name='create_order'),

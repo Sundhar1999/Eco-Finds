@@ -19,7 +19,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 100px); /* Adjusted for header and footer */
+    min-height: 100vh;
     padding: 20px 0;
 }
 
@@ -51,7 +51,6 @@ input[type="file"] {
     padding: 4px;
     border: none;
     border-radius: 2px;
-    background-color: #c7e8ca;
     border-bottom: 2px solid #4a7d47;
     font-size: 18px;
     z-index: 3;

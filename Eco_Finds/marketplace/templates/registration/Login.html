@@ -31,5 +31,16 @@
 <a href="{% url 'register' %}" style="color: #4a7d47;">New User? Register here!</a>
 
       </div>
+
+      {% block styles %}
+        <style>
+          main{
+            min-height: 90vh;
+            }
+
+        </style>
+        {% endblock %}
+
+
      </main>
  {% endblock %}

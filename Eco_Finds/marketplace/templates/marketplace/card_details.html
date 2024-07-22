@@ -1,5 +1,6 @@
-{% extends "marketplace/base.html" %} {% block title %}Card Details -
+{% extends "marketplace/header.html" %} {% block title %}Card Details -
 Eco-Friendly Products Marketplace{% endblock %} {% block content %}
+<main>
 <div class="credit-card-form">
   <h2>PAYMENT PORTAL</h2>
   <img class="Image1" src="https://i.ibb.co/hgJ7z3J/6375aad33dbabc9c424b5713-card-mockup-01.png" alt="6375aad33dbabc9c424b5713-card-mockup-01" border="0"></a>
@@ -30,4 +31,18 @@ Eco-Friendly Products Marketplace{% endblock %} {% block content %}
     <button type="submit">SUBMIT</button>
   </form>
 </div>
+
+    {% block styles %}
+<style>
+
+    main{
+    min-height: 100vh;
+  }
+
+
+  </style>
+{% endblock %}
+
+
+</main>
 {% endblock %}
