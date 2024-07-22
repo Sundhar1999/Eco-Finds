@@ -1,25 +1,384 @@
-{% extends "marketplace/base.html" %} {% block title %}Order History -
-Eco-Friendly Products Marketplace{% endblock %} {% block content %}
-<div class="container">
-  <h1>Order History</h1>
-  {% if orders %}
-  <ul class="list-group">
-    {% for order in orders %}
-    <li class="list-group-item">
-      <h5>Order ID: {{ order.id }}</h5>
-      <p>Ordered At: {{ order.ordered_at }}</p>
-      <p>Total Price: ${{ order.get_total_price }}</p>
-      <p>Items:</p>
-      <ul>
-        {% for item in order.items.all %}
-        <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
-        {% endfor %}
-      </ul>
-    </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-  <p>You have no past orders.</p>
-  {% endif %}
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <!-- Add Bootstrap CSS for modal functionality -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: wheat;
+}
+
+main {
+    padding: 0px 0;
+    background-color: #f8f9fa;
+    flex: 1;
+    margin-top: 0px;
+    animation: fadeIn 1s ease-in-out;
+    background-color: whitesmoke;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: #333;
+    font-weight: 700;
+    position: relative;
+    animation: slideIn 0.8s ease-in-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    background-color:lightgrey;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: darkcyan;
+    padding: 15px;
+    color: white;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.order-card-header div {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-date, .order-total, .order-ship-to{
+    margin: 2px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    padding: 5px 10px;
+}
+
+ .order-id {
+    margin: 2px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: lightgrey;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.order-id:hover {
+    background: linear-gradient(135deg, #eaeaea, #f3f3f3);
+    color: #007bff;
+}
+
+
+.view-order-details, .view-invoice {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 10px;
+    font-weight: bold;
+    position: relative;
+}
+
+.view-order-details::after, .view-invoice::after {
+    content: '';
+    width: 0;
+    height: 2px;
+    background: #007bff;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    transition: width 0.3s;
+}
+
+.view-order-details:hover::after, .view-invoice:hover::after {
+    width: 100%;
+}
+
+.order-card-body {
+    padding: 20px;
+    background-color: #fefefe;
+    transition: background-color 0.3s ease;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    transition: border-color 0.3s ease;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item:hover {
+    border-color: #4caf50;
+}
+
+.order-item-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 20px;
+    transition: transform 0.3s ease;
+}
+
+.order-item:hover .order-item-image img {
+    transform: scale(1.1);
+}
+
+.order-item-details {
+    flex-grow: 1;
+}
+
+.order-item-details h5 {
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #333;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.order-item-details p {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.order-item-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.order-item-buttons .btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.order-item-buttons .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.order-item-buttons .btn:hover::before {
+    left: 0;
+}
+
+.order-item-buttons .btn-outline-primary {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.order-item-buttons .btn-outline-primary:hover {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.order-item-buttons .btn-outline-secondary {
+    border-color:darkcyan;
+    color: #007bff;
+}
+
+.order-item-buttons .btn-outline-secondary:hover {
+    background-color: darkcyan;
+    color: #fff;
+}
+
+.back-to-home {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    text-align: center;
+    padding: 10px 20px;
+    background-color: darkcyan;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+
+.modal-item-details h5 {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.modal-item-details p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+    </style>
+</head>
+<body>
+<main class="order-history-main">
+    <div class="container mt-5">
+        <h2>Your Order History</h2>
+        {% if orders %}
+            <div class="order-list">
+                {% for order in orders %}
+                    <div class="order-card mb-4 p-3">
+                        <div class="order-card-header">
+                            <div>
+                                <span class="order-date">Order placed: {{ order.ordered_at|date:"F j, Y" }}</span>
+                                <span class="order-total">Total: ${{ order.get_total_price }}</span>
+                                <span class="order-ship-to">Ship to: {{ order.shipping_address }}</span>
+                            </div>
+                            <div>
+                                <span class="order-id">Order ID: {{ order.id }}</span>
+                            </div>
+                        </div>
+                        <div class="order-card-body">
+                            {% for item in order.items.all %}
+                                <div class="order-item">
+                                    <div class="order-item-image">
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                    </div>
+                                    <div class="order-item-details">
+                                        <h5>{{ item.product.name }}</h5>
+                                        <p>{{ item.product.description }}</p>
+                                        <p><strong>Price:</strong> ${{ item.product.price }}</p>
+                                        <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                                        <p><strong>Subtotal:</strong> ${{ item.total_price }}</p>
+                                        <div class="order-item-buttons">
+                                            <a href="{% url 'product_showcase' %}" class="btn btn-outline-primary">Buy it again</a>
+                                            <button type="button" class="btn btn-outline-secondary view-item-btn" data-item-id="{{ item.id }}">View your item</button>
+                                            <a href="{% url 'generate_invoice' order.id %}" class="btn btn-outline-secondary">Invoice</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>You have no past orders.</p>
+            {% endif %}
+            <a href="{% url 'home' %}" class="back-to-home">Return to Home</a>
+        </div>
+
+        <!-- Item Details Modal -->
+    <!-- Modal for Viewing Item Details -->
+    <div class="modal" id="viewItemModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Content will be loaded via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <!-- Add Bootstrap JS for modal functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        // Handle view item button clicks
+        document.querySelectorAll(".view-item-btn").forEach(function(button) {
+            button.addEventListener("click", function() {
+                const itemId = this.dataset.itemId;
+                // Fetch and display item details in the modal
+                fetch(`/order/item-details/${itemId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const modalBody = document.querySelector("#viewItemModal .modal-body");
+                        modalBody.innerHTML = `
+                            <div class="modal-item-details">
+                                <img src="${data.image_url}" alt="${data.name}" style="width: 100%;">
+                                <h5>${data.name}</h5>
+                                <p>${data.description}</p>
+                                <p><strong>Price:</strong> $${data.price}</p>
+                                <p><strong>Quantity:</strong> ${data.quantity}</p>
+                                <p><strong>Subtotal:</strong> $${data.total_price}</p>
+                            </div>
+                        `;
+                        $("#viewItemModal").modal("show");
+                    });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

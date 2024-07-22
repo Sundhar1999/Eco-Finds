@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
 
+
 import os
 
 def get_upload_path(instance, filename):
@@ -29,10 +30,9 @@ class Product(models.Model):
     environmental_impact = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.PositiveIntegerField(default=1)
-
+    reward_points = models.DecimalField(max_digits=2, decimal_places=2, default=0)
     def __str__(self):
         return self.name
-    
 
 class UserHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -41,7 +41,6 @@ class UserHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.visits} visits"
-    
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
@@ -52,7 +51,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
-    
 
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -60,11 +58,11 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
     is_favorite = models.BooleanField(default=False)
+    computed_reward_points = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
     @property
     def total_price(self):
         return self.product.price * self.quantity
-    
 
     # def __str__(self):
     #     return self.product.price * self.quantity
@@ -74,7 +72,6 @@ class Cart(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return f'Cart ({self.user.username})'
-    
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -90,6 +87,7 @@ class Order(models.Model):
     def get_total_price(self):
         return sum(item.total_price for item in self.items.all())
 
+
 class Checkout(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     shipping_unit_no = models.CharField(max_length=100)
@@ -97,11 +95,14 @@ class Checkout(models.Model):
     shipping_city = models.CharField(max_length=100)
     shipping_pin = models.CharField(max_length=10)
     phone = models.CharField(max_length=15)
+    billing_unit_no = models.CharField(max_length=100, blank=True, null=True)
+    billing_street = models.CharField(max_length=200, blank=True, null=True)
+    billing_city = models.CharField(max_length=100, blank=True, null=True)
+    billing_pin = models.CharField(max_length=10, blank=True, null=True)
     payment_method = models.CharField(max_length=50)
 
     def __str__(self):
         return f'Checkout for {self.user.username}'
-    
 
 class CardDetails(models.Model):
     checkout = models.ForeignKey(Checkout, on_delete=models.CASCADE, default=1)
@@ -113,9 +114,6 @@ class CardDetails(models.Model):
 
     def __str__(self):
         return f'Card Details for {self.checkout.user.username}'
-    
-
-###LOCKED_DON'T TOUCH - IF U TOUCH, GA WILL GIVE 0.
 
 class UserRegistration(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -125,11 +123,11 @@ class UserRegistration(models.Model):
     security_question2 = models.CharField(max_length=255)
     security_answer2 = models.CharField(max_length=255)
     wishlist = models.ManyToManyField('Product', blank=True, related_name='wishlisted_by')
-
+    visit_count = models.IntegerField(default=0)
+    last_visit = models.DateTimeField(null=True, blank=True)
+    reward_points = models.IntegerField(default=0)
     def __str__(self):
         return self.user.username
-    
-###LOCKED_DON'T TOUCH - IF U TOUCH, GA WILL GIVE 0.
 
 
 class Reward(models.Model):
@@ -172,13 +170,3 @@ def profile_view(request):
         'orders': orders
     }
     return render(request, 'profile.html', context)
-
-
-
-
-
-# Uname - sundhark
-# pswd - Will2win@1148
-
-# uname - sundhar
-# pswd - sundhar@123
