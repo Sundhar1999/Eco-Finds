@@ -122,32 +122,32 @@ def logout_view(request):
     messages.info(request, 'Your session has expired. Please log in again.')
     return redirect('login')
 
-@login_required
-def profile(request):
-    user_orders = Order.objects.filter(user=request.user)
-    history, created = UserHistory.objects.get_or_create(user=request.user)
-
-    user = request.user
-    profile, created = UserProfile.objects.get_or_create(user=user)
-    user_registration, created = UserRegistration.objects.get_or_create(user=user)
-
-    # Check session for visit tracking
-    session_key = f'profile_visited_{user.id}'
-    if not request.session.get(session_key, False):
-        profile.visit_count += 1
-        profile.last_visit = timezone.now()
-        profile.save()
-        request.session[session_key] = True
-
-    context = {
-        'user_orders': user_orders,
-        'last_login': user.last_login,
-        'history': history,
-        'username': request.session.get('username'),
-        'user_registration': user_registration,  # Pass user_registration to the context
-        'profile': profile,  # Ensure profile is passed for last_visit
-    }
-    return render(request, 'marketplace/profile.html', context)
+# @login_required
+# def profile(request):
+#     user_orders = Order.objects.filter(user=request.user)
+#     history, created = UserHistory.objects.get_or_create(user=request.user)
+#
+#     user = request.user
+#     profile, created = UserProfile.objects.get_or_create(user=user)
+#     user_registration, created = UserRegistration.objects.get_or_create(user=user)
+#
+#     # Check session for visit tracking
+#     session_key = f'profile_visited_{user.id}'
+#     if not request.session.get(session_key, False):
+#         profile.visit_count += 1
+#         profile.last_visit = timezone.now()
+#         profile.save()
+#         request.session[session_key] = True
+#
+#     context = {
+#         'user_orders': user_orders,
+#         'last_login': user.last_login,
+#         'history': history,
+#         'username': request.session.get('username'),
+#         'user_registration': user_registration,  # Pass user_registration to the context
+#         'profile': profile,  # Ensure profile is passed for last_visit
+#     }
+#     return render(request, 'marketplace/profile.html', context)
 
 
 def products(request):
@@ -547,11 +547,24 @@ def update_quantity(request, product_id, action):
         cart_item.quantity -= 1
     cart_item.save()
 
+    # Calculate new totals
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.total_price for item in cart_items)
+    total_reward_points = sum(item.computed_reward_points for item in cart_items)
+    tax = total_price * Decimal('0.1')  # Assuming a 10% tax rate
+    total_amount = total_price + tax
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({'success': True, 'new_quantity': cart_item.quantity, 'new_total_price': float(cart_item.total_price)})
+        return JsonResponse({
+            'success': True,
+            'new_quantity': cart_item.quantity,
+            'new_total_price': float(cart_item.total_price),
+            'new_reward_points': float(cart_item.computed_reward_points),
+            'new_cart_total': float(total_price),
+            'new_tax': float(tax),
+            'new_total_amount': float(total_amount),
+        })
     return redirect('view_cart')
-
-
 
 @login_required
 def apply_reward_points(request):
@@ -696,6 +709,10 @@ def profile(request):
     latest_order = user_orders.order_by('-ordered_at').first()
     shipping_address = latest_order.shipping_address if latest_order else "No shipping address available."
 
+    # Fetch the latest phone number from the Checkout table
+    latest_checkout = Checkout.objects.filter(user=user).order_by('-id').first()
+    phone_number = latest_checkout.phone if latest_checkout else "No phone number available."
+
     context = {
         'user_orders': user_orders,
         'last_login': user.last_login,
@@ -704,8 +721,10 @@ def profile(request):
         'user_registration': user_registration,
         'profile': profile,
         'shipping_address': shipping_address,
+        'phone_number': phone_number,  # Add phone_number to the context
     }
     return render(request, 'marketplace/profile.html', context)
+
 
 
 @login_required

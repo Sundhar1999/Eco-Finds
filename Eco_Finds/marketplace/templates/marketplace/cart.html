@@ -74,70 +74,83 @@
 {% block scripts %}
 <script src="{% static 'js/cart.js' %}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateTotalAmount() {
-            var subtotal = parseFloat(document.querySelector('.cart-total').textContent);
-            var tax = parseFloat(document.querySelector('.cart-tax').textContent);
-            var totalAmount = subtotal + tax;
+document.addEventListener('DOMContentLoaded', function() {
+    function updateTotalAmount() {
+        var subtotal = parseFloat(document.querySelector('.cart-total').textContent);
+        var tax = parseFloat(document.querySelector('.cart-tax').textContent);
+        var totalAmount = subtotal + tax;
 
-            var rewardPoints = document.getElementById('reward_points').value;
-            if (rewardPoints) {
-                var discount = Math.floor(rewardPoints / 10) * 1.5;
-                totalAmount -= discount;
+        var rewardPoints = document.getElementById('reward_points').value;
+        if (rewardPoints) {
+            var discount = Math.floor(rewardPoints / 10) * 1.5;
+            totalAmount -= discount;
+        }
+
+        document.querySelector('.cart-total-amount').textContent = totalAmount.toFixed(2);
+    }
+
+    function updateCartItem(element, url) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json'
             }
-
-            document.querySelector('.cart-total-amount').textContent = totalAmount.toFixed(2);
-        }
-
-        function updateCartItem(element, url) {
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                }
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    element.querySelector('input[name="name"]').value = data.new_quantity;
-                    element.querySelector('.total-price').textContent = `$${data.new_total_price.toFixed(2)}`;
-                    element.querySelector('.reward-points').textContent = `${data.new_reward_points.toFixed(2)} points`;
-                    document.querySelector('.cart-total').textContent = data.new_cart_total.toFixed(2);
-                    document.querySelector('.cart-tax').textContent = data.new_tax.toFixed(2);
-                    document.querySelector('.cart-total-amount').textContent = data.new_total_amount.toFixed(2);
-                    updateTotalAmount();
-                }
-            });
-        }
-
-        document.querySelectorAll('.plus-btn, .minus-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                var element = this.closest('.item');
-                var url = this.getAttribute('data-url');
-                updateCartItem(element, url);
-            });
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                element.querySelector('input[name="name"]').value = data.new_quantity;
+                element.querySelector('.total-price').textContent = `$${data.new_total_price.toFixed(2)}`;
+                element.querySelector('.reward-points').textContent = `${data.new_reward_points.toFixed(2)} points`;
+                document.querySelector('.cart-total').textContent = data.new_cart_total.toFixed(2);
+                document.querySelector('.cart-tax').textContent = data.new_tax.toFixed(2);
+                updateTotalAmount();
+            }
         });
+    }
 
-        document.getElementById('apply-points-btn').addEventListener('click', function() {
-            updateTotalAmount();
-            var form = document.getElementById('redeem-points-form');
-            var formData = new FormData(form);
-            fetch("{% url 'apply_reward_points' %}", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                }
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    // Update available reward points in the UI
-                    document.getElementById('reward_points').max = data.available_reward_points;
-                    document.querySelector('label[for="reward_points"]').textContent = `Available Reward Points: (${data.available_reward_points})`;
-                }
-            });
+    document.querySelectorAll('.plus-btn, .minus-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            var element = this.closest('.item');
+            var url = this.getAttribute('data-url');
+            updateCartItem(element, url);
         });
-
-        // Update total amount immediately when the page loads
-        updateTotalAmount();
     });
+
+    document.getElementById('apply-points-btn').addEventListener('click', function() {
+        updateTotalAmount();
+        var form = document.getElementById('redeem-points-form');
+        var formData = new FormData(form);
+        fetch("{% url 'apply_reward_points' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                // Update available reward points in the UI
+                document.getElementById('reward_points').max = data.available_reward_points;
+                document.querySelector('label[for="reward_points"]').textContent = `Available Reward Points: ${data.available_reward_points}`;
+            }
+        });
+    });
+
+    // Update total amount immediately when the page loads
+    updateTotalAmount();
+
+    document.querySelectorAll('button, input').forEach(element => {
+        element.addEventListener('click', function() {
+            setTimeout(function() {
+                location.reload();
+            }, 2000); // 2 second delay before refreshing the page
+        });
+        });
+});
+
+
+
+
+
 </script>
 {% endblock %}
 </main>

@@ -16,6 +16,7 @@ admin.site.register(UserHistory)
 admin.site.register(Review)
 admin.site.register(CartItem)
 admin.site.register(Cart)
+admin.site.register(UserProfile)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):

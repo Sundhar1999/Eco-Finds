@@ -95,10 +95,6 @@ class Checkout(models.Model):
     shipping_city = models.CharField(max_length=100)
     shipping_pin = models.CharField(max_length=10)
     phone = models.CharField(max_length=15)
-    billing_unit_no = models.CharField(max_length=100, blank=True, null=True)
-    billing_street = models.CharField(max_length=200, blank=True, null=True)
-    billing_city = models.CharField(max_length=100, blank=True, null=True)
-    billing_pin = models.CharField(max_length=10, blank=True, null=True)
     payment_method = models.CharField(max_length=50)
 
     def __str__(self):

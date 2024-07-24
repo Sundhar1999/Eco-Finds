@@ -23,7 +23,9 @@
         </div>
         <div class="profile-nav">
             <button class="nav-button" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
-            <button class="nav-button" onclick="showSection('orders')"><i class="fas fa-box"></i> Orders</button>
+            <button class="nav-button" onclick="window.location.href='{% url 'order_history' %}'">
+                <i class="fas fa-box"></i> Orders
+            </button>
             <button class="nav-button" onclick="showSection('address')"><i class="fas fa-map-marker-alt"></i> Address</button>
             <button class="nav-button" onclick="showSection('wishlist')"><i class="fas fa-heart"></i> Wishlist</button>
             <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
@@ -38,14 +40,14 @@
                     <p><strong>Name:</strong> <span>{{ user.username }}</span></p>
                     <p><strong>Email:</strong> <span>{{ user.email }}</span></p>
                     <p><strong>Bio:</strong> <span>{{ user_registration.bio }}</span></p>
-                    <p><strong>Phone:</strong> <span>{{ user_registration.phone }}</span></p>
-                    <p><strong>Rewards Points Earned:</strong> <span>{{ total_points }}</span></p>
+                    <p><strong>Phone:</strong> <span>{{ phone_number }}</span></p>
+                    <p><strong>Rewards Points Earned:</strong> <span>{{user_registration.reward_points}}</span></p>
                     <p><strong>Total Visit Counts:</strong> <span id="visit-count">{{ profile.visit_count }}</span></p>
                 </div>
             </div>
             <div id="orders" class="content-section">
                 <h3>Your Orders</h3>
-                {% for order in orders %}
+                {% for order in user_orders %}
                 <div class="order-item">
                     <h5>Order ID: {{ order.id }}</h5>
                     <p>Ordered At: {{ order.ordered_at }}</p>
