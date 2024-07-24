@@ -95,10 +95,6 @@ class Checkout(models.Model):
     shipping_city = models.CharField(max_length=100)
     shipping_pin = models.CharField(max_length=10)
     phone = models.CharField(max_length=15)
-    billing_unit_no = models.CharField(max_length=100, blank=True, null=True)
-    billing_street = models.CharField(max_length=200, blank=True, null=True)
-    billing_city = models.CharField(max_length=100, blank=True, null=True)
-    billing_pin = models.CharField(max_length=10, blank=True, null=True)
     payment_method = models.CharField(max_length=50)
 
     def __str__(self):
@@ -148,7 +144,8 @@ class UserProfile(models.Model):
     visit_count = models.IntegerField(default=0)
     last_visit = models.DateTimeField(null=True, blank=True)
 
-
+    def __str__(self):
+        return self.user.username
 
 def profile_view(request):
     user = request.user
@@ -158,7 +155,7 @@ def profile_view(request):
     session_key = f'profile_visited_{user.id}'
     if not request.session.get(session_key, False):
         profile.visit_count += 1
-        profile.last_visit = now()
+        profile.last_visit = timezone.now()
         profile.save()
         request.session[session_key] = True
 
