@@ -1,16 +1,14 @@
-# marketplace/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Product
-from .models import Review, Checkout, CardDetails
-from .models import Order, CartItem, Reward
+from .models import Checkout, CardDetails, Reward
+from .models import Order, CartItem
 from .models import UserRegistration
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserRegistration
 import re
 
 
@@ -131,19 +129,6 @@ class ProductForm(forms.ModelForm):
         fields = ['name', 'description', 'price', 'image', 'category', 'carbon_emission', 'environmental_impact']
 
 
-#Review Form
-class ReviewForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ['rating', 'comment']
-
-
-#Order Form
-class OrderForm(forms.ModelForm):
-    class Meta:
-        model = Order
-        fields = ['shipping_address', 'billing_address']
-
 
 class CheckoutForm(forms.ModelForm):
     PAYMENT_METHOD_CHOICES = [
@@ -218,7 +203,6 @@ class CardDetailsForm(forms.ModelForm):
             raise forms.ValidationError("Invalid CVV. It should be 3 digits.")
         return cvv
 
-#rewards
 class RewardForm(forms.ModelForm):
     class Meta:
         model = Reward
