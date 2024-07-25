@@ -1,6 +1,5 @@
 # Eco-Finds 🌿
 
-![Eco-Finds Logo](https://path_to_your_logo_image)
 
 ## Overview
 
