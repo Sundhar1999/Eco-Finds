@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Product, UserHistory, Review, CartItem, Order, Checkout, Cart
-from .models import CardDetails, UserRegistration, Reward, Category, UserProfile
+from .models import Product, CartItem, Order, Checkout, Reward, UserHistory
+from .models import CardDetails, UserRegistration, Category, UserProfile
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -12,10 +12,7 @@ for model in [UserHistory, UserProfile]:
 # Registering models
 admin.site.register(Category)
 admin.site.register(Product)
-admin.site.register(UserHistory)
-admin.site.register(Review)
 admin.site.register(CartItem)
-admin.site.register(Cart)
 admin.site.register(UserProfile)
 
 @admin.register(Order)

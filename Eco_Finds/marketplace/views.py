@@ -1,14 +1,14 @@
 from django.contrib.admin.templatetags.admin_modify import submit_row
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Product, Review, CartItem, Reward, Category, Cart
+from .models import Product, CartItem, Category, Reward
 from django.contrib.auth import logout
-from .forms import ReviewForm
+# from .forms import ReviewForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import Order, UserHistory, CardDetails, Checkout
+from .models import Order, CardDetails, Checkout, UserHistory
 from .forms import UserRegistrationForm, CheckoutForm, CardDetailsForm, RewardForm
 from .forms import ForgetPasswordForm, SetNewPasswordForm
 from .models import UserRegistration
@@ -122,32 +122,6 @@ def logout_view(request):
     messages.info(request, 'Your session has expired. Please log in again.')
     return redirect('login')
 
-# @login_required
-# def profile(request):
-#     user_orders = Order.objects.filter(user=request.user)
-#     history, created = UserHistory.objects.get_or_create(user=request.user)
-#
-#     user = request.user
-#     profile, created = UserProfile.objects.get_or_create(user=user)
-#     user_registration, created = UserRegistration.objects.get_or_create(user=user)
-#
-#     # Check session for visit tracking
-#     session_key = f'profile_visited_{user.id}'
-#     if not request.session.get(session_key, False):
-#         profile.visit_count += 1
-#         profile.last_visit = timezone.now()
-#         profile.save()
-#         request.session[session_key] = True
-#
-#     context = {
-#         'user_orders': user_orders,
-#         'last_login': user.last_login,
-#         'history': history,
-#         'username': request.session.get('username'),
-#         'user_registration': user_registration,  # Pass user_registration to the context
-#         'profile': profile,  # Ensure profile is passed for last_visit
-#     }
-#     return render(request, 'marketplace/profile.html', context)
 
 
 def products(request):
@@ -166,83 +140,6 @@ def products(request):
         'category_name': category_name
     })
 
-
-
-# @login_required
-# def view_cart(request):
-#     cart_items = CartItem.objects.filter(user=request.user)
-#     total_price = sum(item.product.price * item.quantity for item in cart_items)
-#     total_reward_points = sum(item.product.reward_points * item.quantity for item in cart_items)
-#
-#     # Pre-calculate reward points for each cart item
-#     for item in cart_items:
-#         item.reward_points = item.product.reward_points * item.quantity
-#
-#     return render(request, 'marketplace/cart.html', {
-#         'cart_items': cart_items,
-#         'total_price': total_price,
-#         'total_reward_points': total_reward_points,
-#     })
-#
-#
-# @login_required
-# def add_to_cart(request, product_id):
-#     product = get_object_or_404(Product, id=product_id)
-#
-#     if product.quantity > 0:
-#         cart, created = Cart.objects.get_or_create(user=request.user)
-#         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-#         if not created:
-#             cart_item.quantity += 1
-#         else:
-#             cart_item.quantity = 1
-#         cart_item.save()
-#
-#         # Decrease product quantity
-#         product.quantity -= 1
-#         product.save()
-#
-#         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#             return JsonResponse({'new_quantity': product.quantity, 'success': True})
-#
-#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#         return JsonResponse({'new_quantity': product.quantity, 'success': False, 'message': 'Out of Stock'})
-#
-#     return redirect('view_cart')
-#
-# @login_required
-# def remove_from_cart(request, product_id):
-#     cart = get_object_or_404(Cart, user=request.user)
-#     cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
-#     # cart_item.delete()
-#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-#         return JsonResponse({'success': True})
-#     return redirect('view_cart')
-#
-# @login_required
-# def toggle_favorite(request, product_id):
-#     cart = get_object_or_404(Cart, user=request.user)
-#     cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
-#     cart_item.is_favorite = not cart_item.is_favorite
-#     cart_item.save()
-#     return redirect('view_cart')
-#
-# @login_required
-# def update_quantity(request, product_id, action):
-#     cart = get_object_or_404(Cart, user=request.user)
-#     cart_item = get_object_or_404(CartItem, cart=cart, product__id=product_id)
-#     if action == 'increase':
-#         cart_item.quantity += 1
-#     elif action == 'decrease' and cart_item.quantity > 0:
-#         cart_item.quantity -= 1
-#     cart_item.save()
-#     return redirect('view_cart')
-
-# @login_required
-# def cart(request):
-#     cart_items = CartItem.objects.filter(user=request.user)
-#     total_price = sum(item.total_price for item in cart_items)
-#     return render(request, 'marketplace/cart.html', {'items': cart_items, 'total_price': total_price})
 
 @login_required
 def checkout(request):
@@ -334,10 +231,6 @@ def set_new_password(request):
 
 
 @login_required
-def awaiting_payment(request):
-    return render(request, 'marketplace/card_details.html', {'username': request.session.get('username')})
-
-@login_required
 def card_details_view(request, card_type):
     if request.method == 'POST':
         form = CardDetailsForm(request.POST)
@@ -351,13 +244,7 @@ def card_details_view(request, card_type):
         form = CardDetailsForm(initial={'card_type': card_type})
     return render(request, 'marketplace/card_details.html', {'form': form})
 
-@login_required
-def card_details(request):
-    payment_type = request.POST.get('payment')
-    return render(request, 'marketplace/card_details.html', {'payment_type': payment_type, 'username': request.session.get('username')})
 
-
-# views.py
 @login_required
 def submit_payment(request):
     if request.method == 'POST':
@@ -399,7 +286,7 @@ def submit_payment(request):
             item.product.save()
 
         # Clear cart
-      #  cart_items.delete()
+        #  cart_items.delete()
 
         # Clear the cookies
         response = redirect('order_success')
@@ -420,11 +307,9 @@ def order_success(request):
         'total_reward_points': total_reward_points
     })
 
-def aboutus(request):  
+def aboutus(request):
     return render(request, 'marketplace/aboutus.html')
 
-
-######REWARDS
 
 @login_required
 def rewards(request):
@@ -525,7 +410,7 @@ def remove_from_cart(request, product_id):
         cart_item = CartItem.objects.get(product_id=product_id, user=request.user)
        # cart_item.delete()
     except CartItem.DoesNotExist:
-        pass  # Optionally, you can handle the case where the item does not exist
+        pass
 
     return redirect('view_cart')
 
@@ -608,16 +493,14 @@ def add_to_cart_from_wishlist(request, product_id):
     else:
         cart_item.save()
 
-    # Optionally, you can remove the product from the wishlist after adding it to the cart
+
     user_registration = request.user.userregistration
-    # Add product to cart logic here
     user_registration.wishlist.remove(product)
 
     return redirect('view_cart')  # Redirect to the cart page after adding the product
 
 
 
-#View to fetch cart items and pass them to the template >>>
 def cart_view(request):
     try:
         cart = Cart.objects.get(user=request.user)
@@ -635,49 +518,6 @@ def cart_view(request):
     }
     return render(request, 'cart.html', context)
 
-@login_required
-def profile_view(request):
-    profile = UserRegistration.objects.get(user=user)
-    orders = Order.objects.filter(user=request.user)
-    return render(request, 'profile.html', {'user': request.user, 'profile': profile, 'orders': orders})
-
-# to ensure that a Profile object is created whenever a new user is registered
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.userregistration.save()
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                # Get or create UserRegistration instance
-                user_registration, created = UserRegistration.objects.get_or_create(user=user)
-                # Update visit count and last visit time
-                user_registration.visit_count += 1
-                user_registration.last_visit = timezone.now()
-                user_registration.save()
-                return HttpResponseRedirect(reverse('myapp:index'))
-            else:
-                return HttpResponse('Your account is disabled.')
-        else:
-            return HttpResponse('Invalid login details.')
-    else:
-        return render(request, 'registration/login.html')
-
-@login_required
-def view_profile(request):
-    user_registration = UserRegistration.objects.get(user=request.user)
-    orders = Order.objects.filter(user=request.user)
-    return render(request, 'marketplace/profile.html', {'user_registration': user_registration})
 
 def product_showcase(request):
     categories = Category.objects.all()
@@ -729,7 +569,6 @@ def profile(request):
 
 @login_required
 def order_history(request):
-    #orders = Order.objects.filter(user=request.user).prefetch_related('items__product')
     orders = Order.objects.filter(user=request.user).order_by('-id')
     print("hello")
     for order in orders:

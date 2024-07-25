@@ -2,12 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
-
-
 import os
 
 def get_upload_path(instance, filename):
-    # Get the category name, replace spaces with underscores and convert to lowercase
     category_name = instance.category.name.replace(" ", "_").lower()
     # Build the upload path
     return os.path.join('products', category_name, filename)
@@ -42,15 +39,6 @@ class UserHistory(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.visits} visits"
 
-class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    comment = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.product.name}"
 
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -63,15 +51,6 @@ class CartItem(models.Model):
     @property
     def total_price(self):
         return self.product.price * self.quantity
-
-    # def __str__(self):
-    #     return self.product.price * self.quantity
-
-class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(default=timezone.now)
-    def __str__(self):
-        return f'Cart ({self.user.username})'
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -135,8 +114,6 @@ class Reward(models.Model):
     def __str__(self):
         return self.name
 
-# uname - sundhar
-# pswd - sundhar@123
 
 
 class UserProfile(models.Model):
