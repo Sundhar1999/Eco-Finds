@@ -3,7 +3,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Product, CartItem, Category, Reward
 from django.contrib.auth import logout
-# from .forms import ReviewForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -73,7 +72,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 request.session['username'] = username
-                request.session.set_expiry(3000)  # Set session to expire in 3 minutes
+                request.session.set_expiry(300)  # Set session to expire in 5 minutes
                 request.session['last_touch'] = timezone.now().timestamp()
                 messages.info(request, f'You are now logged in as {username}.')
                 return redirect('home')
@@ -650,3 +649,31 @@ def generate_invoice(request, order_id):
     # Build PDF
     doc.build(elements)
     return response
+
+
+
+@login_required
+def fetch_order_history(request):
+    user_orders = Order.objects.filter(user=request.user).select_related('user').prefetch_related('items__product')
+    orders = []
+    for order in user_orders:
+        items = []
+        for item in order.items.all():
+            items.append({
+                'id': item.id,
+                'name': item.product.name,
+                'description': item.product.description,
+                'price': float(item.product.price),
+                'quantity': item.quantity,
+                'subtotal': float(item.total_price),
+                'image_url': item.product.image.url,
+            })
+        orders.append({
+            'id': order.id,
+            'ordered_at': order.ordered_at.strftime('%B %d, %Y'),
+            'total_price': float(order.get_total_price()),
+            'shipping_address': order.shipping_address,
+            'items': items,
+        })
+
+    return JsonResponse({'orders': orders})

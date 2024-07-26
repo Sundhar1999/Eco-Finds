@@ -128,103 +128,93 @@
     </div>
 </div>
 
-<footer>
-  <div class="fo-container">
-    <div class="fo-row fo-text-center">
-      <div class="fo-col-md-4 fo-footer-column">
-        <ul class="fo-nav fo-flex-column">
-          <li class="fo-nav-item">
-            <span class="fo-footer-title">Product</span>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Product 1</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Product 2</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Plans & Prices</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Frequently asked questions</a>
-          </li>
-        </ul>
-      </div>
-      <div class="fo-col-md-4 fo-footer-column">
-        <ul class="fo-nav fo-flex-column">
-          <li class="fo-nav-item">
-            <span class="fo-footer-title">Company</span>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">About us</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">Job postings</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#">News and articles</a>
-          </li>
-        </ul>
-      </div>
-      <div class="fo-col-md-4 fo-footer-column">
-        <ul class="fo-nav fo-flex-column">
-          <li class="fo-nav-item">
-            <span class="fo-footer-title">Contact & Support</span>
-          </li>
-          <li class="fo-nav-item">
-            <span class="fo-nav-link"><i class="fas fa-phone"></i>+47 45 80 80 80</span>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#"><i class="fas fa-comments"></i>Live chat</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#"><i class="fas fa-envelope"></i>Contact us</a>
-          </li>
-          <li class="fo-nav-item">
-            <a class="fo-nav-link" href="#"><i class="fas fa-star"></i>Give feedback</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <footer>
+    <div class="fo-container">
+        <div class="fo-row fo-text-center">
+            <div class="fo-col-md-4 fo-footer-column">
+                <ul class="fo-nav fo-flex-column">
+                    <li class="fo-nav-item">
+                        <span class="fo-footer-title">Product</span>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="{% url 'products' %}?category=Men_Clothing">Men Collection</a>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="{% url 'products' %}?category=Women_Clothing">Women Collection</a>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="{% url 'products' %}?category=Kids_Section">Kids Section</a>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="{% url 'products' %}?category=Home_Essentials">Home Essentials</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="fo-col-md-4 fo-footer-column">
+                <ul class="fo-nav fo-flex-column">
+                    <li class="fo-nav-item">
+                        <span class="fo-footer-title">Company</span>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="{% url 'aboutus' %}">About us</a>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="{% url 'order_history' %}">My Account</a>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="{% url 'wishlist' %}">WishList</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="fo-col-md-4 fo-footer-column">
+                <ul class="fo-nav fo-flex-column">
+                    <li class="fo-nav-item">
+                        <span class="fo-footer-title">Contact & Support</span>
+                    </li>
+                    <li class="fo-nav-item">
+                        <span class="fo-nav-link"><i class="fas fa-phone"></i>+1 (226-961-9931)</span>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="#"><i class="fas fa-star"></i>Reviews</a>
+                    </li>
+                    <li class="fo-nav-item">
+                        <a class="fo-nav-link" href="#"><i class="fas fa-envelope"></i>Give feedback</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-    <div class="fo-text-center"><i class="fas fa-ellipsis-h"></i></div>
+        <div class="fo-text-center"><i class="fas fa-ellipsis-h"></i></div>
 
-    <div class="fo-row fo-text-center">
-      <div class="fo-col-md-4 fo-box">
-        <span class="fo-copyright fo-quick-links">Copyright &copy; Your Website <script>document.write(new Date().getFullYear())</script>
-        </span>
-      </div>
-      <div class="fo-col-md-4 fo-box">
-        <ul class="fo-list-inline fo-social-buttons">
-          <li class="fo-list-inline-item">
-            <a href="#">
-            <i class="fab fa-twitter"></i>
-          </a>
-          </li>
-          <li class="fo-list-inline-item">
-            <a href="#">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          </li>
-          <li class="fo-list-inline-item">
-            <a href="#">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
-          </li>
-        </ul>
-      </div>
-      <div class="fo-col-md-4 fo-box">
-        <ul class="fo-list-inline fo-quick-links">
-          <li class="fo-list-inline-item">
-            <a href="#">Privacy Policy</a>
-          </li>
-          <li class="fo-list-inline-item">
-            <a href="#">Terms of Use</a>
-          </li>
-        </ul>
-      </div>
+        <div class="fo-row fo-text-center">
+            <div class="fo-col-md-4 fo-box">
+                <span class="fo-copyright fo-quick-links">Copyright &copy; Your Website <script>document.write(new Date().getFullYear())</script></span>
+            </div>
+            <div class="fo-col-md-4 fo-box">
+                <ul class="fo-list-inline fo-social-buttons">
+                    <li class="fo-list-inline-item">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li class="fo-list-inline-item">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li class="fo-list-inline-item">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="fo-col-md-4 fo-box">
+                <ul class="fo-quick-links">
+                    <li class="fo-list-inline-item">
+                        <a href="#">Privacy Policy</a>
+                    </li>
+                    <li class="fo-list-inline-item">
+                        <a href="#">Terms of Use</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
 </footer>
 
 <script>
