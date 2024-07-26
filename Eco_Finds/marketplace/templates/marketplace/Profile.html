@@ -23,9 +23,7 @@
         </div>
         <div class="profile-nav">
             <button class="nav-button" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
-            <button class="nav-button" onclick="window.location.href='{% url 'order_history' %}'">
-                <i class="fas fa-box"></i> Orders
-            </button>
+            <button class="nav-button" id="orders-button"><i class="fas fa-box"></i> Orders</button>
             <button class="nav-button" onclick="showSection('address')"><i class="fas fa-map-marker-alt"></i> Address</button>
             <button class="nav-button" onclick="showSection('wishlist')"><i class="fas fa-heart"></i> Wishlist</button>
             <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
@@ -39,26 +37,15 @@
                 <div class="account-details">
                     <p><strong>Name:</strong> <span>{{ user.username }}</span></p>
                     <p><strong>Email:</strong> <span>{{ user.email }}</span></p>
-                    <p><strong>Phone:</strong> <span>{{ phone_number }}</span></p>
-                    <p><strong>Rewards Points Earned:</strong> <span>{{user_registration.reward_points}}</span></p>
-                    <p><strong>Total Visit Counts:</strong> <span id="visit-count">{{ profile.visit_count }}</span></p>
+                    <p><strong>Rewards Points Earned:</strong> <span>{{ user_registration.reward_points }}</span></p>
+                    <div class="visit-count-container">
+                        <p><strong>Total Visit Counts:</strong> <br> <span id="visit-count" class="visit-count">{{ profile.visit_count }}</span></p>
+                    </div>
                 </div>
             </div>
             <div id="orders" class="content-section">
                 <h3>Your Orders</h3>
-                {% for order in user_orders %}
-                <div class="order-item">
-                    <h5>Order ID: {{ order.id }}</h5>
-                    <p>Ordered At: {{ order.ordered_at }}</p>
-                    <p>Total Price: ${{ order.total_price }}</p>
-                    <p>Items:</p>
-                    <ul>
-                        {% for item in order.items.all %}
-                        <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endfor %}
+                <div id="order-list"></div>
             </div>
             <div id="address" class="content-section">
                 <h3>Your Addresses</h3>
@@ -68,15 +55,90 @@
             </div>
             <div id="wishlist" class="content-section">
                 <h3>Your Wishlist</h3>
-                <div class="wishlist-items">
+                <div class="row wishlist-container">
                     {% for product in user_registration.wishlist.all %}
-                    <div class="wishlist-item">
-                        <p>{{ product.name }}</p>
-                    </div>
+                        <div class="col-md-12 wishlist-item" id="wishlist-item-{{ product.id }}">
+                            <div class="card-wishlist mb-4">
+                                <div class="card-content">
+                                    <div class="card-body-wishlist">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text">{{ product.description }}</p>
+                                        <p class="card-text">${{ product.price }}</p>
+                                        <div class="card-actions">
+                                            <a href="{% url 'add_to_cart_from_wishlist' product.id %}" class="btn btn-success">Add to Cart</a>
+                                            <a href="{% url 'remove_from_wishlist' product.id %}" class="btn btn-danger">Remove</a>
+                                        </div>
+                                    </div>
+                                    <div class="card-image">
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        document.getElementById('orders-button').addEventListener('click', function() {
+            showSection('orders');
+            fetchOrderHistory();
+        });
+
+        function fetchOrderHistory() {
+            fetch('{% url "fetch_order_history" %}')
+                .then(response => response.json())
+                .then(data => {
+                    const orderList = document.getElementById('order-list');
+                    orderList.innerHTML = '';
+                    data.orders.forEach(order => {
+                        const orderCard = `
+                            <div class="order-card mb-4 p-3">
+                                <div class="order-card-header">
+                                    <div>
+                                        <span class="order-date">Order placed: ${order.ordered_at}</span>
+                                        <span class="order-total">Total: $${order.total_price}</span>
+                                        <span class="order-ship-to">Ship to: ${order.shipping_address}</span>
+                                    </div>
+                                    <div>
+                                        <span class="order-id">Order ID: ${order.id}</span>
+                                    </div>
+                                </div>
+                                <div class="order-card-body">
+                                    ${order.items.map(item => `
+                                        <div class="order-item">
+                                            <div class="order-item-image">
+                                                <img src="${item.image_url}" alt="${item.name}">
+                                            </div>
+                                            <div class="order-item-details">
+                                                <h5>${item.name}</h5>
+                                                <p>${item.description}</p>
+                                                <p><strong>Price:</strong> $${item.price}</p>
+                                                <p><strong>Quantity:</strong> ${item.quantity}</p>
+                                                <p><strong>Subtotal:</strong> $${item.subtotal}</p>
+                                                <div class="order-item-buttons">
+                                                    <a href="{% url 'product_showcase' %}" class="btn btn-outline-primary">Buy it again</a>
+                                                    <a href="/order/invoice/${order.id}/" class="btn btn-outline-secondary">Invoice</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                        orderList.innerHTML += orderCard;
+                    });
+                });
+        }
+    </script>
 </body>
 </html>

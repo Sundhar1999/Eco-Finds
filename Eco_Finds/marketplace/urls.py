@@ -38,6 +38,8 @@ urlpatterns = [
     path('order_history/', order_history, name='order_history'),
     path('order/item-details/<int:item_id>/', item_details, name='item_details'),
     path('order/invoice/<int:order_id>/', generate_invoice, name='generate_invoice'),
+    path('fetch_order_history/', views.fetch_order_history, name='fetch_order_history'),
+    path('order/invoice/<int:order_id>/', views.generate_invoice, name='generate_invoice'),
 
 ]
 
